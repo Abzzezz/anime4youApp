@@ -16,9 +16,9 @@
 
     <application
             android:allowBackup="true"
-            android:icon="@mipmap/appicon144"
+            android:icon="@mipmap/appicon"
             android:label="@string/app_name"
-            android:roundIcon="@mipmap/appicon144"
+            android:roundIcon="@mipmap/appicon"
             android:supportsRtl="true"
             android:theme="@style/DarkTheme"
             android:usesCleartextTraffic="true"
