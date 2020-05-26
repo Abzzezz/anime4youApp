@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2020. Roman P.
  * All code is owned by Roman P. APIs are mentioned.
- * Last modified: 20.05.20, 23:42
+ * Last modified: 26.05.20, 14:39
  */
 
 package net.bplaced.abzzezz.animeapp.activities.extra;
@@ -13,14 +13,13 @@ import android.os.Handler;
 import android.os.StrictMode;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Switch;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
 import net.bplaced.abzzezz.animeapp.R;
+import net.bplaced.abzzezz.animeapp.util.BackgroundHolder;
 import net.bplaced.abzzezz.animeapp.util.file.AnimeSaver;
 import net.bplaced.abzzezz.animeapp.util.file.AutoUpdater;
-import net.bplaced.abzzezz.animeapp.util.BackgroundHolder;
 import net.bplaced.abzzezz.animeapp.util.file.EpisodeDownloader;
 
 
@@ -59,11 +58,11 @@ public class SplashScreen extends AppCompatActivity {
 
     private void configureHandlers() {
         BackgroundHolder backgroundHolder = new BackgroundHolder();
-        backgroundHolder.shuffle();
-        this.saver = new AnimeSaver(getApplicationContext());
+        BackgroundHolder.shuffle();
+        saver = new AnimeSaver(getApplicationContext());
         saver.load();
 
-        this.episodeDownloader = new EpisodeDownloader();
+        episodeDownloader = new EpisodeDownloader();
         AutoUpdater autoUpdater = new AutoUpdater();
         autoUpdater.update(this);
 

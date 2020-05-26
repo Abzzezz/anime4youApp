@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2020. Roman P.
  * All code is owned by Roman P. APIs are mentioned.
- * Last modified: 20.05.20, 23:32
+ * Last modified: 24.05.20, 15:29
  */
 
 package net.bplaced.abzzezz.animeapp.util.scripter;
@@ -36,7 +36,6 @@ public class DataBaseSearch {
     }
 
     /**
-     *
      * @param aid
      * @return
      */

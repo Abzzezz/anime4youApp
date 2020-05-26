@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2020. Roman P.
  * All code is owned by Roman P. APIs are mentioned.
- * Last modified: 20.05.20, 23:42
+ * Last modified: 26.05.20, 19:54
  */
 
 package net.bplaced.abzzezz.animeapp.activities.main;
@@ -23,7 +23,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.preference.PreferenceManager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 import ga.abzzezz.util.data.FileUtil;
 import ga.abzzezz.util.data.URLUtil;
@@ -47,7 +46,6 @@ public class SelectedAnimeActivity extends AppCompatActivity implements Download
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-
         if (prefs.getBoolean("dark_mode", false)) {
             setTheme(R.style.DarkTheme);
         } else {
@@ -73,28 +71,18 @@ public class SelectedAnimeActivity extends AppCompatActivity implements Download
         TextView selected_anime_aid = findViewById(R.id.selected_anime_aid);
         TextView selected_anime_size = findViewById(R.id.anime_directory_size);
         TextView selected_anime_language = findViewById(R.id.selected_anime_language);
-
-
         selected_anime_aid.append(String.valueOf(aid));
         selected_anime_name.setText(animeName);
         selected_anime_episodes.append(String.valueOf(animeEpisodes));
         selected_anime_language.append(language);
         /**
-         *
-         */
-        /**
          * Toolbar and Image
          */
         Toolbar toolbar = findViewById(R.id.selected_anime_toolbar);
         ImageView cover = findViewById(R.id.anime_cover_image);
-
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(animeName);
-        Picasso.with(getApplicationContext()).load(animeCover).memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE).resize(ImageUtil.dimensions[0], ImageUtil.dimensions[1]).into(cover);
-
-        /**
-         *
-         */
+        Picasso.with(getApplicationContext()).load(animeCover).resize(ImageUtil.dimensions[0], ImageUtil.dimensions[1]).into(cover);
         /**
          * GridView and Download Button
          */
@@ -105,7 +93,6 @@ public class SelectedAnimeActivity extends AppCompatActivity implements Download
 
         AnimeEpisodeAdapter animeEpisodeAdapter = new AnimeEpisodeAdapter(episodes == null || episodes.length == 0 ? new String[]{} : episodes, getApplicationContext());
         episodeGrid.setAdapter(animeEpisodeAdapter);
-
         /**
          Configure grid
          */
@@ -291,8 +278,8 @@ public class SelectedAnimeActivity extends AppCompatActivity implements Download
 
     class AnimeEpisodeAdapter extends BaseAdapter {
 
-        private String[] episodes;
-        private Context context;
+        private final String[] episodes;
+        private final Context context;
 
         public AnimeEpisodeAdapter(String[] episodes, Context context) {
             this.episodes = episodes;

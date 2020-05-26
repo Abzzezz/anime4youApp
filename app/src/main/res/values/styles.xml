@@ -1,7 +1,7 @@
 <!--
   ~ Copyright (c) 2020. Roman P.
   ~ All code is owned by Roman P. APIs are mentioned.
-  ~ Last modified: 20.05.20, 09:21
+  ~ Last modified: 26.05.20, 19:54
   -->
 
 <resources>
@@ -11,10 +11,12 @@
         <!-- Background and itewm colors-->
         <item name="android:colorPrimary">@color/primaryColorDark</item>
         <item name="android:colorAccent">@color/accentColor</item>
-        <item name="android:textColor">@color/textDark</item>
         <item name="android:itemBackground">@color/primaryColorDark</item>
         <item name="android:actionBarItemBackground">@color/toolbarDark</item>
         <item name="android:windowBackground">@color/primaryColorDark</item>
+
+        <!-- Text etc. -->
+        <item name="android:textColor">@color/textDark</item>
 
         <!-- Gridview etc. -->
         <item name="android:gridViewStyle">@color/primaryColorDark</item>

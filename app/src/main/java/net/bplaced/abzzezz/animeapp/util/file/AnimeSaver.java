@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2020. Roman P.
  * All code is owned by Roman P. APIs are mentioned.
- * Last modified: 20.05.20, 18:46
+ * Last modified: 26.05.20, 19:54
  */
 
 package net.bplaced.abzzezz.animeapp.util.file;
@@ -19,7 +19,7 @@ import java.util.List;
 
 public class AnimeSaver {
 
-    private File file;
+    private final File file;
     private List<String> list;
 
     public AnimeSaver(Context context) {
@@ -48,7 +48,7 @@ public class AnimeSaver {
     }
 
     public void add(String string) {
-        String split[] = string.split(StringUtil.splitter);
+        String[] split = string.split(StringUtil.splitter);
         list.add(split[0].replaceAll(":", "") + StringUtil.splitter + split[1] + StringUtil.splitter + split[2] + StringUtil.splitter + split[3]);
     }
 
@@ -56,7 +56,6 @@ public class AnimeSaver {
         for (String s : getList()) {
             return s.split(StringUtil.splitter)[3].equalsIgnoreCase(String.valueOf(aid));
         }
-
         return false;
     }
 

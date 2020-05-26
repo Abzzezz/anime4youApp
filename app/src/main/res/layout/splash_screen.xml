@@ -2,7 +2,7 @@
 <!--
   ~ Copyright (c) 2020. Roman P.
   ~ All code is owned by Roman P. APIs are mentioned.
-  ~ Last modified: 19.05.20, 19:26
+  ~ Last modified: 26.05.20, 13:39
   -->
 
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
