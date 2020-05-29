@@ -14,6 +14,7 @@ import android.widget.ListView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
 import ga.abzzezz.util.data.URLUtil;
+import ga.abzzezz.util.logging.Logger;
 import net.bplaced.abzzezz.animeapp.R;
 import net.bplaced.abzzezz.animeapp.activities.main.AnimeListActivity;
 import org.apache.commons.net.ftp.FTPClient;
@@ -35,8 +36,8 @@ public class CloudList extends AppCompatActivity {
             setTheme(R.style.LightTheme);
         }
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_cloud_list);
 
+        setContentView(R.layout.activity_cloud_list);
         try {
             ListView listView = findViewById(R.id.cloud_list_view);
             ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
@@ -46,19 +47,34 @@ public class CloudList extends AppCompatActivity {
             ftpClient.login("abzzezz_client", "AzA33EUSgU7KZvbj");
             FTPFile[] ftpFile = ftpClient.listFiles("/www/lists/");
             for (FTPFile file : ftpFile) {
-                adapter.add(file.getName());
+                if (file.isFile()) adapter.add(file.getName());
             }
+
             listView.setAdapter(adapter);
             listView.setOnItemClickListener((parent, view, position, id) -> {
                 try {
-                    URLUtil.getURLContentAsArray(new URL("http://abzzezz.bplaced.net/lists/" + ftpFile[position].getName())).forEach(SplashScreen.saver::add);
+                    URLUtil.getURLContentAsArray(new URL("http://abzzezz.bplaced.net/lists/" + ftpFile[position + 2].getName())).forEach(s -> {
+                        if (prefs.getBoolean("check_existing", false)) {
+                            if (SplashScreen.saver.getList().contains(s)) {
+                                Logger.log("Already existing found: " + s, Logger.LogType.INFO);
+                            } else {
+                                SplashScreen.saver.add(s);
+                            }
+                        } else {
+                            SplashScreen.saver.add(s);
+                        }
+                    });
                 } catch (MalformedURLException e) {
+                    Logger.log("Error getting from cloud.", Logger.LogType.ERROR);
                     e.printStackTrace();
                 }
             });
+
+            ftpClient.disconnect();
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 
     @Override

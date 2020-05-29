@@ -25,7 +25,7 @@ public class AutoUpdater {
     /**
      * Version
      */
-    public static float version = 27F;
+    public static float version = 29F;
 
     /**
      * @param activity

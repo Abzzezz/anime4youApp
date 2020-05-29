@@ -12,12 +12,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
+import android.webkit.*;
 import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -130,7 +130,7 @@ public class SelectedAnimeActivity extends AppCompatActivity implements Download
         SplashScreen.episodeDownloader.setButton(downloadAnime);
 
         int nextStart = (episodes != null && episodes.length != 0) ? StringUtil.extractNumberI(episodes[episodes.length - 1].replaceAll(".mp4", "")) + 1 : 1;
-        downloadAnime.setOnClickListener(v -> download(nextStart));
+        downloadAnime.setOnClickListener(v -> download(nextStart, animeEpisodes));
     }
 
     @Override
@@ -166,7 +166,7 @@ public class SelectedAnimeActivity extends AppCompatActivity implements Download
         super.onBackPressed();
     }
 
-    public void download(int start) {
+    public void download(int start, int episodes) {
             /*
                 If series is downloaded, reset index to 0
             */
@@ -181,7 +181,7 @@ public class SelectedAnimeActivity extends AppCompatActivity implements Download
         if (SplashScreen.episodeDownloader.currentIndex == 0) {
             SplashScreen.episodeDownloader.currentIndex = start;
             SplashScreen.episodeDownloader.downloadAID = aid;
-            SplashScreen.episodeDownloader.episodesTotal = animeEpisodes;
+            SplashScreen.episodeDownloader.episodesTotal = episodes;
         }
 
         if (start > animeEpisodes) {
@@ -192,6 +192,19 @@ public class SelectedAnimeActivity extends AppCompatActivity implements Download
         WebView webView = new WebView(getApplicationContext());
         webView.getSettings().setJavaScriptEnabled(true);
         webView.loadUrl(URLHandler.captchaURL);
+
+        /**
+         * Clear all previous data and Cookies, so no code 400 appears: Cookie too large (yummy ;) )
+         */
+        WebStorage.getInstance().deleteAllData();
+        CookieManager.getInstance().removeAllCookies(null);
+        CookieManager.getInstance().flush();
+        webView.clearCache(true);
+        webView.clearFormData();
+        webView.clearHistory();
+        webView.clearSslPreferences();
+
+
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageFinished(WebView view, String url) {
@@ -214,39 +227,44 @@ public class SelectedAnimeActivity extends AppCompatActivity implements Download
                              */
                         String[] urlComplete = SplashScreen.episodeDownloader.currentLink.split(StringUtil.splitter);
                         view.loadUrl(urlComplete[0]);
+
                         view.setWebViewClient(new WebViewClient() {
                             @Override
                             public void onPageFinished(WebView view, String url) {
-                                view.evaluateJavascript(ScriptUtil.vivoExploit, returnJS -> {
-                                    if (returnJS.contains("node")) {
+                                new Handler().postDelayed(() -> {
+                                    view.evaluateJavascript(ScriptUtil.vivoExploit, returnJS -> {
+                                        if (returnJS.contains("node")) {
                                             /*
                                             Debug purposes
                                              */
-                                        Logger.log("Got vivo video url: " + returnJS, Logger.LogType.INFO);
+                                            Logger.log("Got vivo video url: " + returnJS, Logger.LogType.INFO);
                                             /*
                                             Download from Vivo url
                                              */
-                                        SplashScreen.episodeDownloader.download(returnJS.replaceAll("\"", ""), urlComplete[1], SelectedAnimeActivity.this, "mp4");
+                                            SplashScreen.episodeDownloader.download(returnJS.replaceAll("\"", ""), urlComplete[1], SelectedAnimeActivity.this, "mp4");
                                             /*
                                             Destroy old web view
                                              */
-                                        view.destroy();
-                                        /**
-                                         * Add to index and if button checked then call on click again
-                                         */
-                                        if (SplashScreen.episodeDownloader.currentIndex <= SplashScreen.episodeDownloader.episodesTotal) {
-                                            SplashScreen.episodeDownloader.currentIndex++;
+                                            view.destroy();
+                                            /**
+                                             * Add to index and if button checked then call on click again
+                                             */
+                                            if (SplashScreen.episodeDownloader.currentIndex <= SplashScreen.episodeDownloader.episodesTotal) {
+                                                SplashScreen.episodeDownloader.currentIndex++;
+                                            } else {
+                                                makeText("Anime Downloaded successfully");
+                                            }
+                                        } else {
+                                            /**
+                                             * If the JS return of the vivo page does not equal node (vivo direct video url)
+                                             * then return
+                                             */
+                                            Logger.log(returnJS, Logger.LogType.INFO);
+                                            makeText("Error getting link, returning");
+                                            return;
                                         }
-                                    } else {
-                                        /**
-                                         * If the JS return of the vivo page does not equal node (vivo direct video url)
-                                         * then return
-                                         */
-                                        Logger.log(returnJS, Logger.LogType.INFO);
-                                        makeText("Error getting link, returning");
-                                        return;
-                                    }
-                                });
+                                    });
+                                }, 1000);
                             }
                         });
                     } else {
@@ -270,7 +288,7 @@ public class SelectedAnimeActivity extends AppCompatActivity implements Download
     @Override
     public void applyTexts(String start) {
         try {
-            download(Integer.valueOf(start));
+            download(Integer.valueOf(start), 1);
         } catch (NumberFormatException e) {
             makeText("Not possible to convert number, please check your input");
         }

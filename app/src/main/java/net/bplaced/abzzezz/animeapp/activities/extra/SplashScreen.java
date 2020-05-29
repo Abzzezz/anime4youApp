@@ -45,7 +45,7 @@ public class SplashScreen extends AppCompatActivity {
         configureHandlers();
 
         TextView versionText = findViewById(R.id.version_text);
-        versionText.append("" + AutoUpdater.version);
+        versionText.append(" v." + AutoUpdater.version);
 
         new Handler().postDelayed(() -> {
             Intent intent = new Intent(this, MainMenuActivity.class);
@@ -59,9 +59,8 @@ public class SplashScreen extends AppCompatActivity {
     private void configureHandlers() {
         BackgroundHolder backgroundHolder = new BackgroundHolder();
         BackgroundHolder.shuffle();
-        saver = new AnimeSaver(getApplicationContext());
+        this.saver = new AnimeSaver(getApplicationContext());
         saver.load();
-
         episodeDownloader = new EpisodeDownloader();
         AutoUpdater autoUpdater = new AutoUpdater();
         autoUpdater.update(this);
@@ -77,7 +76,6 @@ public class SplashScreen extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
         return super.onOptionsItemSelected(item);
     }
 

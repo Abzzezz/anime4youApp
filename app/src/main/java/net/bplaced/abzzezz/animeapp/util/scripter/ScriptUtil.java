@@ -10,7 +10,8 @@ import java.util.Random;
 
 public class ScriptUtil {
 
-    public static final String vivoExploit = "\n" +
+    public static final String vivoExploit = "cal();\n" +
+            "function cal() {\n" +
             "  var source = document.getElementsByTagName('body')[0].innerHTML;\n" +
             "  if (source != null) {\n" +
             "    source = source.replace(/(?:.|\\n)+Core\\.InitializeStream\\s*\\(\\s*\\{[^)}]*source\\s*:\\s*'(.*?)'(?:.|\\n)+/, \"$1\");\n" +
@@ -26,7 +27,9 @@ public class ScriptUtil {
             "        url += String.fromCharCode(t);\n" +
             "      }\n" +
             "    }\n" +
-            " }";
+            "  }" +
+            "  return url;" +
+            "}";
 
     public static String generateRandomKey() {
         String[] keys = {"2fe519479de544f68a46f5284a9e94dac6bc36f0fcee744312f92a77616bb790e705f8b0c03c582d",

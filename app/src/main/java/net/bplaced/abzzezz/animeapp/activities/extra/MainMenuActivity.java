@@ -48,7 +48,6 @@ public class MainMenuActivity extends AppCompatActivity {
         FloatingActionButton changelogButton = findViewById(R.id.changelog_button);
         changelogButton.setOnClickListener(v -> {
             showLog = !showLog;
-            System.out.println(showLog);
             changelog.setVisibility(showLog ? View.VISIBLE : View.INVISIBLE);
         });
     }

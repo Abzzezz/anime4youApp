@@ -35,7 +35,6 @@ public class AIDInput extends AppCompatDialogFragment {
                 });
 
         aid_in = view.findViewById(R.id.enter_aid);
-        aid_in.setHighlightColor(BackgroundHolder.color);
         return builder.create();
     }
 

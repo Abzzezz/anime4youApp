@@ -35,7 +35,6 @@ public class DownloadSpecificInput extends AppCompatDialogFragment {
                 });
 
         download_in = view.findViewById(R.id.download_specific);
-        download_in.setHighlightColor(BackgroundHolder.color);
         return builder.create();
     }
 
