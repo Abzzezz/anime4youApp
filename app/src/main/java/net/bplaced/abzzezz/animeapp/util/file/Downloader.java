@@ -29,13 +29,8 @@ public class Downloader {
         DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
         request.setDescription("Downloading File: " + outFileName);
         request.setTitle(outFileName);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            request.allowScanningByMediaScanner();
-            request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-        }
 
         request.setDestinationInExternalPublicDir(outDir.getAbsolutePath(), outFileName);
-
         DownloadManager manager = (DownloadManager) activity.getSystemService(Context.DOWNLOAD_SERVICE);
         manager.enqueue(request);
     }

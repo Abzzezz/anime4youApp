@@ -17,6 +17,7 @@
 
         <!-- Text etc. -->
         <item name="android:textColor">@color/textDark</item>
+        <item name="android:textColorPrimary">@color/textDark</item>
 
         <!-- Gridview etc. -->
         <item name="android:gridViewStyle">@color/primaryColorDark</item>

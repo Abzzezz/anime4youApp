@@ -29,7 +29,7 @@ import net.bplaced.abzzezz.animeapp.R;
 import net.bplaced.abzzezz.animeapp.activities.extra.CloudList;
 import net.bplaced.abzzezz.animeapp.activities.extra.SettingsActivity;
 import net.bplaced.abzzezz.animeapp.activities.extra.SplashScreen;
-import net.bplaced.abzzezz.animeapp.input.AIDInput;
+import net.bplaced.abzzezz.animeapp.activities.input.AIDInput;
 import net.bplaced.abzzezz.animeapp.util.ImageUtil;
 import net.bplaced.abzzezz.animeapp.util.scripter.DataBaseSearch;
 
@@ -112,15 +112,10 @@ public class AnimeListActivity extends AppCompatActivity implements AIDInput.AID
 
     @Override
     public void applyTexts(String aid) {
-        int aid_int = Integer.valueOf(aid);
-        String[] all = dataBaseSearch.getAll(aid_int);
+        String[] all = dataBaseSearch.getAll(Integer.valueOf(aid));
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         if (prefs.getBoolean("check_existing", false)) {
-            if (!SplashScreen.saver.containsAid(aid_int)) {
-                SplashScreen.saver.add(all[0], all[1], all[2], all[3]);
-            } else {
-                Toast.makeText(AnimeListActivity.this, "Anime already exists", Toast.LENGTH_LONG);
-            }
+            if (!SplashScreen.saver.containsAid(aid)) SplashScreen.saver.add(all[0], all[1], all[2], all[3]);
         } else {
             SplashScreen.saver.add(all[0], all[1], all[2], all[3]);
         }
@@ -175,7 +170,6 @@ public class AnimeListActivity extends AppCompatActivity implements AIDInput.AID
             //imageView.setImageBitmap(ImageUtil.getImageBitmap(SplashScreen.saver.getAll(string.get(position))[2], ImageUtil.dimensions[0], ImageUtil.dimensions[1]));
             return imageView;
         }
-
 
         public List<String> getString() {
             return string;

@@ -4,7 +4,7 @@
  * Last modified: 21.05.20, 12:54
  */
 
-package net.bplaced.abzzezz.animeapp.input;
+package net.bplaced.abzzezz.animeapp.activities.input;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -15,7 +15,6 @@ import android.view.View;
 import android.widget.EditText;
 import androidx.appcompat.app.AppCompatDialogFragment;
 import net.bplaced.abzzezz.animeapp.R;
-import net.bplaced.abzzezz.animeapp.util.BackgroundHolder;
 
 public class AIDInput extends AppCompatDialogFragment {
 
@@ -28,11 +27,10 @@ public class AIDInput extends AppCompatDialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_layout, null);
         builder.setView(view).setTitle("Add AID").setNegativeButton("Cancel", (dialogInterface, i) -> {
-        })
-                .setPositiveButton("Enter", (dialogInterface, i) -> {
-                    String aid = aid_in.getText().toString();
-                    listener.applyTexts(aid);
-                });
+        }).setPositiveButton("Enter", (dialogInterface, i) -> {
+            String aid = aid_in.getText().toString();
+            listener.applyTexts(aid);
+        });
 
         aid_in = view.findViewById(R.id.enter_aid);
         return builder.create();

@@ -15,10 +15,10 @@ import java.util.Random;
 
 public class BackgroundHolder {
 
-    public static final ArrayList<Integer> backgroundAndColor = new ArrayList<>();
+    private static final ArrayList<Integer> backgroundAndColor = new ArrayList<>();
     public static int background;
 
-    public BackgroundHolder() {
+    public static void setup() {
         backgroundAndColor.add(R.drawable.darwisgame);
         backgroundAndColor.add(R.drawable.akamegakill);
         backgroundAndColor.add(R.drawable.demonslayer);

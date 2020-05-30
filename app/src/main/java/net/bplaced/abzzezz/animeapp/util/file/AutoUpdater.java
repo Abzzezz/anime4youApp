@@ -33,7 +33,6 @@ public class AutoUpdater {
     public void update(Activity activity) {
         try {
             if (version < Float.valueOf(checkUpdate())) {
-                Toast.makeText(activity.getApplicationContext(), "App Update available!", Toast.LENGTH_LONG);
                 File outDic = new File(Environment.DIRECTORY_DOWNLOADS, "Anime4you-Update");
                 String fileName = "appUpdate Version:" + checkUpdate() + ".apk";
                 Downloader.download(URLHandler.updateURL, outDic, fileName, activity);

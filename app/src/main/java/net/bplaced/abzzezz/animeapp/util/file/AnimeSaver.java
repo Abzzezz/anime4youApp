@@ -20,10 +20,10 @@ import java.util.List;
 public class AnimeSaver {
 
     private final File file;
-    private List<String> list;
+    private List<String> animeList;
 
     public AnimeSaver(Context context) {
-        this.list = new ArrayList<>();
+        this.animeList = new ArrayList<>();
         this.file = new File(context.getFilesDir(), "animes.txt");
         if (!file.exists()) {
             try {
@@ -35,44 +35,41 @@ public class AnimeSaver {
     }
 
     public void load() {
-        list = FileUtil.getFileContentAsList(file);
+        animeList = FileUtil.getFileContentAsList(file);
     }
 
     public void save() {
         Logger.log("Saving", Logger.LogType.INFO);
-        if (!list.isEmpty()) FileUtil.writeArrayListToFile(list, file, false, true);
+        if (!animeList.isEmpty()) FileUtil.writeArrayListToFile(animeList, file, false, true);
     }
 
     public void add(String name, String episode, String url, String aid) {
-        list.add(name.replaceAll(":", "") + StringUtil.splitter + episode + StringUtil.splitter + url + StringUtil.splitter + aid);
+        animeList.add(name.replaceAll(":", "") + StringUtil.splitter + episode + StringUtil.splitter + url + StringUtil.splitter + aid);
     }
 
     public void add(String string) {
         String[] split = string.split(StringUtil.splitter);
-        list.add(split[0].replaceAll(":", "") + StringUtil.splitter + split[1] + StringUtil.splitter + split[2] + StringUtil.splitter + split[3]);
+        animeList.add(split[0].replaceAll(":", "") + StringUtil.splitter + split[1] + StringUtil.splitter + split[2] + StringUtil.splitter + split[3]);
     }
 
-    public boolean containsAid(int aid) {
-        for (String s : getList()) {
-            return s.split(StringUtil.splitter)[3].equalsIgnoreCase(String.valueOf(aid));
-        }
-        return false;
+    public boolean containsAid(String aid) {
+        return getList().stream().filter(s -> s.split(StringUtil.splitter)[3].equalsIgnoreCase(aid)).count() > 0;
     }
 
     /**
-     * Name: 1
-     * Episodes: 2
-     * ImageURL: 3
-     * AID: 4
+     * Name: 0
+     * Episodes: 1
+     * ImageURL: 2
+     * AID: 3
      *
      * @param anime
      * @return
      */
     public String[] getAll(String anime) {
-        return list.get(ArrayUtil.indexOfKey(list, anime)).split(StringUtil.splitter);
+        return animeList.get(ArrayUtil.indexOfKey(animeList, anime)).split(StringUtil.splitter);
     }
 
     public List<String> getList() {
-        return list;
+        return animeList;
     }
 }

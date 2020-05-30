@@ -31,7 +31,6 @@ public class SplashScreen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-
         if (prefs.getBoolean("dark_mode", false)) {
             setTheme(R.style.DarkTheme);
         } else {
@@ -40,31 +39,30 @@ public class SplashScreen extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_screen);
+
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
-        configureHandlers();
 
+        configureHandlers();
         TextView versionText = findViewById(R.id.version_text);
-        versionText.append(" v." + AutoUpdater.version);
+        versionText.append("v." + AutoUpdater.version);
 
         new Handler().postDelayed(() -> {
             Intent intent = new Intent(this, MainMenuActivity.class);
             startActivity(intent);
             finish();
         }, 2500);
-
     }
 
 
     private void configureHandlers() {
-        BackgroundHolder backgroundHolder = new BackgroundHolder();
+        BackgroundHolder.setup();
         BackgroundHolder.shuffle();
         this.saver = new AnimeSaver(getApplicationContext());
         saver.load();
         episodeDownloader = new EpisodeDownloader();
         AutoUpdater autoUpdater = new AutoUpdater();
         autoUpdater.update(this);
-
     }
 
 

@@ -45,11 +45,6 @@ public class EpisodeDownloader {
         DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
         request.setDescription("Downloading File: " + fileName);
         request.setTitle(fileName);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            request.allowScanningByMediaScanner();
-            request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-        }
         request.setDestinationInExternalPublicDir(outDic.getAbsolutePath(), fileName + "." + fileExtension);
         DownloadManager manager = (DownloadManager) activity.getSystemService(Context.DOWNLOAD_SERVICE);
         this.downloadID = manager.enqueue(request);

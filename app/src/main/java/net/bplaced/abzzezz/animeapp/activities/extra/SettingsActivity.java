@@ -19,12 +19,12 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-
         if (prefs.getBoolean("dark_mode", false)) {
             setTheme(R.style.DarkTheme);
         } else {
             setTheme(R.style.LightTheme);
         }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings_activity);
         getSupportFragmentManager()
@@ -35,7 +35,6 @@ public class SettingsActivity extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-
 
     }
 

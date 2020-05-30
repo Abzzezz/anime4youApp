@@ -4,7 +4,7 @@
  * Last modified: 21.05.20, 13:01
  */
 
-package net.bplaced.abzzezz.animeapp.input;
+package net.bplaced.abzzezz.animeapp.activities.input;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -15,7 +15,6 @@ import android.view.View;
 import android.widget.EditText;
 import androidx.appcompat.app.AppCompatDialogFragment;
 import net.bplaced.abzzezz.animeapp.R;
-import net.bplaced.abzzezz.animeapp.util.BackgroundHolder;
 
 public class DownloadSpecificInput extends AppCompatDialogFragment {
 
@@ -28,12 +27,10 @@ public class DownloadSpecificInput extends AppCompatDialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_download_layout, null);
         builder.setView(view).setTitle("Download specific").setNegativeButton("Cancel", (dialogInterface, i) -> {
-        })
-                .setPositiveButton("Enter", (dialogInterface, i) -> {
-                    String start = download_in.getText().toString();
-                    listener.applyTexts(start);
-                });
-
+        }).setPositiveButton("Enter", (dialogInterface, i) -> {
+            String start = download_in.getText().toString();
+            listener.applyTexts(start);
+        });
         download_in = view.findViewById(R.id.download_specific);
         return builder.create();
     }

@@ -10,6 +10,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -17,7 +19,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.*;
+import android.webkit.CookieManager;
+import android.webkit.WebStorage;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -31,7 +36,7 @@ import ga.abzzezz.util.stringing.StringUtil;
 import net.bplaced.abzzezz.animeapp.R;
 import net.bplaced.abzzezz.animeapp.activities.extra.PlayerActivity;
 import net.bplaced.abzzezz.animeapp.activities.extra.SplashScreen;
-import net.bplaced.abzzezz.animeapp.input.DownloadSpecificInput;
+import net.bplaced.abzzezz.animeapp.activities.input.DownloadSpecificInput;
 import net.bplaced.abzzezz.animeapp.util.ImageUtil;
 import net.bplaced.abzzezz.animeapp.util.scripter.ScriptUtil;
 import net.bplaced.abzzezz.animeapp.util.scripter.URLHandler;
@@ -91,7 +96,7 @@ public class SelectedAnimeActivity extends AppCompatActivity implements Download
         String[] episodes = animeFile.list();
         selected_anime_size.append(FileUtil.calculateFileSize(animeFile));
 
-        AnimeEpisodeAdapter animeEpisodeAdapter = new AnimeEpisodeAdapter(episodes == null || episodes.length == 0 ? new String[]{} : episodes, getApplicationContext());
+        AnimeEpisodeAdapter animeEpisodeAdapter = new AnimeEpisodeAdapter(episodes == null || episodes.length == 0 ? new String[1] : episodes, getApplicationContext());
         episodeGrid.setAdapter(animeEpisodeAdapter);
         /**
          Configure grid
@@ -105,24 +110,17 @@ public class SelectedAnimeActivity extends AppCompatActivity implements Download
         });
 
         episodeGrid.setOnItemLongClickListener((parent, view, position, id) -> {
-            new AlertDialog.Builder(SelectedAnimeActivity.this)
-                    .setIcon(android.R.drawable.ic_dialog_alert)
-                    .setTitle("Delete?")
-                    .setMessage("Will delete File")
-                    .setPositiveButton("Yes", (dialogInterface, i) -> {
-                        File f = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/" + animeName, animeEpisodeAdapter.episodes[position]);
-                        f.deleteOnExit();
-                        System.out.println("Deleted: " + f.delete());
-                        finish();
-                        overridePendingTransition(0, 0);
-                        startActivity(getIntent());
-                        overridePendingTransition(0, 0);
-                    })
-                    .setNegativeButton("No", (dialogInterface, i) -> {
-                    })
-                    .show();
+            new AlertDialog.Builder(SelectedAnimeActivity.this).setIcon(android.R.drawable.ic_dialog_alert).setTitle("Delete?").setMessage("Will delete File").setPositiveButton("Yes", (dialogInterface, i) -> {
+                File f = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/" + animeName, animeEpisodeAdapter.episodes[position]);
+                Logger.log("Deleted: " + f.delete(), Logger.LogType.INFO);
+                finish();
+                overridePendingTransition(0, 0);
+                startActivity(getIntent());
+                overridePendingTransition(0, 0);
+            }).show();
             return true;
         });
+
         /**
          * Button
          */
@@ -142,11 +140,18 @@ public class SelectedAnimeActivity extends AppCompatActivity implements Download
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemID = item.getItemId();
-        if (itemID == R.id.delete_aid_item) {
-            SplashScreen.saver.getList().remove(position);
-        } else if (itemID == R.id.download_specific_episode) {
-            DownloadSpecificInput input = new DownloadSpecificInput();
-            input.show(getSupportFragmentManager(), "Download specific");
+        switch (itemID) {
+            case R.id.delete_aid_item:
+                SplashScreen.saver.getList().remove(position);
+                break;
+
+            case R.id.download_specific_episode:
+                DownloadSpecificInput input = new DownloadSpecificInput();
+                input.show(getSupportFragmentManager(), "Download specific");
+                break;
+
+            default:
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -323,8 +328,7 @@ public class SelectedAnimeActivity extends AppCompatActivity implements Download
         public View getView(int position, View convertView, ViewGroup parent) {
             TextView textView = new TextView(context);
             textView.setTextSize(15);
-            textView.setTextColor(-1);
-            textView.setAlpha(0.87F);
+            textView.setTextColor(ColorStateList.valueOf(Color.WHITE));
             textView.setText(episodes[position]);
             return textView;
         }
