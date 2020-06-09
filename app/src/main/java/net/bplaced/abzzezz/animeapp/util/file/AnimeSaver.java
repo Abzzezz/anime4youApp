@@ -33,6 +33,9 @@ public class AnimeSaver {
         this.editor = preferences.edit();
         this.publicPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         Logger.log("Anime Saver set up.", Logger.LogType.INFO);
+
+        //editor.clear().apply();
+
         preferences.getAll().entrySet().forEach(System.out::println);
     }
 
@@ -76,6 +79,13 @@ public class AnimeSaver {
      */
     public void remove(int key) {
         editor.remove(String.valueOf(key));
+        /*
+        Move all upcoming entries one down
+         */
+        for (int i = key; i < preferences.getAll().size() - /*One gone */ 1; i++) {
+            editor.putString(String.valueOf(i), preferences.getString(String.valueOf(i + /* Next one */ 1), "NULL"));
+            editor.remove(String.valueOf(i + 1));
+        }
         editor.apply();
     }
 
