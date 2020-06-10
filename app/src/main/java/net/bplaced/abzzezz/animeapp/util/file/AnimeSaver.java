@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2020. Roman P.
  * All code is owned by Roman P. APIs are mentioned.
- * Last modified: 26.05.20, 19:54
+ * Last modified: 10.06.20, 13:54
  */
 
 package net.bplaced.abzzezz.animeapp.util.file;
@@ -11,6 +11,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import ga.abzzezz.util.logging.Logger;
 import ga.abzzezz.util.stringing.StringUtil;
+import net.bplaced.abzzezz.animeapp.activities.extra.SplashScreen;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -35,8 +36,7 @@ public class AnimeSaver {
         Logger.log("Anime Saver set up.", Logger.LogType.INFO);
 
         //editor.clear().apply();
-
-        preferences.getAll().entrySet().forEach(System.out::println);
+        if (SplashScreen.isDebugVersion) preferences.getAll().entrySet().forEach(System.out::println);
     }
 
     /**

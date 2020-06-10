@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2020. Roman P.
  * All code is owned by Roman P. APIs are mentioned.
- * Last modified: 26.05.20, 19:54
+ * Last modified: 10.06.20, 13:58
  */
 
 package net.bplaced.abzzezz.animeapp.activities.main;
@@ -26,6 +26,7 @@ import android.webkit.WebViewClient;
 import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.FileProvider;
 import androidx.preference.PreferenceManager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.squareup.picasso.Picasso;
@@ -34,16 +35,14 @@ import ga.abzzezz.util.data.URLUtil;
 import ga.abzzezz.util.logging.Logger;
 import ga.abzzezz.util.stringing.StringUtil;
 import net.bplaced.abzzezz.animeapp.R;
-import net.bplaced.abzzezz.animeapp.activities.extra.PlayerActivity;
 import net.bplaced.abzzezz.animeapp.activities.extra.SplashScreen;
-import net.bplaced.abzzezz.animeapp.activities.input.InputDialog;
 import net.bplaced.abzzezz.animeapp.util.ImageUtil;
 import net.bplaced.abzzezz.animeapp.util.scripter.ScriptUtil;
 import net.bplaced.abzzezz.animeapp.util.scripter.URLHandler;
 
 import java.io.File;
 
-public class SelectedAnimeActivity extends AppCompatActivity implements InputDialog.InputDialogListener {
+public class SelectedAnimeActivity extends AppCompatActivity {
 
     private String animeName, animeCover, language;
     private int aid, animeEpisodes;
@@ -57,7 +56,7 @@ public class SelectedAnimeActivity extends AppCompatActivity implements InputDia
             setTheme(R.style.LightTheme);
         }
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_anime_selected);
+        setContentView(R.layout.anime_selected_layout);
 
         /**
          * Get intent varaibles
@@ -107,10 +106,10 @@ public class SelectedAnimeActivity extends AppCompatActivity implements InputDia
          */
         episodeGrid.setOnItemClickListener((parent, view, position, id) -> {
             File episodeFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/" + animeName, animeEpisodeAdapter.episodes[position]);
-            Intent intent = new Intent(this, PlayerActivity.class);
-            intent.putExtra("file_path", episodeFile.getPath());
+            Intent intent = new Intent(Intent.ACTION_VIEW, FileProvider.getUriForFile(this, getApplicationContext().getPackageName() + ".provider", episodeFile));
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             startActivity(intent);
-            finish();
+
         });
 
         episodeGrid.setOnItemLongClickListener((parent, view, position, id) -> {
@@ -139,17 +138,17 @@ public class SelectedAnimeActivity extends AppCompatActivity implements InputDia
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemID = item.getItemId();
+        EditText editText = new EditText(this);
         switch (itemID) {
             case R.id.download_specific_episode:
-                InputDialog input = new InputDialog("Episode to download");
-                input.show(getSupportFragmentManager(), "Download specific");
+                new AlertDialog.Builder(this).setTitle("Download bound").setMessage("Enter download bound").setPositiveButton("Enter", (dialogInterface, i) -> {
+                    downloadEpisode(Integer.valueOf(editText.getText().toString()), 1, 0);
+                }).setView(editText).show();
                 break;
 
             case R.id.download_bound:
                 String[] episodes = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), animeName).list();
-
                 int nextStart = (episodes != null && episodes.length != 0) ? StringUtil.extractNumberI(episodes[episodes.length - 1].replaceAll(".mp4", "")) + 1 : 1;
-                EditText editText = new EditText(this);
                 new AlertDialog.Builder(this).setTitle("Download bound").setMessage("Enter download bound").setPositiveButton("Enter", (dialogInterface, i) -> {
                     downloadEpisode(nextStart, Integer.parseInt(editText.getText().toString()), 0);
                 }).setView(editText).show();
@@ -163,7 +162,7 @@ public class SelectedAnimeActivity extends AppCompatActivity implements InputDia
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(this, AnimeListActivity.class);
+        Intent intent = new Intent(this, DrawerMainMenu.class);
         startActivity(intent);
         finish();
         super.onBackPressed();
@@ -237,14 +236,6 @@ public class SelectedAnimeActivity extends AppCompatActivity implements InputDia
         Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
     }
 
-    @Override
-    public void applyTexts(String start) {
-        try {
-            downloadEpisode(Integer.valueOf(start), 1, 0);
-        } catch (NumberFormatException e) {
-            makeText("Not possible to convert number, please check your input");
-        }
-    }
 
     class AnimeEpisodeAdapter extends BaseAdapter {
 

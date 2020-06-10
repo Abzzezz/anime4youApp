@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2020. Roman P.
+  ~ All code is owned by Roman P. APIs are mentioned.
+  ~ Last modified: 10.06.20, 13:52
+  -->
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:tools="http://schemas.android.com/tools"
+      tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+                android:id="@+id/nav_anime_list"
+                android:title="@string/menu_anime_list" android:icon="@drawable/format_list_bulleted"/>
+        <item
+                android:id="@+id/nav_settings"
+                android:icon="@drawable/cog_outline"
+                android:title="@string/menu_settings"/>
+        <item
+                android:id="@+id/nav_changelog"
+                android:icon="@drawable/changelog"
+                android:title="@string/menu_changelog"/>
+
+        <item
+                android:id="@+id/add_aid_item"
+                android:icon="@drawable/plus"
+                android:title="Add aid"/>
+
+        <item
+                android:id="@+id/cloud_download"
+                android:icon="@drawable/cloud_download"
+                android:title="Cloud list"/>
+
+    </group>
+</menu>
