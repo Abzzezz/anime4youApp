@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2020. Roman P.
  * All code is owned by Roman P. APIs are mentioned.
- * Last modified: 10.06.20, 13:54
+ * Last modified: 14.06.20, 18:18
  */
 
 package net.bplaced.abzzezz.animeapp.util.scripter;
@@ -29,8 +29,8 @@ public class DataBaseSearch extends AsyncTask<String, Void, String[]> {
             String line = URLUtil.getURLContentAsString(new URL(URLHandler.dataBase));
             realSeries = StringUtil.getStringFromLong(line, "\"aid\"" + ":" + "\"" + aid + "\"", "}");
         } catch (StringIndexOutOfBoundsException | MalformedURLException e) {
-            e.printStackTrace();
             Logger.log("Checking Database: " + e.getMessage(), Logger.LogType.ERROR);
+            URLHandler.dataBase = "http://abzzezz.bplaced.net/list.txt";
         }
         return realSeries;
     }

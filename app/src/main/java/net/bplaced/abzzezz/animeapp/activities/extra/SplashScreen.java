@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2020. Roman P.
  * All code is owned by Roman P. APIs are mentioned.
- * Last modified: 10.06.20, 13:54
+ * Last modified: 14.06.20, 20:07
  */
 
 package net.bplaced.abzzezz.animeapp.activities.extra;
@@ -19,7 +19,6 @@ import net.bplaced.abzzezz.animeapp.R;
 import net.bplaced.abzzezz.animeapp.activities.main.DrawerMainMenu;
 import net.bplaced.abzzezz.animeapp.util.file.AnimeSaver;
 import net.bplaced.abzzezz.animeapp.util.file.AutoUpdater;
-import net.bplaced.abzzezz.animeapp.util.file.EpisodeDownloader;
 import net.bplaced.abzzezz.animeapp.util.scripter.URLHandler;
 
 
@@ -30,8 +29,7 @@ public class SplashScreen extends AppCompatActivity {
      */
 
     public static AnimeSaver saver;
-    public static EpisodeDownloader episodeDownloader;
-    public static boolean isDebugVersion;
+    public static boolean isDebugVersion = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,10 +76,9 @@ public class SplashScreen extends AppCompatActivity {
      * Configures the handlers and gets a random background
      */
     private void configureHandlers() {
-        saver = new AnimeSaver(getApplicationContext());
-        episodeDownloader = new EpisodeDownloader();
-        //AutoUpdater autoUpdater = new AutoUpdater();
-        //autoUpdater.execute(this);
+        this.saver = new AnimeSaver(getApplicationContext());
+        AutoUpdater autoUpdater = new AutoUpdater();
+        autoUpdater.execute(this);
     }
 
 

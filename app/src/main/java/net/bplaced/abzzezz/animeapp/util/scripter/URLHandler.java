@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2020. Roman P.
  * All code is owned by Roman P. APIs are mentioned.
- * Last modified: 03.06.20, 11:37
+ * Last modified: 14.06.20, 18:18
  */
 
 package net.bplaced.abzzezz.animeapp.util.scripter;
@@ -17,7 +17,7 @@ public class URLHandler {
      */
     public static final String captchaURL = "https://captcha.anime4you.one/";
     public static final String updateURL = "http://abzzezz.bplaced.net/app/update.apk";
-    public static final String dataBase = "https://www.anime4you.one/speedlist.old.txt";
+    public static String dataBase = "https://www.anime4you.one/speedlist.old.txt";
     public static final String checkURL = "http://abzzezz.bplaced.net/app/version.txt";
     public static final String changelogURL = "http://abzzezz.bplaced.net/app/changelog.txt";
 
