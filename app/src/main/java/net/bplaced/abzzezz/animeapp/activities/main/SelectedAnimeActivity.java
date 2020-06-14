@@ -63,7 +63,6 @@ public class SelectedAnimeActivity extends AppCompatActivity {
         }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.anime_selected_layout);
-
         /**
          * Get intent varaibles
          */
@@ -100,21 +99,29 @@ public class SelectedAnimeActivity extends AppCompatActivity {
          * GridView and Download Button
          */
         GridView episodeGrid = findViewById(R.id.anime_episodes_grid);
-
+        /**
+         * Get anime file
+         */
         File animeFile = new File(getFilesDir(), animeName);
+        /**
+         * If it does not exist then create new one
+         */
         if (!animeFile.exists()) animeFile.mkdir();
+        /**
+         * Convert file array to list
+         */
         List<String> episodes = Arrays.asList(animeFile.list());
-
         selected_anime_size.append(FileUtil.calculateFileSize(animeFile));
+        /**
+         * Set Adapter
+         */
         this.animeEpisodeAdapter = new AnimeEpisodeAdapter(episodes, getApplicationContext());
         episodeGrid.setAdapter(animeEpisodeAdapter);
         /**
          Configure grid
          */
         episodeGrid.setOnItemClickListener((parent, view, position, id) -> {
-
-            File episodeFile = getEpisodeFile(position);
-            Intent intent = new Intent(Intent.ACTION_VIEW, FileProvider.getUriForFile(this, getApplicationContext().getPackageName() + ".provider", episodeFile));
+            Intent intent = new Intent(Intent.ACTION_VIEW, FileProvider.getUriForFile(this, getApplicationContext().getPackageName() + ".provider", getEpisodeFile(position)));
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             startActivity(intent);
 
@@ -136,12 +143,22 @@ public class SelectedAnimeActivity extends AppCompatActivity {
         downloadAnime.setOnClickListener(v -> downloadEpisode(nextStart, animeEpisodes, 0));
     }
 
+    /**
+     * Toolbar
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.anime_selected_toolbar, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
+    /**
+     * Items selected
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemID = item.getItemId();
@@ -165,7 +182,9 @@ public class SelectedAnimeActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
+    /**
+     * On Back pressed
+     */
     @Override
     public void onBackPressed() {
         Intent intent = new Intent(this, DrawerMainMenu.class);
@@ -174,6 +193,12 @@ public class SelectedAnimeActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
+    /**
+     * Download method
+     * @param start
+     * @param countMax
+     * @param currentCount
+     */
     public void downloadEpisode(int start, int countMax, int currentCount) {
         int[] count = {currentCount, start};
         /**
@@ -213,7 +238,7 @@ public class SelectedAnimeActivity extends AppCompatActivity {
                             public void onPageFinished(WebView view, String url) {
                                 view.evaluateJavascript(ScriptUtil.vivoExploit, value -> {
                                     if (value.contains("node")) {
-                                        download(value.replaceAll("\"", ""), animeName + "::" + count[1], SelectedAnimeActivity.this, "mp4");
+                                        download(value.replaceAll("\"", ""), animeName + "::" + count[1]);
                                         view.destroy();
                                         new Handler().postDelayed(() -> {
                                             if (count[0] < countMax) {
@@ -237,10 +262,19 @@ public class SelectedAnimeActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Make text
+     * @param text
+     */
     public void makeText(String text) {
         Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
     }
 
+    /**
+     * Get episode file
+     * @param index
+     * @return
+     */
     public File getEpisodeFile(int index) {
         File animeFile = new File(getFilesDir(), animeName);
         return new File(animeFile, animeFile.list()[index]);
@@ -248,13 +282,18 @@ public class SelectedAnimeActivity extends AppCompatActivity {
 
     private BroadcastReceiver broadcastReceiver;
 
-    public void download(String url, String fileName, Activity activity, String fileExtension) {
+    /**
+     * Download
+     * @param url
+     * @param fileName
+     */
+    public void download(String url, String fileName) {
         DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
         File file = new File(Environment.DIRECTORY_DOWNLOADS, "Move");
         request.setDescription("Downloading File: " + fileName);
         request.setTitle(fileName);
-        request.setDestinationInExternalPublicDir(file.getAbsolutePath(), fileName + "." + fileExtension);
-        DownloadManager downloadManager = (DownloadManager) activity.getSystemService(Context.DOWNLOAD_SERVICE);
+        request.setDestinationInExternalPublicDir(file.getAbsolutePath(), fileName + ".mp4");
+        DownloadManager downloadManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
         downloadManager.enqueue(request);
         this.broadcastReceiver = new BroadcastReceiver() {
             @Override
@@ -264,40 +303,26 @@ public class SelectedAnimeActivity extends AppCompatActivity {
                     long downloadId = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, 0);
                     Cursor cursor = downloadManager.query(new DownloadManager.Query().setFilterById(downloadId));
                     if (cursor.moveToFirst()) {
+                        /**
+                         * Move file from download to internal storage
+                         */
                         File src = new File(Uri.parse(cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI))).getPath());
-                        File newOut = new File(activity.getFilesDir(), fileName.substring(0, fileName.indexOf("::")));
+                        File newOut = new File(getFilesDir(), fileName.substring(0, fileName.indexOf("::")));
                         if (!newOut.exists()) newOut.mkdir();
                         moveFile(src, new File(newOut, src.getName()));
                     }
+                    /**
+                     * Reload
+                     */
                     finish();
                     overridePendingTransition(0, 0);
                     startActivity(getIntent());
                     overridePendingTransition(0, 0);
-
                     cursor.close();
                 }
             }
         };
-        activity.registerReceiver(broadcastReceiver, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
-    }
-
-    private void moveFile(File in, File dest) {
-        try {
-            dest.createNewFile();
-            InputStream inputStream = new BufferedInputStream(new FileInputStream(in));
-            OutputStream out = new BufferedOutputStream(new FileOutputStream(dest));
-            byte[] buffer = new byte[1024];
-            int lengthRead;
-            while ((lengthRead = inputStream.read(buffer)) > 0) {
-                out.write(buffer, 0, lengthRead);
-                out.flush();
-            }
-            inputStream.close();
-            out.close();
-            Files.delete(in.toPath());
-        } catch (IOException var7) {
-            Logger.log(var7.getMessage(), Logger.LogType.ERROR);
-        }
+        registerReceiver(broadcastReceiver, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
     }
 
     class AnimeEpisodeAdapter extends BaseAdapter {
@@ -340,4 +365,24 @@ public class SelectedAnimeActivity extends AppCompatActivity {
             notifyDataSetChanged();
         }
     }
+
+    private void moveFile(File in, File dest) {
+        try {
+            dest.createNewFile();
+            InputStream inputStream = new BufferedInputStream(new FileInputStream(in));
+            OutputStream out = new BufferedOutputStream(new FileOutputStream(dest));
+            byte[] buffer = new byte[1024];
+            int lengthRead;
+            while ((lengthRead = inputStream.read(buffer)) > 0) {
+                out.write(buffer, 0, lengthRead);
+                out.flush();
+            }
+            inputStream.close();
+            out.close();
+            Files.delete(in.toPath());
+        } catch (IOException var7) {
+            Logger.log(var7.getMessage(), Logger.LogType.ERROR);
+        }
+    }
+
 }

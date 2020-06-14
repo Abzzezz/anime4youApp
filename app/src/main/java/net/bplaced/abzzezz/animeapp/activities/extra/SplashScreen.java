@@ -29,7 +29,7 @@ public class SplashScreen extends AppCompatActivity {
      */
 
     public static AnimeSaver saver;
-    public static boolean isDebugVersion = true;
+    public static boolean isDebugVersion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,15 +81,4 @@ public class SplashScreen extends AppCompatActivity {
         autoUpdater.execute(this);
     }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        //   getMenuInflater().inflate(R.menu.main_menu_menu, menu);
-        return true;
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
 }
