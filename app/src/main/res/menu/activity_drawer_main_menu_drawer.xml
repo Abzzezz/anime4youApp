@@ -23,14 +23,15 @@
                 android:title="@string/menu_changelog"/>
 
         <item
-                android:id="@+id/add_aid_item"
-                android:icon="@drawable/plus"
-                android:title="Add aid"/>
-
-        <item
                 android:id="@+id/cloud_download"
                 android:icon="@drawable/cloud_download"
                 android:title="Cloud list"/>
+
+        <item
+                android:id="@+id/download_tracker"
+                android:icon="@drawable/format_list_bulleted"
+                android:title="Download Tracker"/>
+
 
     </group>
 </menu>

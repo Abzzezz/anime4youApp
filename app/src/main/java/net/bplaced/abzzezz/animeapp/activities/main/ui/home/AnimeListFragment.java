@@ -9,7 +9,6 @@ package net.bplaced.abzzezz.animeapp.activities.main.ui.home;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.*;
@@ -19,21 +18,14 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.squareup.picasso.Picasso;
-import ga.abzzezz.util.logging.Logger;
+import net.bplaced.abzzezz.animeapp.AnimeAppMain;
 import net.bplaced.abzzezz.animeapp.R;
-import net.bplaced.abzzezz.animeapp.activities.extra.SplashScreen;
 import net.bplaced.abzzezz.animeapp.activities.main.SelectedAnimeActivity;
 import net.bplaced.abzzezz.animeapp.util.ImageUtil;
 import net.bplaced.abzzezz.animeapp.util.scripter.DataBaseSearch;
 import net.bplaced.abzzezz.animeapp.util.scripter.URLHandler;
-import org.apache.commons.net.ftp.FTPClient;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.ExecutionException;
 
 public class AnimeListFragment extends Fragment {
@@ -44,7 +36,7 @@ public class AnimeListFragment extends Fragment {
         View root = inflater.inflate(R.layout.anime_list_layout, container, false);
 
         GridView gridView = root.findViewById(R.id.anime_grid);
-        this.animeAdapter = new AnimeAdapter(SplashScreen.saver.getList(), getActivity().getApplicationContext());
+        this.animeAdapter = new AnimeAdapter(AnimeAppMain.getInstance().getAnimeSaver().getList(), getActivity().getApplicationContext());
         gridView.setAdapter(animeAdapter);
         /**
          * Set onclick listener, if clicked pass information through to selected anime.
@@ -52,7 +44,7 @@ public class AnimeListFragment extends Fragment {
         gridView.setOnItemClickListener((parent, view, position, id) -> new Handler().postDelayed(() -> {
             try {
                 Intent intent = new Intent(getActivity(), SelectedAnimeActivity.class);
-                String[] pass = SplashScreen.saver.getAll(position);
+                String[] pass = AnimeAppMain.getInstance().getAnimeSaver().getAll(position);
                 String[] dataBase = new DataBaseSearch().execute(pass[3]).get();
                 intent.putExtra("anime_name", pass[0]);
                 intent.putExtra("anime_episodes", dataBase[1]);
@@ -161,7 +153,7 @@ public class AnimeListFragment extends Fragment {
         public View getView(int position, View convertView, ViewGroup parent) {
             ImageView imageView = new ImageView(context);
             try {
-                Picasso.with(context).load(SplashScreen.saver.getAll(position)[2]).resize(ImageUtil.dimensions[0], ImageUtil.dimensions[1]).into(imageView);
+                Picasso.with(context).load(AnimeAppMain.getInstance().getAnimeSaver().getAll(position)[2]).resize(ImageUtil.dimensions[0], ImageUtil.dimensions[1]).into(imageView);
                 imageView.setAdjustViewBounds(true);
             } catch (ArrayIndexOutOfBoundsException e) {
                 System.out.println(position);
@@ -171,20 +163,20 @@ public class AnimeListFragment extends Fragment {
 
         public void removeItem(int index) {
             string.remove(index);
-            SplashScreen.saver.remove(index);
+            AnimeAppMain.getInstance().getAnimeSaver().remove(index);
             notifyDataSetChanged();
         }
 
         public void addItem(String item) {
             try {
-                if(!URLHandler.isOnline(getActivity())) {
+                if (!URLHandler.isOnline(getActivity())) {
                     Toast.makeText(context, "You are currently not connected to the internet, returning", Toast.LENGTH_LONG).show();
                     return;
                 }
 
                 String[] all = new DataBaseSearch().execute(item).get();
                 string.add(item);
-                SplashScreen.saver.add(all);
+                AnimeAppMain.getInstance().getAnimeSaver().add(all);
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }
@@ -199,7 +191,7 @@ public class AnimeListFragment extends Fragment {
     /**
      * Debug
      */
-
+    /*
     class FTPGetter extends AsyncTask<Void, Void, Void> {
 
         @Override
@@ -220,4 +212,5 @@ public class AnimeListFragment extends Fragment {
             return null;
         }
     }
+     */
 }

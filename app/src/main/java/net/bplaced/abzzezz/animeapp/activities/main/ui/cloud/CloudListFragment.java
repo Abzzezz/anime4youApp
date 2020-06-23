@@ -19,6 +19,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import ga.abzzezz.util.data.URLUtil;
 import ga.abzzezz.util.logging.Logger;
+import net.bplaced.abzzezz.animeapp.AnimeAppMain;
 import net.bplaced.abzzezz.animeapp.R;
 import net.bplaced.abzzezz.animeapp.activities.extra.SplashScreen;
 import org.apache.commons.net.ftp.FTPClient;
@@ -93,7 +94,7 @@ public class CloudListFragment extends Fragment {
         protected Void doInBackground(String... strings) {
             try {
                 //Pull and add
-                URLUtil.getURLContentAsArray(new URL("http://abzzezz.bplaced.net/lists/" + strings[0])).forEach(SplashScreen.saver::add);
+                URLUtil.getURLContentAsArray(new URL("http://abzzezz.bplaced.net/lists/" + strings[0])).forEach(AnimeAppMain.getInstance().getAnimeSaver()::add);
             } catch (MalformedURLException e) {
                 Logger.log("Error getting from cloud.", Logger.LogType.ERROR);
                 e.printStackTrace();

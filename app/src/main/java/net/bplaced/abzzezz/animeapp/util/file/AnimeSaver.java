@@ -11,7 +11,6 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import ga.abzzezz.util.logging.Logger;
 import ga.abzzezz.util.stringing.StringUtil;
-import net.bplaced.abzzezz.animeapp.activities.extra.SplashScreen;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -34,8 +33,6 @@ public class AnimeSaver {
         this.editor = preferences.edit();
         this.publicPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         Logger.log("Anime Saver set up.", Logger.LogType.INFO);
-        //editor.clear().apply();
-        if (SplashScreen.isDebugVersion) preferences.getAll().entrySet().forEach(System.out::println);
     }
 
     /**
@@ -45,7 +42,7 @@ public class AnimeSaver {
      * @param all
      */
     public void add(String... all) {
-        if(all[0].equals("ERROR")) return;
+        if (all[0].equals("ERROR")) return;
 
         boolean check = publicPreferences.getBoolean("check_existing", false);
         String add = all[0].replaceAll(":", "") + StringUtil.splitter + all[1] + StringUtil.splitter + all[2] + StringUtil.splitter + all[3];

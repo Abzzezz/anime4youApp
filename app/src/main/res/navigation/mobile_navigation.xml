@@ -14,23 +14,39 @@
             android:id="@+id/nav_settings"
             android:name="net.bplaced.abzzezz.animeapp.activities.main.ui.settings.SettingsFragment"
             android:label="@string/action_settings"
-            tools:layout="@layout/settings_layout"/>
+            tools:layout="@layout/settings_layout">
+        <action android:id="@+id/action_nav_settings_to_cloud_download" app:destination="@id/cloud_download"/>
+    </fragment>
 
     <fragment
             android:id="@+id/nav_anime_list"
             android:name="net.bplaced.abzzezz.animeapp.activities.main.ui.home.AnimeListFragment"
             android:label="@string/app_name"
-            tools:layout="@layout/anime_list_layout"/>
+            tools:layout="@layout/anime_list_layout">
+        <action android:id="@+id/action_nav_anime_list_to_nav_settings" app:destination="@id/nav_settings"/>
+    </fragment>
 
     <fragment
             android:id="@+id/cloud_download"
             android:name="net.bplaced.abzzezz.animeapp.activities.main.ui.cloud.CloudListFragment"
             android:label="Cloud Download"
-            tools:layout="@layout/cloud_download_layout"/>
+            tools:layout="@layout/cloud_download_layout">
+        <action android:id="@+id/action_cloud_download_to_download_tracker" app:destination="@id/download_tracker"/>
+    </fragment>
 
     <fragment
             android:id="@+id/nav_changelog"
             android:name="net.bplaced.abzzezz.animeapp.activities.main.ui.chagelog.ChangelogFragment"
             android:label="@string/menu_changelog"
-            tools:layout="@layout/changelog_layout"/>
+            tools:layout="@layout/changelog_layout">
+        <action android:id="@+id/action_nav_changelog_to_nav_anime_list" app:destination="@id/nav_anime_list"/>
+    </fragment>
+
+    <fragment
+            android:id="@+id/download_tracker"
+            android:name="net.bplaced.abzzezz.animeapp.activities.main.ui.tracker.DownloadTrackerFragment"
+            android:label="Download Tracker"
+            tools:layout="@layout/cloud_download_layout">
+        <action android:id="@+id/action_download_tracker_to_nav_changelog" app:destination="@id/nav_changelog"/>
+    </fragment>
 </navigation>
