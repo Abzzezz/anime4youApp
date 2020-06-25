@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2020. Roman P.
  * All code is owned by Roman P. APIs are mentioned.
- * Last modified: 23.06.20, 17:29
+ * Last modified: 25.06.20, 15:37
  */
 
 package net.bplaced.abzzezz.animeapp;
@@ -11,8 +11,11 @@ import android.app.Activity;
 import android.app.Application;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Build;
 import android.widget.Toast;
+import androidx.preference.PreferenceManager;
 import ga.abzzezz.util.logging.Logger;
 import net.bplaced.abzzezz.animeapp.util.file.AnimeSaver;
 import net.bplaced.abzzezz.animeapp.util.file.DownloadTracker;
@@ -23,11 +26,14 @@ public class AnimeAppMain {
     /**
      * Version and variables
      */
+    private static final AnimeAppMain inst = new AnimeAppMain();
+
     private final float version;
     private final boolean debugVersion;
-    public static final String NOTIFICATION_CHANNEL_ID = "Anime Channel";
     private final String notificationChannelName;
-    private static final AnimeAppMain inst = new AnimeAppMain();
+    private boolean darkMode;
+    public static final String NOTIFICATION_CHANNEL_ID = "Anime Channel";
+    private int themeID;
 
     /**
      * Handlers
@@ -36,8 +42,8 @@ public class AnimeAppMain {
     private DownloadTracker downloadTracker;
 
     public AnimeAppMain() {
-        this.version = 39;
-        this.debugVersion = false;
+        this.version = 40;
+        this.debugVersion = true;
         this.notificationChannelName = "AnimeChannel";
     }
 
@@ -47,6 +53,13 @@ public class AnimeAppMain {
     public void configureHandlers(final Application application) {
         this.animeSaver = new AnimeSaver(application);
         this.downloadTracker = new DownloadTracker(application);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(application.getApplicationContext());
+        this.darkMode = sharedPreferences.getBoolean("dark_mode", false);
+        if (darkMode)
+            themeID = R.style.DarkTheme;
+        else
+            themeID = R.style.LightTheme;
+
     }
 
     /**
@@ -65,10 +78,18 @@ public class AnimeAppMain {
             int importance = NotificationManager.IMPORTANCE_LOW;
             NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, notificationChannelName, importance);
             channel.setDescription(description);
-            channel.setLightColor(0xFFD76675);
+            channel.setLightColor(Color.MAGENTA);
             NotificationManager notificationManager = application.getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
+    }
+
+    public boolean isDarkMode() {
+        return darkMode;
+    }
+
+    public int getThemeID() {
+        return themeID;
     }
 
     public static AnimeAppMain getInstance() {

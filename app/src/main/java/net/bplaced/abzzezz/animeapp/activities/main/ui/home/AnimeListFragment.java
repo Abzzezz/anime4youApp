@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2020. Roman P.
  * All code is owned by Roman P. APIs are mentioned.
- * Last modified: 14.06.20, 16:38
+ * Last modified: 25.06.20, 15:16
  */
 
 package net.bplaced.abzzezz.animeapp.activities.main.ui.home;
@@ -10,7 +10,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.*;
 import android.widget.*;
 import androidx.annotation.NonNull;
@@ -25,40 +24,47 @@ import net.bplaced.abzzezz.animeapp.activities.main.SelectedAnimeActivity;
 import net.bplaced.abzzezz.animeapp.util.ImageUtil;
 import net.bplaced.abzzezz.animeapp.util.scripter.DataBaseSearch;
 import net.bplaced.abzzezz.animeapp.util.scripter.URLHandler;
+import net.bplaced.abzzezz.animeapp.util.tasks.DataBaseTask;
+import net.bplaced.abzzezz.animeapp.util.tasks.TaskExecutor;
 
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 public class AnimeListFragment extends Fragment {
 
     private AnimeAdapter animeAdapter;
+    private final DataBaseSearch dataBaseSearch = new DataBaseSearch();
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.anime_list_layout, container, false);
 
         GridView gridView = root.findViewById(R.id.anime_grid);
-        this.animeAdapter = new AnimeAdapter(AnimeAppMain.getInstance().getAnimeSaver().getList(), getActivity().getApplicationContext());
+        this.animeAdapter = new AnimeAdapter(AnimeAppMain.getInstance().getAnimeSaver().getList(), getActivity());
         gridView.setAdapter(animeAdapter);
         /**
          * Set onclick listener, if clicked pass information through to selected anime.
          */
-        gridView.setOnItemClickListener((parent, view, position, id) -> new Handler().postDelayed(() -> {
-            try {
-                Intent intent = new Intent(getActivity(), SelectedAnimeActivity.class);
-                String[] pass = AnimeAppMain.getInstance().getAnimeSaver().getAll(position);
-                String[] dataBase = new DataBaseSearch().execute(pass[3]).get();
-                intent.putExtra("anime_name", pass[0]);
-                intent.putExtra("anime_episodes", dataBase[1]);
-                intent.putExtra("anime_cover", pass[2]);
-                intent.putExtra("anime_aid", pass[3]);
-                intent.putExtra("anime_language", dataBase[4]);
-                startActivity(intent);
-                getActivity().finish();
+        gridView.setOnItemClickListener((parent, view, position, id) -> {
+            Intent intent = new Intent(getActivity(), SelectedAnimeActivity.class);
+            String[] pass = AnimeAppMain.getInstance().getAnimeSaver().getAll(position);
 
-            } catch (InterruptedException | ExecutionException e) {
-                e.printStackTrace();
-            }
-        }, 100));
+            new TaskExecutor().executeAsync(new DataBaseTask(pass[3], dataBaseSearch), new TaskExecutor.Callback<String[]>() {
+                @Override
+                public void onComplete(String[] result) {
+                    intent.putExtra("anime_name", pass[0]);
+                    intent.putExtra("anime_episodes", result[1]);
+                    intent.putExtra("anime_cover", pass[2]);
+                    intent.putExtra("anime_aid", pass[3]);
+                    intent.putExtra("anime_language", result[4]);
+                    startActivity(intent);
+                    getActivity().finish();
+                }
+
+                @Override
+                public void preExecute() {
+
+                }
+            });
+        });
         /**
          * Set on long hold listener, then block the old one
          */
@@ -171,19 +177,23 @@ public class AnimeListFragment extends Fragment {
         }
 
         public void addItem(String item) {
-            try {
-                if (!URLHandler.isOnline(getActivity())) {
-                    Toast.makeText(context, "You are currently not connected to the internet, returning", Toast.LENGTH_LONG).show();
-                    return;
+            if (!URLHandler.isOnline(getActivity())) {
+                Toast.makeText(context, "You are currently not connected to the internet, returning", Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            new TaskExecutor().executeAsync(new DataBaseTask(item, dataBaseSearch), new TaskExecutor.Callback<String[]>() {
+                @Override
+                public void onComplete(String[] result) {
+                    string.add(item);
+                    AnimeAppMain.getInstance().getAnimeSaver().add(result);
+                    notifyDataSetChanged();
                 }
 
-                String[] all = new DataBaseSearch().execute(item).get();
-                string.add(item);
-                AnimeAppMain.getInstance().getAnimeSaver().add(all);
-            } catch (InterruptedException | ExecutionException e) {
-                e.printStackTrace();
-            }
-            notifyDataSetChanged();
+                @Override
+                public void preExecute() {
+                }
+            });
         }
 
         public List<String> getString() {

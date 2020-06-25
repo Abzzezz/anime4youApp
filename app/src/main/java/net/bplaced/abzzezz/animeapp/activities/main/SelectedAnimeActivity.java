@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2020. Roman P.
  * All code is owned by Roman P. APIs are mentioned.
- * Last modified: 14.06.20, 20:07
+ * Last modified: 25.06.20, 15:37
  */
 
 package net.bplaced.abzzezz.animeapp.activities.main;
@@ -11,9 +11,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -41,10 +41,10 @@ import net.bplaced.abzzezz.animeapp.R;
 import net.bplaced.abzzezz.animeapp.util.ImageUtil;
 import net.bplaced.abzzezz.animeapp.util.scripter.ScriptUtil;
 import net.bplaced.abzzezz.animeapp.util.scripter.URLHandler;
+import net.bplaced.abzzezz.animeapp.util.tasks.TaskExecutor;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.channels.Channels;
@@ -52,6 +52,8 @@ import java.nio.channels.ReadableByteChannel;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.Callable;
 
 public class SelectedAnimeActivity extends AppCompatActivity {
 
@@ -64,11 +66,7 @@ public class SelectedAnimeActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean("dark_mode", false)) {
-            setTheme(R.style.DarkTheme);
-        } else {
-            setTheme(R.style.LightTheme);
-        }
+        setTheme(AnimeAppMain.getInstance().getThemeID());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.anime_selected_layout);
 
@@ -118,7 +116,7 @@ public class SelectedAnimeActivity extends AppCompatActivity {
         /*
          * Convert file array to list
          */
-        List<String> episodes = Arrays.asList(animeFile.list() != null ? animeFile.list() : new String[0]);
+        List<String> episodes = Arrays.asList(animeFile.list() == null ? new String[0] : animeFile.list());
 
         selected_anime_size.append(FileUtil.calculateFileSize(animeFile));
         /*
@@ -264,12 +262,11 @@ public class SelectedAnimeActivity extends AppCompatActivity {
                                 view.evaluateJavascript(ScriptUtil.vivoExploit, value -> {
                                     if (value.contains("node")) {
                                         //Run new Download Task and download episode
-                                        String[] in = new String[]{value.replaceAll("\"", ""), animeName + "::" + count[1]};
-                                        new EpisodeDownload().execute(in);
-
+                                        String[] in = new String[]{value.replaceAll("\"", ""), animeName + "::" + count[1] + ".mp4"};
+                                        new DownloadTask(in).executeAsync();
                                         //  download(value.replaceAll("\"", ""), animeName + "::" + count[1]);
                                         view.destroy();
-                                        new Handler().postDelayed(() -> {
+                                        new Handler(Looper.getMainLooper()).postDelayed(() -> {
                                             if (count[0] < countMax) {
                                                 count[0]++;
                                                 count[1]++;
@@ -311,7 +308,7 @@ public class SelectedAnimeActivity extends AppCompatActivity {
      */
     public File getEpisodeFile(int index) {
         File animeFile = new File(getFilesDir(), animeName);
-        return new File(animeFile, animeFile.list()[index]);
+        return new File(animeFile, Objects.requireNonNull(animeFile.list())[index]);
     }
 
     /*
@@ -388,76 +385,74 @@ public class SelectedAnimeActivity extends AppCompatActivity {
         }
     }
 
+    /*
+    New download task
+     */
+    class DownloadTask extends TaskExecutor implements Callable<String>, TaskExecutor.Callback<String> {
 
-    private class EpisodeDownload extends AsyncTask<String, Integer, String> {
-
+        private final String[] information;
         private NotificationManagerCompat notificationManagerCompat;
         private NotificationCompat.Builder notification;
         private int notifyID;
 
+
+        public DownloadTask(final String[] information) {
+            this.information = information;
+        }
+
+        public <R> void executeAsync() {
+            super.executeAsync(this, this);
+        }
+
         @Override
-        protected void onPreExecute() {
+        public String call() throws Exception {
+            Logger.log("New download thread started, ID:", Logger.LogType.INFO);
+            final File outDir = new File(getFilesDir(), information[1].substring(0, information[1].indexOf("::")));
+            if (!outDir.exists()) outDir.mkdir();
+            final File fileOut = new File(outDir, information[1]);
+            //Open new URL connection
+            URLConnection urlConnection = new URL(information[0]).openConnection();
+            urlConnection.connect();
+            //Open Stream
+            FileOutputStream fileOutputStream = new FileOutputStream(fileOut);
+            ReadableByteChannel readableByteChannel = Channels.newChannel(urlConnection.getInputStream());
+            //Copy from channel to channel
+            fileOutputStream.getChannel().transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
+                /*
+                Close and flush streams
+                 */
+            Logger.log("Done copying streams, closing stream", Logger.LogType.INFO);
+            fileOutputStream.close();
+            return fileOut.getName();
+        }
+
+        @Override
+        public void onComplete(String result) {
+            notificationManagerCompat.cancel(notifyID);
+            AnimeAppMain.getInstance().getDownloadTracker().submitTrack("Downloaded Episode: " + result);
+            Toast.makeText(SelectedAnimeActivity.this, "Done downloading anime episode: " + result, Toast.LENGTH_SHORT).show();
+            animeEpisodeAdapter = new SelectedAnimeActivity.AnimeEpisodeAdapter(Arrays.asList(animeFile.list()), getApplicationContext());
+            episodeGrid.setAdapter(animeEpisodeAdapter);
+            animeEpisodeAdapter.notifyDataSetChanged();
+
+            notification = new NotificationCompat.Builder(getApplicationContext(), AnimeAppMain.NOTIFICATION_CHANNEL_ID)
+                    .setSmallIcon(R.drawable.information).setColor(Color.GREEN).setContentText("Episode-download done")
+                    .setContentTitle("Done downloading episode: " + animeName)
+                    .setPriority(NotificationCompat.PRIORITY_MAX);
+            notificationManagerCompat.notify(notifyID, notification.build());
+        }
+
+        @Override
+        public void preExecute() {
             this.notifyID = (int) System.currentTimeMillis() % 10000;
-            this.notificationManagerCompat = NotificationManagerCompat.from(getApplicationContext());
-            this.notification = new NotificationCompat.Builder(getApplicationContext(), AnimeAppMain.NOTIFICATION_CHANNEL_ID)
+            this.notificationManagerCompat = NotificationManagerCompat.from(getApplication());
+            this.notification = new NotificationCompat.Builder(getApplication(), AnimeAppMain.NOTIFICATION_CHANNEL_ID)
                     .setSmallIcon(R.drawable.download)
                     .setContentText("Currently downloading episode")
                     .setContentTitle("Episode Download")
                     .setPriority(NotificationCompat.PRIORITY_HIGH)
                     .setOngoing(true);
             this.notificationManagerCompat.notify(notifyID, notification.build());
-            super.onPreExecute();
-        }
-
-        /**
-         * Downloads the requested Episode with name from requested URL to the internal storage
-         */
-
-
-        @Override
-        protected String doInBackground(final String... strings) {
-            try {
-                Logger.log("New download thread started, ID:" + getTaskId(), Logger.LogType.INFO);
-                final File outDir = new File(getFilesDir(), strings[1].substring(0, strings[1].indexOf("::")));
-                if (!outDir.exists()) outDir.mkdir();
-                final File fileOut = new File(outDir, strings[1] + ".mp4");
-                //Open new URL connection
-                URLConnection urlConnection = new URL(strings[0]).openConnection();
-                urlConnection.connect();
-                //Open Stream
-                FileOutputStream fileOutputStream = new FileOutputStream(fileOut);
-                ReadableByteChannel readableByteChannel = Channels.newChannel(urlConnection.getInputStream());
-                //Copy from channel to channel
-                fileOutputStream.getChannel().transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
-                /*
-                Close and flush streams
-                 */
-                Logger.log("Done copying streams, closing stream", Logger.LogType.INFO);
-                fileOutputStream.close();
-                return fileOut.getName();
-            } catch (IOException e) {
-                e.printStackTrace();
-                return "ERROR Downloading";
-            }
-        }
-
-        @Override
-        protected void onPostExecute(final String animeName) {
-            super.onPostExecute(animeName);
-            //Cancel old
-            notificationManagerCompat.cancel(notifyID);
-            AnimeAppMain.getInstance().getDownloadTracker().submitTrack("Downloaded Episode: " + animeName);
-            Toast.makeText(SelectedAnimeActivity.this, "Done downloading anime episode: " + animeName, Toast.LENGTH_SHORT).show();
-            animeEpisodeAdapter = new AnimeEpisodeAdapter(Arrays.asList(animeFile.list()), getApplicationContext());
-            episodeGrid.setAdapter(animeEpisodeAdapter);
-            animeEpisodeAdapter.notifyDataSetChanged();
-
-            this.notification = new NotificationCompat.Builder(getApplicationContext(), AnimeAppMain.NOTIFICATION_CHANNEL_ID)
-                    .setSmallIcon(R.drawable.information).setColor(Color.GREEN).setContentText("Episode-download done")
-                    .setContentTitle("Done downloading episode: " + animeName)
-                    .setPriority(NotificationCompat.PRIORITY_MAX);
-            this.notificationManagerCompat.notify(notifyID, notification.build());
         }
     }
-
 }

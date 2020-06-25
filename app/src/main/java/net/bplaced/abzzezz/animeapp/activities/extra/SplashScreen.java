@@ -1,32 +1,29 @@
 /*
  * Copyright (c) 2020. Roman P.
  * All code is owned by Roman P. APIs are mentioned.
- * Last modified: 14.06.20, 20:07
+ * Last modified: 25.06.20, 15:37
  */
 
 package net.bplaced.abzzezz.animeapp.activities.extra;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.Looper;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.preference.PreferenceManager;
 import ga.abzzezz.util.data.URLUtil;
 import net.bplaced.abzzezz.animeapp.AnimeAppMain;
 import net.bplaced.abzzezz.animeapp.R;
 import net.bplaced.abzzezz.animeapp.activities.main.DrawerMainMenu;
 import net.bplaced.abzzezz.animeapp.util.file.Downloader;
 import net.bplaced.abzzezz.animeapp.util.scripter.URLHandler;
+import net.bplaced.abzzezz.animeapp.util.tasks.TaskExecutor;
 
 import java.io.File;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.concurrent.ExecutionException;
 
 
 public class SplashScreen extends AppCompatActivity {
@@ -36,11 +33,7 @@ public class SplashScreen extends AppCompatActivity {
         /**
          * Set theme
          */
-        if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean("dark_mode", false)) {
-            setTheme(R.style.DarkTheme);
-        } else {
-            setTheme(R.style.LightTheme);
-        }
+        setTheme(AnimeAppMain.getInstance().getThemeID());
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_screen_layout);
@@ -53,15 +46,25 @@ public class SplashScreen extends AppCompatActivity {
         //Configure handlers
         AnimeAppMain.getInstance().configureHandlers(getApplication());
 
-        SplashScreen.AutoUpdater autoUpdater = new SplashScreen.AutoUpdater();
-        SplashScreen.VersionChecker versionChecker = new SplashScreen.VersionChecker();
-        try {
-            if (versionChecker.execute().get()) {
-                autoUpdater.execute(this);
+        /*
+        Check version
+         */
+
+        new TaskExecutor().executeAsync(() -> AnimeAppMain.getInstance().getVersion() < Float.parseFloat(URLUtil.getURLContentAsString(new URL(URLHandler.checkURL))), new TaskExecutor.Callback<Boolean>() {
+            @Override
+            public void preExecute() {
             }
-        } catch (ExecutionException | InterruptedException e) {
-            e.printStackTrace();
-        }
+
+            @Override
+            public void onComplete(Boolean result) {
+                if (result) {
+                    File outDic = new File(Environment.DIRECTORY_DOWNLOADS, "Anime4you-Update");
+                    String fileName = "AutoUpdate.apk";
+                    Downloader.download(URLHandler.updateURL, outDic, fileName, getParent());
+                    Toast.makeText(SplashScreen.this, "New update available. Please install the new version.", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
 
 
         //Set version text
@@ -70,53 +73,11 @@ public class SplashScreen extends AppCompatActivity {
         /**
          * Start new intent
          */
-        new Handler().postDelayed(() -> {
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
             Intent intent = new Intent(this, DrawerMainMenu.class);
             startActivity(intent);
             finish();
         }, AnimeAppMain.getInstance().isDebugVersion() ? 10 : 2500);
-    }
-
-
-    /**
-     * Auto updates
-     */
-
-    class VersionChecker extends AsyncTask<Void, Void, Boolean> {
-        @Override
-        protected Boolean doInBackground(Void... voids) {
-            try {
-                if(!checkUpdate().equals("NULL"))
-                    return AnimeAppMain.getInstance().getVersion() < Float.valueOf(checkUpdate());
-                else return false;
-            } catch (MalformedURLException e) {
-                return false;
-            }
-        }
-
-        private String checkUpdate() throws MalformedURLException {
-            return URLUtil.getURLContentAsString(new URL(URLHandler.checkURL));
-        }
-    }
-
-    /**
-     * Checks if the byte (version) is smaller than the Byte value of the String on the host
-     */
-    public class AutoUpdater extends AsyncTask<Activity, Integer, String> {
-
-        @Override
-        protected String doInBackground(Activity... activities) {
-            File outDic = new File(Environment.DIRECTORY_DOWNLOADS, "Anime4you-Update");
-            String fileName = "AutoUpdate.apk";
-            Downloader.download(URLHandler.updateURL, outDic, fileName, activities[0]);
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String path) {
-            Toast.makeText(SplashScreen.this, "New update available. Please install the new version.", Toast.LENGTH_LONG).show();
-            super.onPostExecute(path);
-        }
     }
 
 }

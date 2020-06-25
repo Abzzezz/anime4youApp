@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2020. Roman P.
  * All code is owned by Roman P. APIs are mentioned.
- * Last modified: 10.06.20, 15:25
+ * Last modified: 25.06.20, 15:39
  */
 
 package net.bplaced.abzzezz.animeapp.activities.main;
@@ -16,8 +16,8 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
-import androidx.preference.PreferenceManager;
 import com.google.android.material.navigation.NavigationView;
+import net.bplaced.abzzezz.animeapp.AnimeAppMain;
 import net.bplaced.abzzezz.animeapp.R;
 
 public class DrawerMainMenu extends AppCompatActivity {
@@ -27,11 +27,7 @@ public class DrawerMainMenu extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean("dark_mode", false)) {
-            setTheme(R.style.DarkTheme);
-        } else {
-            setTheme(R.style.LightTheme);
-        }
+        setTheme(AnimeAppMain.getInstance().getThemeID());
 
         setContentView(R.layout.drawer_layout);
         Toolbar toolbar = findViewById(R.id.fragmenthost_toolbar);
@@ -43,7 +39,7 @@ public class DrawerMainMenu extends AppCompatActivity {
 
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
-        mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.nav_anime_list, R.id.nav_settings, R.id.cloud_download, R.id.download_tracker).setDrawerLayout(drawer).build();
+        mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.nav_anime_list, R.id.nav_settings, R.id.cloud_download, R.id.download_tracker).setOpenableLayout(drawer).build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         navigationView.setNavigationItemSelectedListener(menuItem -> {

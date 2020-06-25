@@ -1,14 +1,14 @@
 /*
  * Copyright (c) 2020. Roman P.
  * All code is owned by Roman P. APIs are mentioned.
- * Last modified: 10.06.20, 14:02
+ * Last modified: 25.06.20, 14:08
  */
 
 package net.bplaced.abzzezz.animeapp.util.file;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
+import androidx.preference.PreferenceManager;
 import ga.abzzezz.util.logging.Logger;
 import ga.abzzezz.util.stringing.StringUtil;
 
@@ -55,8 +55,6 @@ public class AnimeSaver {
             editor.putString(String.valueOf(preferences.getAll().size()), add);
             editor.commit();
         }
-
-        System.out.println(editor.commit());
     }
 
     public boolean containsAid(String aid) {

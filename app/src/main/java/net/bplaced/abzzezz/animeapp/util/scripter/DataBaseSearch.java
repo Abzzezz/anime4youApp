@@ -1,12 +1,11 @@
 /*
  * Copyright (c) 2020. Roman P.
  * All code is owned by Roman P. APIs are mentioned.
- * Last modified: 14.06.20, 18:18
+ * Last modified: 25.06.20, 15:05
  */
 
 package net.bplaced.abzzezz.animeapp.util.scripter;
 
-import android.os.AsyncTask;
 import ga.abzzezz.util.data.URLUtil;
 import ga.abzzezz.util.logging.Logger;
 import ga.abzzezz.util.stringing.StringUtil;
@@ -15,7 +14,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 
-public class DataBaseSearch extends AsyncTask<String, Void, String[]> {
+public class DataBaseSearch {
 
 
     /**
@@ -33,21 +32,5 @@ public class DataBaseSearch extends AsyncTask<String, Void, String[]> {
             URLHandler.dataBase = "http://abzzezz.bplaced.net/list.txt";
         }
         return realSeries;
-    }
-
-    @Override
-    protected String[] doInBackground(String... aid) {
-        String realSeries = getSubstringFromDB(aid[0]);
-        String coverURL = realSeries.isEmpty() ? "0" : StringUtil.getStringFromLong(realSeries, "src=\\\"", "\\\"");
-        String episodesString = realSeries.isEmpty() ? "0" : StringUtil.getStringFromLong(realSeries, "\"Letzte\":\"", "\"");
-        String seriesName = realSeries.isEmpty() ? "ERROR" : StringUtil.getStringFromLong(realSeries, "\"titel\":\"", "\"");
-        String language = realSeries.isEmpty() ? "ERROR" : StringUtil.getStringFromLong(realSeries, "\"Untertitel\":\"", "\"");
-        return new String[]{seriesName, episodesString, coverURL, String.valueOf(aid[0]), language};
-    }
-
-    @Override
-    protected void onCancelled() {
-        Logger.log("Cancelled DataBase Task", Logger.LogType.INFO);
-        super.onCancelled();
     }
 }

@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2020. Roman P.
  * All code is owned by Roman P. APIs are mentioned.
- * Last modified: 23.06.20, 17:58
+ * Last modified: 25.06.20, 14:05
  */
 
 package net.bplaced.abzzezz.animeapp.util.file;
@@ -11,7 +11,6 @@ import android.content.SharedPreferences;
 import ga.abzzezz.util.logging.Logger;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 
 public class DownloadTracker {
@@ -30,12 +29,23 @@ public class DownloadTracker {
         this.preferences = context.getSharedPreferences("DownloadTracker", Context.MODE_PRIVATE);
         this.editor = preferences.edit();
         Logger.log("Download Tracker set up", Logger.LogType.INFO);
+        String[] array = new String[20];
+
+        for (int i = 0; i < array.length; i++) {
+            array[i] = "Test" + i + String.valueOf(Math.random());
+        }
+
+        for (int i = 0; i < array.length; i++) {
+            editor.putString(String.valueOf(i), array[i]);
+        }
+        editor.apply();
     }
 
     public void submitTrack(String information) {
         editor.putString(String.valueOf(preferences.getAll().size()), information);
-        editor.apply();
+        editor.commit();
     }
+
     /**
      * Return list, same as before
      *

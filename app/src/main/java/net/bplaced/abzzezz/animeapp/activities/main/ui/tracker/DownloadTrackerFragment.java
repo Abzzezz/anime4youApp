@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2020. Roman P.
  * All code is owned by Roman P. APIs are mentioned.
- * Last modified: 23.06.20, 18:12
+ * Last modified: 23.06.20, 18:16
  */
 
 package net.bplaced.abzzezz.animeapp.activities.main.ui.tracker;
