@@ -262,19 +262,10 @@ public class SelectedAnimeActivity extends AppCompatActivity {
                                 view.evaluateJavascript(ScriptUtil.vivoExploit, value -> {
                                     if (value.contains("node")) {
                                         //Run new Download Task and download episode
-                                        new DownloadTask(new String[]{value.replaceAll("\"", ""), animeName + "::" + count[1] + ".mp4"}).executeAsync();
+                                        new DownloadTask(new String[]{value.replaceAll("\"", ""), animeName + "::" + count[1] + ".mp4"}, new int[]{count[0], count[1], countMax}).executeAsync();
+                                        view.destroy();
                                         //  download(value.replaceAll("\"", ""), animeName + "::" + count[1]);
-                                        new Handler(Looper.getMainLooper()).postDelayed(() -> {
-                                            if (count[0] < countMax) {
-                                                count[0]++;
-                                                count[1]++;
-                                                downloadEpisode(count[1], countMax, count[0]);
-                                            }
-                                            view.destroy();
-                                            /**
-                                             * Wait
-                                             */
-                                        }, Long.parseLong(PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString("download_delay", "0")) * 1000);
+
                                     } else makeText("Error getting direct vivo link: " + value);
                                 });
                                 super.onPageFinished(view, url);
@@ -385,18 +376,20 @@ public class SelectedAnimeActivity extends AppCompatActivity {
     }
 
     /*
-    New download task
-     */
+New download task
+ */
     class DownloadTask extends TaskExecutor implements Callable<String>, TaskExecutor.Callback<String> {
 
         private final String[] information;
         private NotificationManagerCompat notificationManagerCompat;
         private NotificationCompat.Builder notification;
         private int notifyID;
+        private int[] count;
 
 
-        public DownloadTask(final String[] information) {
+        public DownloadTask(final String[] information, final int[] count) {
             this.information = information;
+            this.count = count;
         }
 
         public <R> void executeAsync() {
@@ -433,12 +426,18 @@ public class SelectedAnimeActivity extends AppCompatActivity {
             animeEpisodeAdapter = new SelectedAnimeActivity.AnimeEpisodeAdapter(Arrays.asList(animeFile.list()), getApplicationContext());
             episodeGrid.setAdapter(animeEpisodeAdapter);
             animeEpisodeAdapter.notifyDataSetChanged();
-
             notification = new NotificationCompat.Builder(getApplicationContext(), AnimeAppMain.NOTIFICATION_CHANNEL_ID)
                     .setSmallIcon(R.drawable.information).setColor(Color.GREEN).setContentText("Episode-download done")
                     .setContentTitle("Done downloading episode: " + animeName)
                     .setPriority(NotificationCompat.PRIORITY_MAX);
             notificationManagerCompat.notify(notifyID, notification.build());
+            new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                if (count[0] < count[2]) {
+                    count[0]++;
+                    count[1]++;
+                    downloadEpisode(count[1], count[2], count[0]);
+                }
+            }, Long.parseLong(PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString("download_delay", "0")) * 1000);
         }
 
         @Override
