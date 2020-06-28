@@ -5,7 +5,7 @@
   ~ Last modified: 06.06.20, 13:53
   -->
 
-<menu xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:title="Download specific" android:id="@+id/download_specific_episode"/>
     <item android:title="Download Bound" android:id="@+id/download_bound"/>

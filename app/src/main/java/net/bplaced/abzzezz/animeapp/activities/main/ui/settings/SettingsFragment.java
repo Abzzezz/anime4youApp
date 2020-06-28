@@ -12,8 +12,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
+import ga.abzzezz.util.logging.Logger;
+import id.ionbit.ionalert.IonAlert;
+import net.bplaced.abzzezz.animeapp.AnimeAppMain;
 import net.bplaced.abzzezz.animeapp.R;
+
+import java.io.File;
 
 public class SettingsFragment extends Fragment {
 
@@ -21,7 +27,8 @@ public class SettingsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.settings_layout, container, false);
-        getFragmentManager().beginTransaction().replace(R.id.settings, new SettingsFragmentInner()).commit();
+        getParentFragmentManager().beginTransaction().replace(R.id.settings, new SettingsFragmentInner()).commit();
+
         return root;
     }
 
@@ -29,6 +36,20 @@ public class SettingsFragment extends Fragment {
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             setPreferencesFromResource(R.xml.root_preferences, rootKey);
+            Preference button = findPreference("clear_offline_images_button");
+            button.setOnPreferenceClickListener(preference -> {
+                new IonAlert(getActivity(), IonAlert.WARNING_TYPE)
+                        .setTitleText("Delete all offline images?")
+                        .setContentText("If you are offline and there are no caches images wont be loaded!")
+                        .setConfirmText("Yes, delete!")
+                        .setConfirmClickListener(ionAlert -> {
+                            for (File imageFile : AnimeAppMain.getInstance().getImageStorage().listFiles())
+                                Logger.log("Deleting file: " + imageFile.getName() + "- Success: " + imageFile.delete(), Logger.LogType.INFO);
+                            ionAlert.dismissWithAnimation();
+                        }).setCancelText("Abort").setCancelClickListener(IonAlert::dismissWithAnimation)
+                        .show();
+                return true;
+            });
         }
     }
 

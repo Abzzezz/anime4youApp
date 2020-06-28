@@ -19,9 +19,16 @@
     <!-- Preference Titles -->
     <string name="global_options">Options</string>
     <string name="global_video">Video</string>
-
     <!-- Messages Preferences -->
     <string name="download_delay">Download delay (seconds)</string>
+    <string name="offline_mode">Offline mode</string>
+    <string name="offline_mode_attachment_summary_on">Anime covers and information will be stored in storage, maybe
+        resulting in higher storage usage.
+        Image load-times will be longer
+    </string>
+    <string name="offline_mode_attachment_summary_off">Images will only be cached. If cache is cleared and device is not
+        connected to the internet, no images will be loaded.
+    </string>
 
     <!-- Sync Preferences -->
     <string name="dark_mode_toggle">Use Dark Mode</string>
@@ -30,11 +37,6 @@
     <string name="attachment_summary_on">Checks if Anime already exists. Still accepts sub/dub</string>
     <string name="attachment_summary_off">Does not check. Entries can be duplicated</string>
     <string name="title_activity_drawer_main_menu">DrawerMainMenu</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
-    <string name="nav_header_desc">Navigation header</string>
 
     <string name="menu_anime_list">Anime List</string>
     <string name="menu_settings">Settings</string>

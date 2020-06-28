@@ -15,6 +15,7 @@ import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceManager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.squareup.picasso.Picasso;
 import id.ionbit.ionalert.IonAlert;
@@ -22,6 +23,7 @@ import net.bplaced.abzzezz.animeapp.AnimeAppMain;
 import net.bplaced.abzzezz.animeapp.R;
 import net.bplaced.abzzezz.animeapp.activities.main.SelectedAnimeActivity;
 import net.bplaced.abzzezz.animeapp.util.ImageUtil;
+import net.bplaced.abzzezz.animeapp.util.file.OfflineImageLoader;
 import net.bplaced.abzzezz.animeapp.util.scripter.DataBaseSearch;
 import net.bplaced.abzzezz.animeapp.util.scripter.URLHandler;
 import net.bplaced.abzzezz.animeapp.util.tasks.DataBaseTask;
@@ -36,7 +38,6 @@ public class AnimeListFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.anime_list_layout, container, false);
-
         GridView gridView = root.findViewById(R.id.anime_grid);
         this.animeAdapter = new AnimeAdapter(AnimeAppMain.getInstance().getAnimeSaver().getList(), getActivity());
         gridView.setAdapter(animeAdapter);
@@ -46,22 +47,27 @@ public class AnimeListFragment extends Fragment {
         gridView.setOnItemClickListener((parent, view, position, id) -> {
             Intent intent = new Intent(getActivity(), SelectedAnimeActivity.class);
             String[] pass = AnimeAppMain.getInstance().getAnimeSaver().getAll(position);
-
             new TaskExecutor().executeAsync(new DataBaseTask(pass[3], dataBaseSearch), new TaskExecutor.Callback<String[]>() {
                 @Override
                 public void onComplete(String[] result) {
-                    intent.putExtra("anime_name", pass[0]);
-                    intent.putExtra("anime_episodes", result[1]);
-                    intent.putExtra("anime_cover", pass[2]);
-                    intent.putExtra("anime_aid", pass[3]);
+                    String[] extra = result;
+
+                    if (PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean("offline_mode", false)) {
+                        extra = pass;
+                    }
+
+                    intent.putExtra("anime_name", extra[0]);
+                    intent.putExtra("anime_episodes", extra[1]);
+                    intent.putExtra("anime_cover", extra[2]);
+                    intent.putExtra("anime_aid", extra[3]);
                     intent.putExtra("anime_language", result[4]);
+
                     startActivity(intent);
                     getActivity().finish();
                 }
 
                 @Override
                 public void preExecute() {
-
                 }
             });
         });
@@ -84,9 +90,7 @@ public class AnimeListFragment extends Fragment {
         FloatingActionButton addAidButton = root.findViewById(R.id.add_aid);
         addAidButton.setOnClickListener(v -> {
             EditText editText = new EditText(getActivity());
-            new AlertDialog.Builder(getActivity()).setTitle("Aid").setMessage("Enter Aid to add").setPositiveButton("Enter", (dialogInterface, i) -> {
-                animeAdapter.addItem(editText.getText().toString());
-            }).setView(editText).show();
+            new AlertDialog.Builder(getActivity()).setTitle("Aid").setMessage("Enter Aid to add").setPositiveButton("Enter", (dialogInterface, i) -> animeAdapter.addItem(editText.getText().toString())).setView(editText).show();
         });
         return root;
     }
@@ -94,7 +98,6 @@ public class AnimeListFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
     }
 
     @Override
@@ -133,7 +136,7 @@ public class AnimeListFragment extends Fragment {
      */
 
 
-    private class AnimeAdapter extends BaseAdapter {
+    class AnimeAdapter extends BaseAdapter {
 
         private final Context context;
         private final List<String> string;
@@ -161,12 +164,17 @@ public class AnimeListFragment extends Fragment {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             ImageView imageView = new ImageView(context);
-            try {
-                Picasso.with(context).load(AnimeAppMain.getInstance().getAnimeSaver().getAll(position)[2]).resize(ImageUtil.dimensions[0], ImageUtil.dimensions[1]).into(imageView);
-                imageView.setAdjustViewBounds(true);
-            } catch (ArrayIndexOutOfBoundsException e) {
-                System.out.println(position);
+            String imageURL = AnimeAppMain.getInstance().getAnimeSaver().getAll(position)[2];
+            if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean("offline_mode", false)) {
+                OfflineImageLoader.loadImage(imageURL, AnimeAppMain.getInstance().getAnimeSaver().getAll(position)[3], imageView, getContext());
+            } else {
+                try {
+                    Picasso.with(context).load(imageURL).resize(ImageUtil.dimensions[0], ImageUtil.dimensions[1]).into(imageView);
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    System.out.println(position);
+                }
             }
+            imageView.setAdjustViewBounds(true);
             return imageView;
         }
 

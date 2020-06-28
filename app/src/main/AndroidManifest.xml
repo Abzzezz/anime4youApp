@@ -21,7 +21,8 @@
             android:theme="@style/DarkTheme"
             android:usesCleartextTraffic="true">
 
-        <activity android:name=".activities.extra.PlayerActivity" android:configChanges="keyboardHidden|orientation|screenSize|layoutDirection">
+        <activity android:name=".activities.extra.PlayerActivity"
+                  android:configChanges="keyboardHidden|orientation|screenSize|layoutDirection">
         </activity>
         <activity
                 android:name=".activities.main.DrawerMainMenu"

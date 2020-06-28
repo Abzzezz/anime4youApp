@@ -22,6 +22,8 @@ import net.bplaced.abzzezz.animeapp.util.file.AnimeSaver;
 import net.bplaced.abzzezz.animeapp.util.file.DownloadTracker;
 import net.bplaced.abzzezz.animeapp.util.scripter.URLHandler;
 
+import java.io.File;
+
 public class AnimeAppMain {
 
     /**
@@ -35,6 +37,7 @@ public class AnimeAppMain {
     private boolean darkMode;
     public static final String NOTIFICATION_CHANNEL_ID = "Anime Channel";
     private int themeID;
+    private File imageStorage;
 
     /**
      * Handlers
@@ -43,7 +46,7 @@ public class AnimeAppMain {
     private DownloadTracker downloadTracker;
 
     public AnimeAppMain() {
-        this.version = 41;
+        this.version = 42;
         this.debugVersion = false;
         this.notificationChannelName = "AnimeChannel";
     }
@@ -54,13 +57,15 @@ public class AnimeAppMain {
     public void configureHandlers(final Application application) {
         this.animeSaver = new AnimeSaver(application);
         this.downloadTracker = new DownloadTracker(application);
+        this.imageStorage = new File(application.getDataDir(), "StoredImagesOffline");
+        if (!imageStorage.exists()) Logger.log("Image file created: " + imageStorage.mkdir(), Logger.LogType.INFO);
+
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(application.getApplicationContext());
         this.darkMode = sharedPreferences.getBoolean("dark_mode", false);
         if (darkMode)
             themeID = R.style.DarkTheme;
         else
             themeID = R.style.LightTheme;
-
     }
 
     /**
@@ -86,6 +91,10 @@ public class AnimeAppMain {
             managerCompat.cancelAll();
 
         }
+    }
+
+    public File getImageStorage() {
+        return imageStorage;
     }
 
     public boolean isDarkMode() {

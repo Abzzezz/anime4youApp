@@ -6,7 +6,6 @@
 
 package net.bplaced.abzzezz.animeapp.activities.main;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -31,7 +30,6 @@ import androidx.core.content.FileProvider;
 import androidx.preference.PreferenceManager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.squareup.picasso.Picasso;
-import ga.abzzezz.util.array.ArrayUtil;
 import ga.abzzezz.util.data.FileUtil;
 import ga.abzzezz.util.data.URLUtil;
 import ga.abzzezz.util.logging.Logger;
@@ -41,6 +39,8 @@ import net.bplaced.abzzezz.animeapp.AnimeAppMain;
 import net.bplaced.abzzezz.animeapp.R;
 import net.bplaced.abzzezz.animeapp.activities.extra.PlayerActivity;
 import net.bplaced.abzzezz.animeapp.util.ImageUtil;
+import net.bplaced.abzzezz.animeapp.util.InputDialogBuilder;
+import net.bplaced.abzzezz.animeapp.util.file.OfflineImageLoader;
 import net.bplaced.abzzezz.animeapp.util.scripter.ScriptUtil;
 import net.bplaced.abzzezz.animeapp.util.scripter.URLHandler;
 import net.bplaced.abzzezz.animeapp.util.tasks.TaskExecutor;
@@ -100,7 +100,14 @@ public class SelectedAnimeActivity extends AppCompatActivity {
         ImageView cover = findViewById(R.id.anime_cover_image);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(animeName);
-        Picasso.with(getApplicationContext()).load(animeCover).resize(ImageUtil.dimensions[0], ImageUtil.dimensions[1]).into(cover);
+        /**
+         * If offline mode is enabled use image offline loader
+         */
+        if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean("offline_mode", false)) {
+            OfflineImageLoader.loadImage(animeCover, String.valueOf(aid), cover, this);
+        } else {
+            Picasso.with(getApplicationContext()).load(animeCover).resize(ImageUtil.dimensions[0], ImageUtil.dimensions[1]).into(cover);
+        }
         /*
          * GridView and Download Button
          */
@@ -170,9 +177,7 @@ public class SelectedAnimeActivity extends AppCompatActivity {
     }
 
     public static List<String> sortWithNumberInName(List<String> in) {
-        Collections.sort(in, Comparator.comparingInt((o) -> {
-            return StringUtil.extractNumberI(o.substring(o.indexOf("::") + 2, o.indexOf(".mp4")));
-        }));
+        in.sort(Comparator.comparingInt((o) -> StringUtil.extractNumberI(o.substring(o.indexOf("::") + 2, o.indexOf(".mp4")))));
         return in;
     }
 
@@ -200,18 +205,35 @@ public class SelectedAnimeActivity extends AppCompatActivity {
         EditText editText = new EditText(this);
         switch (itemID) {
             case R.id.download_specific_episode:
-                new AlertDialog.Builder(this)
-                        .setTitle("Download specific")
-                        .setMessage("Enter episode to download").setPositiveButton("Enter", (dialogInterface, i) -> downloadEpisode(Integer.parseInt(editText.getText().toString()), 1, 0)).setView(editText).show();
+                InputDialogBuilder inputDialogBuilder = new InputDialogBuilder(new InputDialogBuilder.InputDialogListener() {
+                    @Override
+                    public void onDialogInput(String text) {
+                        downloadEpisode(Integer.parseInt(text), 1, 0);
+                    }
+
+                    @Override
+                    public void onDialogDenied() {
+
+                    }
+                });
                 break;
             case R.id.download_bound:
                 String[] episodes = new File(getFilesDir(), animeName).list();
                 String episodeString = (episodes != null && episodes.length != 0) ? episodes[episodes.length - 1] : "1";
                 int nextStart = (episodes != null && episodes.length != 0) ? StringUtil.extractNumberI(episodeString.substring(episodeString.indexOf("::") + 2, episodeString.indexOf(".mp4"))) + 1 : 1;
-                new AlertDialog.Builder(this)
-                        .setTitle("Download bound")
-                        .setMessage("Enter download bound")
-                        .setPositiveButton("Enter", (dialogInterface, i) -> downloadEpisode(nextStart, Integer.parseInt(editText.getText().toString()), 0)).setView(editText).show();
+
+                InputDialogBuilder dialogBuilder = new InputDialogBuilder(new InputDialogBuilder.InputDialogListener() {
+                    @Override
+                    public void onDialogInput(String text) {
+                        downloadEpisode(nextStart, Integer.parseInt(text), 0);
+                    }
+
+                    @Override
+                    public void onDialogDenied() {
+
+                    }
+                });
+                dialogBuilder.showInput("Download bound", "Enter bound", this);
                 break;
             default:
                 break;
