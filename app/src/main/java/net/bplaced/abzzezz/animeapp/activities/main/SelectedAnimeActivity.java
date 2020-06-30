@@ -115,10 +115,12 @@ public class SelectedAnimeActivity extends AppCompatActivity {
         /*
          * Get anime file
          */
+
         /*
          * If it does not exist then create new one
          */
         this.animeFile = new File(getFilesDir(), animeName);
+
         /*
          * Convert file array to list
          */
@@ -129,14 +131,13 @@ public class SelectedAnimeActivity extends AppCompatActivity {
          * Set Adapter
          */
         this.animeEpisodeAdapter = new AnimeEpisodeAdapter(episodes, getApplicationContext());
-        episodeGrid.setAdapter(animeEpisodeAdapter);
+        this.episodeGrid.setAdapter(animeEpisodeAdapter);
         /*
          Configure grid
          */
         episodeGrid.setOnItemClickListener((parent, view, position, id) -> {
             Intent intent = null;
             int mode = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(this).getString("video_player_preference", "0"));
-
             if (mode == 0) {
                 intent = new Intent(Intent.ACTION_VIEW);
                 intent.setDataAndType(FileProvider.getUriForFile(getApplicationContext(), getApplicationContext().getPackageName() + ".provider", getEpisodeFile(position)), "video/mp4");
@@ -168,12 +169,10 @@ public class SelectedAnimeActivity extends AppCompatActivity {
          * Button
          */
         FloatingActionButton downloadAnime = findViewById(R.id.download_anime_button);
-        String episodeString = episodes.size() != 0 ? episodes.get(episodes.size() - 1) : "1";
         /*
         "Calculate" next start
          */
-        int nextStart = episodes.size() != 0 ? StringUtil.extractNumberI(episodeString.substring(episodeString.indexOf("::") + 2, episodeString.indexOf(".mp4"))) + 1 : 1;
-        downloadAnime.setOnClickListener(v -> downloadEpisode(nextStart, animeEpisodes, 0));
+        downloadAnime.setOnClickListener(v -> downloadEpisode(getLatestEpisode(), animeEpisodes, 0));
     }
 
     public static List<String> sortWithNumberInName(List<String> in) {
@@ -193,6 +192,16 @@ public class SelectedAnimeActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+    public int getLatestEpisode() {
+        if(animeFile.list() != null) {
+            OptionalInt highest = Arrays.stream(animeFile.list()).map(s -> StringUtil.extractNumberI(s.substring(s.indexOf("::") + 2, s.indexOf(".mp4")))).mapToInt(integer -> integer).max();
+            if (highest.isPresent())
+                return highest.getAsInt() + 1;
+        }
+
+        return 1;
+    }
+
     /**
      * Items selected
      *
@@ -202,7 +211,6 @@ public class SelectedAnimeActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemID = item.getItemId();
-        EditText editText = new EditText(this);
         switch (itemID) {
             case R.id.download_specific_episode:
                 InputDialogBuilder inputDialogBuilder = new InputDialogBuilder(new InputDialogBuilder.InputDialogListener() {
@@ -213,9 +221,9 @@ public class SelectedAnimeActivity extends AppCompatActivity {
 
                     @Override
                     public void onDialogDenied() {
-
                     }
                 });
+                inputDialogBuilder.showInput("Download spefic", "Enter episode to download", this);
                 break;
             case R.id.download_bound:
                 String[] episodes = new File(getFilesDir(), animeName).list();
@@ -230,7 +238,6 @@ public class SelectedAnimeActivity extends AppCompatActivity {
 
                     @Override
                     public void onDialogDenied() {
-
                     }
                 });
                 dialogBuilder.showInput("Download bound", "Enter bound", this);
@@ -422,7 +429,7 @@ New download task
         private NotificationManagerCompat notificationManagerCompat;
         private NotificationCompat.Builder notification;
         private int notifyID;
-        private int[] count;
+        private final int[] count;
 
 
         public DownloadTask(final String[] information, final int[] count) {

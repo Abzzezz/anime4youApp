@@ -20,23 +20,20 @@
             android:supportsRtl="true"
             android:theme="@style/DarkTheme"
             android:usesCleartextTraffic="true">
-
         <activity android:name=".activities.extra.PlayerActivity"
                   android:configChanges="keyboardHidden|orientation|screenSize|layoutDirection">
         </activity>
         <activity
                 android:name=".activities.main.DrawerMainMenu"
                 android:label="@string/title_activity_drawer_main_menu"
-                android:theme="@style/DarkTheme.NoActionBar">
-        </activity>
-        <activity android:name=".activities.main.SelectedAnimeActivity">
-        </activity>
+                android:theme="@style/DarkTheme.NoActionBar"/>
+        <activity android:name=".activities.main.SelectedAnimeActivity"/>
+
         <activity
                 android:name=".activities.extra.SplashScreen"
                 android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
@@ -49,7 +46,6 @@
                     android:name="android.support.FILE_PROVIDER_PATHS"
                     android:resource="@xml/provider_paths"/>
         </provider>
-
         <meta-data
                 android:name="preloaded_fonts"
                 android:resource="@array/preloaded_fonts"/>

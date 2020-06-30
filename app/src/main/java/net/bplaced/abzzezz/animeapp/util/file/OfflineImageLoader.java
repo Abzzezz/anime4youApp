@@ -26,7 +26,6 @@ public class OfflineImageLoader {
         File imageBitmap = new File(AnimeAppMain.getInstance().getImageStorage(), aid);
         if (!imageBitmap.exists()) {
             //Create new task
-            if(!URLHandler.isOnline(context)) return;
             new TaskExecutor().executeAsync(() -> {
                 FileOutputStream fileOutputStream = new FileOutputStream(imageBitmap);
                 //Get imagebitmap and save to file
