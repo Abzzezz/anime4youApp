@@ -24,11 +24,9 @@ import java.io.File;
 public class SettingsFragment extends Fragment {
 
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.settings_layout, container, false);
         getParentFragmentManager().beginTransaction().replace(R.id.settings, new SettingsFragmentInner()).commit();
-
         return root;
     }
 

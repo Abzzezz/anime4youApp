@@ -34,7 +34,7 @@ public class CloudListFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.simplelist_layout, container, false);
-        ListView listView = root.findViewById(R.id.cloud_list_view);
+        ListView listView = root.findViewById(R.id.simple_list_view);
         /**
          * Let the threads do their work
          */

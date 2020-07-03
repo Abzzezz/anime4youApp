@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2020. Roman P.
  * All code is owned by Roman P. APIs are mentioned.
- * Last modified: 03.07.20, 17:07
+ * Last modified: 03.07.20, 18:32
  */
 
-package net.bplaced.abzzezz.animeapp.util.animenotifications;
+package net.bplaced.abzzezz.animeapp.util.reciver;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;

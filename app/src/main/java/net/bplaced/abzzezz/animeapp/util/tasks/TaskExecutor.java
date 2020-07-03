@@ -15,8 +15,9 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 public class TaskExecutor {
+
     /**
-     * TO ensure API level 30 compatibility
+     * To ensure API level 30 compatibility
      */
     private final Executor executor = Executors.newSingleThreadExecutor();
     private final Handler handler = new Handler(Looper.getMainLooper());
@@ -32,6 +33,7 @@ public class TaskExecutor {
             }
         });
     }
+
 
     public interface Callback<R> {
         void onComplete(R result);

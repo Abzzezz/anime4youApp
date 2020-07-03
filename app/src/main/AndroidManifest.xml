@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="net.bplaced.abzzezz.animeapp">
 
+    <!-- Permissions -->
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
@@ -13,8 +14,9 @@
     <uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <!-- Permissions -->
 
-
+    <!-- Application tag -->
     <application
             android:icon="@mipmap/appimage"
             android:installLocation="preferExternal"
@@ -23,6 +25,7 @@
             android:supportsRtl="true"
             android:theme="@style/DarkTheme"
             android:usesCleartextTraffic="true">
+        <!-- Activities -->
         <activity android:name=".activities.extra.PlayerActivity"
                   android:configChanges="keyboardHidden|orientation|screenSize|layoutDirection">
         </activity>
@@ -40,7 +43,7 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-
+        <!-- Providers -->
         <provider
                 android:name="androidx.core.content.FileProvider"
                 android:authorities="${applicationId}.provider"
@@ -50,12 +53,14 @@
                     android:name="android.support.FILE_PROVIDER_PATHS"
                     android:resource="@xml/provider_paths"/>
         </provider>
+        <!-- Font -->
         <meta-data
                 android:name="preloaded_fonts"
                 android:resource="@array/preloaded_fonts"/>
 
+        <!-- Receiver and service -->
         <receiver
-                android:name=".util.BootReceiver"
+                android:name=".util.reciver.BootReceiver"
                 android:enabled="true"
                 android:exported="true"
                 android:label="BootReceiver">
@@ -65,18 +70,18 @@
         </receiver>
 
         <receiver android:enabled="true"
-                  android:exported="true" android:name=".util.animenotifications.Alarm">
+                  android:exported="true" android:name=".util.reciver.Alarm">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
         </receiver>
-
         <service
                 android:label="Anime Notification Service"
                 android:description="@string/anime_notification_service_description"
                 android:enabled="true" android:exported="true"
                 android:name=".util.animenotifications.AnimeNotificationService"
         />
-
+        <receiver android:name=".util.reciver.StopDownloadingReceiver"/>
+        <!-- Receiver and Service -->
     </application>
 </manifest>

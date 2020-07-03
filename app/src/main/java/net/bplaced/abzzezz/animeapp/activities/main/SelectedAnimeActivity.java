@@ -11,8 +11,6 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,8 +22,6 @@ import android.webkit.WebViewClient;
 import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.FileProvider;
 import androidx.preference.PreferenceManager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -43,20 +39,14 @@ import net.bplaced.abzzezz.animeapp.util.InputDialogBuilder;
 import net.bplaced.abzzezz.animeapp.util.file.OfflineImageLoader;
 import net.bplaced.abzzezz.animeapp.util.scripter.ScriptUtil;
 import net.bplaced.abzzezz.animeapp.util.scripter.URLHandler;
-import net.bplaced.abzzezz.animeapp.util.tasks.TaskExecutor;
+import net.bplaced.abzzezz.animeapp.util.tasks.DownloadTask;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.net.URL;
-import java.net.URLConnection;
-import java.nio.channels.Channels;
-import java.nio.channels.ReadableByteChannel;
 import java.util.*;
-import java.util.concurrent.Callable;
 
 public class SelectedAnimeActivity extends AppCompatActivity {
 
-    public AnimeEpisodeAdapter animeEpisodeAdapter;
+    public transient AnimeEpisodeAdapter animeEpisodeAdapter;
     private String animeName;
     private int aid, animeEpisodes;
     private File animeFile;
@@ -201,6 +191,12 @@ public class SelectedAnimeActivity extends AppCompatActivity {
         return 1;
     }
 
+    public void resetAdapter() {
+        animeEpisodeAdapter = new AnimeEpisodeAdapter(sortWithNumberInName(Arrays.asList(animeFile.list())), this);
+        episodeGrid.setAdapter(animeEpisodeAdapter);
+        animeEpisodeAdapter.notifyDataSetChanged();
+    }
+
     /**
      * Items selected
      *
@@ -306,7 +302,7 @@ public class SelectedAnimeActivity extends AppCompatActivity {
                                 view.evaluateJavascript(ScriptUtil.vivoExploit, value -> {
                                     if (value.contains("node")) {
                                         //Run new Download Task and download episode
-                                        new DownloadTask(new String[]{value.replaceAll("\"", ""), animeName + "::" + count[1] + ".mp4"}, new int[]{count[0], count[1], countMax}).executeAsync();
+                                        new DownloadTask(SelectedAnimeActivity.this, new String[]{value.replaceAll("\"", ""), animeName + "::" + count[1] + ".mp4"}, new int[]{count[0], count[1], countMax}).executeAsync();
                                         view.destroy();
                                         //  download(value.replaceAll("\"", ""), animeName + "::" + count[1]);
 
@@ -377,7 +373,9 @@ public class SelectedAnimeActivity extends AppCompatActivity {
     }
     */
 
-
+    /**
+     * Episode adapter
+     */
     class AnimeEpisodeAdapter extends BaseAdapter {
 
         private final List<String> episodes;
@@ -412,6 +410,10 @@ public class SelectedAnimeActivity extends AppCompatActivity {
             return textView;
         }
 
+        /**
+         * Remove item from list then refresh
+         * @param index
+         */
         public void deleteItem(int index) {
             Logger.log("Deleted: " + getEpisodeFile(index).delete(), Logger.LogType.INFO);
             episodes.remove(index);
@@ -420,90 +422,7 @@ public class SelectedAnimeActivity extends AppCompatActivity {
     }
 
     /*
-New download task
- */
-    class DownloadTask extends TaskExecutor implements Callable<String>, TaskExecutor.Callback<String> {
-
-        private final String[] information;
-        private final int[] count;
-        private NotificationManagerCompat notificationManagerCompat;
-        private NotificationCompat.Builder notification;
-        private int notifyID;
-
-
-        public DownloadTask(final String[] information, final int[] count) {
-            this.information = information;
-            this.count = count;
-        }
-
-        public <R> void executeAsync() {
-            super.executeAsync(this, this);
-        }
-
-        @Override
-        public String call() throws Exception {
-            Logger.log("New download thread started" + notifyID, Logger.LogType.INFO);
-            final File outDir = new File(getFilesDir(), information[1].substring(0, information[1].indexOf("::")));
-            if (!outDir.exists()) outDir.mkdir();
-            final File fileOut = new File(outDir, information[1]);
-
-            //Open new URL connection
-            URLConnection urlConnection = new URL(information[0]).openConnection();
-            //Connect using a mac user agent
-            urlConnection.setRequestProperty("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_2) AppleWebKit/601.3.9 (KHTML, like Gecko) Version/9.0.2 Safari/601.3.9");
-            urlConnection.connect();
-            //Open Stream
-            FileOutputStream fileOutputStream = new FileOutputStream(fileOut);
-            ReadableByteChannel readableByteChannel = Channels.newChannel(urlConnection.getInputStream());
-            //Copy from channel to channel
-            fileOutputStream.getChannel().transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
-            //Close stream
-            Logger.log("Done copying streams, closing stream", Logger.LogType.INFO);
-            fileOutputStream.close();
-            return information[1];
-        }
-
-        @Override
-        public void onComplete(String result) {
-            //Cancel notification
-            notificationManagerCompat.cancel(notifyID);
-            //Add to download tracker
-            AnimeAppMain.getInstance().getDownloadTracker().submitTrack("Downloaded Episode: " + result);
-            //Make toast text
-            Toast.makeText(SelectedAnimeActivity.this, "Done downloading anime episode: " + result, Toast.LENGTH_SHORT).show();
-
-            this.notification = new NotificationCompat.Builder(getApplicationContext(), AnimeAppMain.NOTIFICATION_CHANNEL_ID)
-                    .setSmallIcon(R.drawable.information).setColor(Color.GREEN).setContentText("Episode-download done")
-                    .setContentTitle("Done downloading episode: " + result)
-                    .setPriority(NotificationCompat.PRIORITY_MAX);
-            //Notify, reuse old id
-            notificationManagerCompat.notify(notifyID, notification.build());
-            //Reset adapter
-            animeEpisodeAdapter = new AnimeEpisodeAdapter(sortWithNumberInName(Arrays.asList(animeFile.list())), getApplicationContext());
-            episodeGrid.setAdapter(animeEpisodeAdapter);
-            animeEpisodeAdapter.notifyDataSetChanged();
-            //Delay and start
-            new Handler(Looper.getMainLooper()).postDelayed(() -> {
-                if (count[0] < count[2]) {
-                    count[0]++;
-                    count[1]++;
-                    downloadEpisode(count[1], count[2], count[0]);
-                }
-            }, Long.parseLong(PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString("download_delay", "0")) * 1000);
-        }
-
-        @Override
-        public void preExecute() {
-            //Create notification
-            this.notifyID = (int) System.currentTimeMillis() % 10000;
-            this.notificationManagerCompat = NotificationManagerCompat.from(getApplication());
-            this.notification = new NotificationCompat.Builder(getApplication(), AnimeAppMain.NOTIFICATION_CHANNEL_ID)
-                    .setSmallIcon(R.drawable.download)
-                    .setContentText("Currently downloading episode")
-                    .setContentTitle("Episode Download")
-                    .setPriority(NotificationCompat.PRIORITY_HIGH)
-                    .setOngoing(true);
-            this.notificationManagerCompat.notify(notifyID, notification.build());
-        }
-    }
+    New download task
+    */
 }
+

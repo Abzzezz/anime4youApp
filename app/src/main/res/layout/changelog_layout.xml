@@ -16,15 +16,19 @@
             android:layout_height="wrap_content"
             android:background="?attr/colorPrimary"
             android:theme="?attr/actionBarTheme"
-            android:minHeight="?attr/actionBarSize" tools:layout_editor_absoluteY="1dp"
-            tools:layout_editor_absoluteX="1dp" android:id="@+id/toolbar3"/>
+            android:minHeight="?attr/actionBarSize"
+            android:id="@+id/toolbar3" app:layout_constraintStart_toStartOf="@+id/changelog_list_view"
+            app:layout_constraintEnd_toEndOf="@+id/changelog_list_view" app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintVertical_bias="0.0"/>
+
     <ListView
-            android:layout_width="409dp"
-            android:layout_height="729dp"
-            app:layout_constraintStart_toStartOf="parent"
+            android:id="@+id/changelog_list_view"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" android:id="@+id/changelog_list_view"
             app:layout_constraintTop_toBottomOf="@+id/toolbar3" app:layout_constraintVertical_bias="0.0"
-            app:layout_constraintHorizontal_bias="0.0">
+            app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="1dp"
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="1dp"
+            app:layout_constraintHorizontal_bias="0.0" android:layout_width="wrap_content"
+            android:layout_height="0dp">
     </ListView>
 </androidx.constraintlayout.widget.ConstraintLayout>
