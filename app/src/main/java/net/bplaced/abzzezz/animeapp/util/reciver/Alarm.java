@@ -26,10 +26,18 @@ import net.bplaced.abzzezz.animeapp.util.tasks.TaskExecutor;
 
 public class Alarm extends BroadcastReceiver {
 
+    //Databasesearch instance
     private final DataBaseSearch dataBaseSearch = new DataBaseSearch();
     private final AnimeNotifications animeNotifications = AnimeAppMain.getInstance().getAnimeNotifications();
+    //Alarm ID
     private final int alarmID = 1337;
 
+    /**
+     * Receiver trigger
+     *
+     * @param context
+     * @param intent
+     */
     @Override
     public void onReceive(final Context context, final Intent intent) {
         if (!URLHandler.isOnline(context)) return;
@@ -41,12 +49,12 @@ public class Alarm extends BroadcastReceiver {
         if (AnimeAppMain.getInstance().isDebugVersion()) sendNotification(context);
         Logger.log("Checking for new episodes", Logger.LogType.INFO);
         animeNotifications.getPreferences().getAll().forEach((key, o) ->
-                new TaskExecutor().executeAsync(new DataBaseTask(key.split(StringUtil.splitter)[1], dataBaseSearch),
+                new TaskExecutor().executeAsync(new DataBaseTask(key.split(StringUtil.splitter)[1], dataBaseSearch, "\"Letzte\":\""),
                         new TaskExecutor.Callback<String[]>() {
                             @Override
                             public void onComplete(String[] result) {
-                                if (Integer.parseInt(result[1]) > Integer.parseInt(animeNotifications.getPreferences().getString(key, "1"))) {
-                                    animeNotifications.updateKey(result[0] + StringUtil.splitter + result[3], result[1]);
+                                if (Integer.parseInt(result[0]) > Integer.parseInt(animeNotifications.getPreferences().getString(key, "1"))) {
+                                    animeNotifications.updateKey(result[0] + StringUtil.splitter + result[3], result[0]);
                                     sendNotification(context, result);
                                 }
                             }
@@ -95,7 +103,7 @@ public class Alarm extends BroadcastReceiver {
         AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, Alarm.class);
         PendingIntent pi = PendingIntent.getBroadcast(context, alarmID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        //TODO: Set real time
+        //Triggers every two hours (eg. 12x a day)
         am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 1000 * 60 * 60 * 2, pi);
     }
 

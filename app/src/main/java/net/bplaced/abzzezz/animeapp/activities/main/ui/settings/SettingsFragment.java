@@ -34,8 +34,8 @@ public class SettingsFragment extends Fragment {
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             setPreferencesFromResource(R.xml.root_preferences, rootKey);
-            Preference button = findPreference("clear_offline_images_button");
-            button.setOnPreferenceClickListener(preference -> {
+            Preference clearOfflineImages = findPreference("clear_offline_images_button");
+            clearOfflineImages.setOnPreferenceClickListener(preference -> {
                 new IonAlert(getActivity(), IonAlert.WARNING_TYPE)
                         .setTitleText("Delete all offline images?")
                         .setContentText("If you are offline and there are no caches images wont be loaded!")
@@ -46,6 +46,13 @@ public class SettingsFragment extends Fragment {
                             ionAlert.dismissWithAnimation();
                         }).setCancelText("Abort").setCancelClickListener(IonAlert::dismissWithAnimation)
                         .show();
+                return true;
+            });
+
+            Preference manageAnimeNotifications = findPreference("manage_anime_notifications");
+            Fragment newFragment = new AnimeNotificationsFragment();
+            manageAnimeNotifications.setOnPreferenceClickListener(preference -> {
+                getActivity().getSupportFragmentManager().beginTransaction().add(R.id.simple_list_layout, newFragment).commit();
                 return true;
             });
         }

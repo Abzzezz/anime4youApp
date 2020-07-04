@@ -14,6 +14,11 @@ import net.bplaced.abzzezz.animeapp.util.animenotifications.AnimeNotificationSer
 
 public class BootReceiver extends BroadcastReceiver {
 
+    /**
+     * Gets triggered whenever the phone is restarted, restarts alarm
+     * @param context
+     * @param intent
+     */
     @Override
     public void onReceive(Context context, Intent intent) {
         if ("android.intent.action.BOOT_COMPLETED".equals(intent.getAction())) {

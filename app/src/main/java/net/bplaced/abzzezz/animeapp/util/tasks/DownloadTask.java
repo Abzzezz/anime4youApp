@@ -33,7 +33,7 @@ import java.util.concurrent.Callable;
 
 public class DownloadTask extends TaskExecutor implements Callable<String>, TaskExecutor.Callback<String> {
 
-    private SelectedAnimeActivity application;
+    private final SelectedAnimeActivity application;
     private final String[] information;
     private final int[] count;
     private NotificationManagerCompat notificationManagerCompat;
@@ -53,6 +53,11 @@ public class DownloadTask extends TaskExecutor implements Callable<String>, Task
         super.executeAsync(this, this);
     }
 
+    /**
+     * Call method downloads file.
+     * @return
+     * @throws Exception
+     */
     @Override
     public String call() throws Exception {
         Logger.log("New download thread started" + notifyID, Logger.LogType.INFO);
@@ -91,7 +96,7 @@ public class DownloadTask extends TaskExecutor implements Callable<String>, Task
         if (!isCancelled()) notificationManagerCompat.notify(notifyID, notification.build());
         //Reset adapter
         application.resetAdapter();
-        //Delay and start
+        //Delay and start if not cancelled
         if (!isCancelled()) {
             new Handler(Looper.getMainLooper()).postDelayed(() -> {
                 if (count[0] < count[2]) {
@@ -101,7 +106,7 @@ public class DownloadTask extends TaskExecutor implements Callable<String>, Task
                 }
             }, Long.parseLong(PreferenceManager.getDefaultSharedPreferences(application).getString("download_delay", "0")) * 1000);
         }
-        /**
+        /*
          * Check if stopped
          */
         if (isCancelled()) {
@@ -110,12 +115,16 @@ public class DownloadTask extends TaskExecutor implements Callable<String>, Task
         }
     }
 
+    /**
+     * Pre execute method. Creates notifications and task id
+     */
     @Override
     public void preExecute() {
         //Create notification
         this.notifyID = (int) System.currentTimeMillis() % 10000;
         this.notificationManagerCompat = NotificationManagerCompat.from(application);
         Intent notificationActionIntent = new Intent(application, StopDownloadingReceiver.class);
+        //Put object key
         IntentHelper.addObjectForKey(this, "task");
         PendingIntent stopDownloadingPendingIntent = PendingIntent.getBroadcast(application, 1, notificationActionIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         this.notification = new NotificationCompat.Builder(application, AnimeAppMain.NOTIFICATION_CHANNEL_ID)
@@ -127,12 +136,20 @@ public class DownloadTask extends TaskExecutor implements Callable<String>, Task
         this.notificationManagerCompat.notify(notifyID, notification.build());
     }
 
+    /**
+     *
+     * @return task cancelled
+     */
     public boolean isCancelled() {
         return cancel;
     }
 
+    /**
+     * Cancel task
+     */
     public void cancel() {
         if (fileOutputStream == null) return;
+        //Flush streams
         try {
             fileOutputStream.flush();
             fileOutputStream.close();
@@ -140,6 +157,7 @@ public class DownloadTask extends TaskExecutor implements Callable<String>, Task
             Logger.log("Error closing task stream", Logger.LogType.ERROR);
             e.printStackTrace();
         }
+        //Set canceled true
         this.cancel = true;
         Logger.log("Task cancelled, Streams flushed", Logger.LogType.INFO);
     }

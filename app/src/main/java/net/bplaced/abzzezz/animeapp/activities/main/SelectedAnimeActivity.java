@@ -71,7 +71,7 @@ public class SelectedAnimeActivity extends AppCompatActivity {
         String animeCover = getIntent().getStringExtra("anime_cover");
         this.aid = Integer.parseInt(getIntent().getStringExtra("anime_aid"));
         String language = getIntent().getStringExtra("anime_language");
-
+        int year = getIntent().getIntExtra("anime_year", 0);
         /*
          * Set text
          */
@@ -80,8 +80,10 @@ public class SelectedAnimeActivity extends AppCompatActivity {
         TextView selected_anime_aid = findViewById(R.id.selected_anime_aid);
         TextView selected_anime_size = findViewById(R.id.anime_directory_size);
         TextView selected_anime_language = findViewById(R.id.selected_anime_language);
+        TextView selected_anime_year = findViewById(R.id.selected_anime_year);
 
         selected_anime_aid.append(String.valueOf(aid));
+        selected_anime_year.append(String.valueOf(year));
         selected_anime_name.setText(animeName);
         selected_anime_episodes.append(String.valueOf(animeEpisodes));
         selected_anime_language.append(language);
@@ -405,7 +407,6 @@ public class SelectedAnimeActivity extends AppCompatActivity {
         public View getView(int position, View convertView, ViewGroup parent) {
             final TextView textView = new TextView(context);
             textView.setTextSize(15);
-            textView.setTextColor(ColorStateList.valueOf(Color.WHITE));
             textView.setText(episodes.get(position));
             return textView;
         }

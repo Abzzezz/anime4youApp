@@ -14,9 +14,7 @@
 
     <com.google.android.material.appbar.AppBarLayout
             android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:theme="@style/DarkTheme.AppBarOverlay"/>
-
+            android:layout_width="match_parent"/>
     <include layout="@layout/content_drawer_main_menu"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

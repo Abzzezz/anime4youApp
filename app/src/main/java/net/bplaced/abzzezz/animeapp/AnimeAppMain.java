@@ -50,7 +50,7 @@ public class AnimeAppMain {
 
     public AnimeAppMain() {
         this.version = 44;
-        this.debugVersion = false;
+        this.debugVersion = true;
         this.notificationChannelName = "AnimeChannel";
     }
 
@@ -67,9 +67,8 @@ public class AnimeAppMain {
         this.animeNotifications = new AnimeNotifications(application);
         this.imageStorage = new File(application.getDataDir(), "StoredImagesOffline");
         if (!imageStorage.exists()) Logger.log("Image file created: " + imageStorage.mkdir(), Logger.LogType.INFO);
-        this.darkMode = PreferenceManager.getDefaultSharedPreferences(application.getApplicationContext()).getBoolean("dark_mode", false);
 
-
+        this.darkMode = PreferenceManager.getDefaultSharedPreferences(application).getBoolean("dark_mode", true);
         if (darkMode)
             this.themeID = R.style.DarkTheme;
         else
@@ -89,7 +88,8 @@ public class AnimeAppMain {
         String[] permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.INTERNET,
                 Manifest.permission.ACCESS_NETWORK_STATE, Manifest.permission.ACCESS_WIFI_STATE,
-                Manifest.permission.BLUETOOTH, Manifest.permission.SET_ALARM, Manifest.permission.WAKE_LOCK, Manifest.permission.RECEIVE_BOOT_COMPLETED, Manifest.permission.FOREGROUND_SERVICE};
+                Manifest.permission.BLUETOOTH, Manifest.permission.SET_ALARM, Manifest.permission.WAKE_LOCK, Manifest.permission.RECEIVE_BOOT_COMPLETED,
+                Manifest.permission.FOREGROUND_SERVICE};
 
         activity.requestPermissions(permissions, 101);
         if (!URLHandler.isOnline(activity))

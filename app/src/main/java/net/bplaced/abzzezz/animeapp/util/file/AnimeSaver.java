@@ -46,13 +46,15 @@ public class AnimeSaver {
 
         boolean check = publicPreferences.getBoolean("check_existing", false);
         String add = all[0].replaceAll(":", "") + StringUtil.splitter + all[1] + StringUtil.splitter + all[2] + StringUtil.splitter + all[3];
+        String key = String.valueOf(preferences.getAll().size());
+
         if (check) {
             if (!containsAid(all[3])) {
-                editor.putString(String.valueOf(preferences.getAll().size()), add);
+                editor.putString(key, add);
                 editor.commit();
             }
         } else {
-            editor.putString(String.valueOf(preferences.getAll().size()), add);
+            editor.putString(key, add);
             editor.commit();
         }
     }

@@ -23,18 +23,15 @@ public class AnimeNotifications {
      */
     private final SharedPreferences preferences;
     private final SharedPreferences.Editor editor;
-    private final DataBaseSearch dataBaseSearch;
 
     /**
      * Aids used as keys. The other values stay the same
      */
 
-    public AnimeNotifications(Context context) {
-        this.dataBaseSearch = new DataBaseSearch();
+    public AnimeNotifications(final Context context) {
         this.preferences = context.getSharedPreferences("AnimeNotifications", Context.MODE_PRIVATE);
         this.editor = preferences.edit();
         Logger.log("Anime Notifications set up.", Logger.LogType.INFO);
-        //  editor.clear().apply();
     }
 
     /**
@@ -43,19 +40,28 @@ public class AnimeNotifications {
      *
      * @param key
      */
-    public void add(String key, String episodes) {
+    public void add(final String key, final String episodes) {
         if (getPreferences().contains(key)) return;
 
         editor.putString(key, episodes);
         editor.apply();
     }
 
-    public void updateKey(String key, String newCount) {
+    /**
+     * Update given key
+     * @param key
+     * @param newCount
+     */
+    public void updateKey(final String key, final String newCount) {
         editor.remove(key);
         editor.putString(key, newCount);
         editor.apply();
     }
 
+    /**
+     *
+     * @return
+     */
     public SharedPreferences getPreferences() {
         return preferences;
     }
@@ -65,7 +71,7 @@ public class AnimeNotifications {
      *
      * @param key
      */
-    public void remove(String key) {
+    public void remove(final String key) {
         editor.remove(key);
         editor.apply();
     }
