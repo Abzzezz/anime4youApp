@@ -22,7 +22,7 @@ public class DataBaseSearch {
      * @return
      */
 
-    public String getSubstringFromDB(String aid) {
+    public String getSubstringFromDB(final String aid) {
         String realSeries = "";
         try {
             String line = URLUtil.getURLContentAsString(new URL(URLHandler.dataBase));

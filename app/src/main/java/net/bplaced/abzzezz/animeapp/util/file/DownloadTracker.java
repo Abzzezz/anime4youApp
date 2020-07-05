@@ -26,9 +26,12 @@ public class DownloadTracker {
     public DownloadTracker(final Context context) {
         this.trackerFile = new File(context.getFilesDir(), "DownloadTracker.xml");
         Logger.log("Download Tracker set up", Logger.LogType.INFO);
-        clearTrack();
     }
 
+    /**
+     * Submit track to tracker list
+     * @param information string to add
+     */
     public void submitTrack(final String information) {
         @SuppressLint("SimpleDateFormat") String time = new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z").format(new Date(System.currentTimeMillis()));
         String track = time + "\n" + information + "\n";

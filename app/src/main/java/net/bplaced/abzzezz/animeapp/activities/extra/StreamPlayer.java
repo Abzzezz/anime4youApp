@@ -34,10 +34,9 @@ public class StreamPlayer extends AppCompatActivity {
         setContentView(R.layout.activity_player);
         Uri uri = Uri.parse(getIntent().getStringExtra("stream"));
         PlayerView playerView = findViewById(R.id.ep_video_view);
-        simpleExoPlayer = new SimpleExoPlayer.Builder(this).build();
+        this.simpleExoPlayer = new SimpleExoPlayer.Builder(this).build();
         DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(getApplicationContext(), Util.getUserAgent(getApplicationContext(), "Anime4you"));
         MediaSource videoSource = new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(uri);
-
         playerView.setResizeMode(Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(this).getString("video_stretch_preference", "0")));
         playerView.setPlayer(simpleExoPlayer);
         simpleExoPlayer.setPlayWhenReady(true);

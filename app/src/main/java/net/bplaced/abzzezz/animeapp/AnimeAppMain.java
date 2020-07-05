@@ -49,8 +49,8 @@ public class AnimeAppMain {
     private AnimeNotifications animeNotifications;
 
     public AnimeAppMain() {
-        this.version = 44;
-        this.debugVersion = true;
+        this.version = 45;
+        this.debugVersion = false;
         this.notificationChannelName = "AnimeChannel";
     }
 

@@ -14,7 +14,6 @@ import ga.abzzezz.util.stringing.StringUtil;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.stream.Collector;
 
 public class AnimeSaver {
 
@@ -29,7 +28,7 @@ public class AnimeSaver {
      * Aids used as keys. The other values stay the same
      */
 
-    public AnimeSaver(Context context) {
+    public AnimeSaver(final Context context) {
         this.preferences = context.getSharedPreferences("AnimeList", Context.MODE_PRIVATE);
         this.editor = preferences.edit();
         this.publicPreferences = PreferenceManager.getDefaultSharedPreferences(context);
@@ -42,7 +41,7 @@ public class AnimeSaver {
      *
      * @param all
      */
-    public void add(String... all) {
+    public void add(final String... all) {
         if (all[0].equals("ERROR")) return;
 
         boolean check = publicPreferences.getBoolean("check_existing", false);
@@ -60,7 +59,7 @@ public class AnimeSaver {
         }
     }
 
-    public boolean containsAid(String aid) {
+    public boolean containsAid(final String aid) {
         return preferences.getAll().values().stream().anyMatch(o -> o.toString().split(StringUtil.splitter)[3].equals(aid));
     }
 
@@ -78,7 +77,7 @@ public class AnimeSaver {
      *
      * @param key
      */
-    public void remove(int key) {
+    public void remove(final int key) {
         //Remove key (int)
         editor.remove(String.valueOf(key));
         /*
@@ -98,10 +97,10 @@ public class AnimeSaver {
      * ImageURL: 2
      * AID: 3
      *
-     * @param index
+     * @param index key
      * @return
      */
-    public String[] getAll(int index) {
+    public String[] getAll(final int index) {
         return preferences.getString(String.valueOf(index), "NULL").split(StringUtil.splitter);
     }
 

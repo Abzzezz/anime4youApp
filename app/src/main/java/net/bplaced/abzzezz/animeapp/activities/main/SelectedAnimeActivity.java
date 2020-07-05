@@ -39,6 +39,7 @@ import net.bplaced.abzzezz.animeapp.util.tasks.DownloadTask;
 
 import java.io.File;
 import java.util.*;
+import java.util.stream.IntStream;
 
 public class SelectedAnimeActivity extends AppCompatActivity {
 
@@ -108,10 +109,8 @@ public class SelectedAnimeActivity extends AppCompatActivity {
         /*
          * Fill episode list
          */
-        List<String> episodes = new ArrayList<>();
-        for (int i = 0; i < animeEpisodes; i++) {
-            episodes.add(animeName + "::" + (i + 1) + ".mp4");
-        }
+        final List<String> episodes = new ArrayList<>();
+        IntStream.range(0, animeEpisodes).forEach(i -> episodes.add(animeName + "::" + (i + 1) + ".mp4"));
 
         selected_anime_size.append(FileUtil.calculateFileSize(animeFile));
         /*
@@ -158,7 +157,7 @@ public class SelectedAnimeActivity extends AppCompatActivity {
 
     public int getLatestEpisode() {
         if (animeFile.list() != null) {
-            OptionalInt highest = Arrays.stream(animeFile.list()).map(s -> StringUtil.extractNumberI(s.substring(s.indexOf("::") + 2, s.indexOf(".mp4")))).mapToInt(integer -> integer).max();
+            final OptionalInt highest = Arrays.stream(animeFile.list()).map(s -> StringUtil.extractNumberI(s.substring(s.indexOf("::") + 2, s.indexOf(".mp4")))).mapToInt(integer -> integer).max();
             if (highest.isPresent())
                 return highest.getAsInt() + 1;
         }
@@ -171,7 +170,8 @@ public class SelectedAnimeActivity extends AppCompatActivity {
 
     private boolean isEpisodeDownloaded(final String episodeName) {
         if (animeFile.list() != null) {
-            return Arrays.stream(animeFile.list()).anyMatch(s -> s.equals(episodeName));
+            //TODO: Watch what works better
+            return Arrays.asList(animeFile.list()).contains(episodeName);
         }
         return false;
     }
@@ -361,7 +361,7 @@ public class SelectedAnimeActivity extends AppCompatActivity {
      *
      * @param text
      */
-    public void makeText(String text) {
+    public void makeText(final String text) {
         Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
     }
 
@@ -480,8 +480,8 @@ public class SelectedAnimeActivity extends AppCompatActivity {
          *
          * @param index
          */
-        public void deleteItem(int index) {
-            File file =  new File(getFilesDir(), animeName);
+        public void deleteItem(final int index) {
+            File file = new File(getFilesDir(), animeName);
             Logger.log("Deleted: " + new File(file, episodes.get(index)).delete(), Logger.LogType.INFO);
             notifyDataSetChanged();
         }
