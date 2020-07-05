@@ -103,7 +103,7 @@ public class AnimeListFragment extends Fragment {
             @Override
             public void onComplete(String[] result) {
                 //Transfer
-                information[1] = result[0];
+                information[1] = result[0].equals("-1") ? savedInformation[1] : result[0];
                 information[4] = result[1];
                 information[5] = result[2];
 

@@ -6,7 +6,7 @@
 
 <resources>
 
-    <style name="DarkTheme" parent="Theme.AppCompat">
+    <style name="DarkTheme" parent="Theme.AppCompat.NoActionBar">
         <!-- Background and item colors-->
         <item name="android:colorPrimary">@color/primaryColorDark</item>
         <item name="android:colorAccent">@color/accentColor</item>

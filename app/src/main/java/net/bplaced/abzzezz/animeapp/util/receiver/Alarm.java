@@ -4,7 +4,7 @@
  * Last modified: 03.07.20, 18:32
  */
 
-package net.bplaced.abzzezz.animeapp.util.reciver;
+package net.bplaced.abzzezz.animeapp.util.receiver;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;

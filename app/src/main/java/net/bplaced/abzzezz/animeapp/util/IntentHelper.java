@@ -15,10 +15,10 @@ import java.util.Hashtable;
 public class IntentHelper {
 
     private static IntentHelper _instance;
-    private Hashtable<String, Object> _hash;
+    private final Hashtable<String, Object> _hash;
 
     private IntentHelper() {
-        _hash = new Hashtable<String, Object>();
+        _hash = new Hashtable<>();
     }
 
     private static IntentHelper getInstance() {
@@ -36,7 +36,6 @@ public class IntentHelper {
         IntentHelper helper = getInstance();
         Object data = helper._hash.get(key);
         helper._hash.remove(key);
-        helper = null;
         return data;
     }
 }

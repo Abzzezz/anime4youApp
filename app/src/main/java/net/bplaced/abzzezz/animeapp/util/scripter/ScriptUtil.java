@@ -10,7 +10,7 @@ import java.util.Random;
 
 public class ScriptUtil {
 
-    public static final String vivoExploit = "cal();\n" +
+    public static final String VIVO_EXPLOIT = "cal();\n" +
             "function cal() {\n" +
             "  var source = document.getElementsByTagName('body')[0].innerHTML;\n" +
             "  if (source != null) {\n" +

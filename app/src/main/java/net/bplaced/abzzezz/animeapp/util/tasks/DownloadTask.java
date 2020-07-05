@@ -9,6 +9,7 @@ package net.bplaced.abzzezz.animeapp.util.tasks;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 import android.widget.Toast;
@@ -20,7 +21,7 @@ import net.bplaced.abzzezz.animeapp.AnimeAppMain;
 import net.bplaced.abzzezz.animeapp.R;
 import net.bplaced.abzzezz.animeapp.activities.main.SelectedAnimeActivity;
 import net.bplaced.abzzezz.animeapp.util.IntentHelper;
-import net.bplaced.abzzezz.animeapp.util.reciver.StopDownloadingReceiver;
+import net.bplaced.abzzezz.animeapp.util.receiver.StopDownloadingReceiver;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -41,6 +42,7 @@ public class DownloadTask extends TaskExecutor implements Callable<String>, Task
     private int notifyID;
     private boolean cancel;
     private FileOutputStream fileOutputStream;
+    private File outFile;
 
     public DownloadTask(final SelectedAnimeActivity application, final String[] information, final int[] count) {
         this.application = application;
@@ -55,6 +57,7 @@ public class DownloadTask extends TaskExecutor implements Callable<String>, Task
 
     /**
      * Call method downloads file.
+     *
      * @return
      * @throws Exception
      */
@@ -63,14 +66,15 @@ public class DownloadTask extends TaskExecutor implements Callable<String>, Task
         Logger.log("New download thread started" + notifyID, Logger.LogType.INFO);
         final File outDir = new File(application.getFilesDir(), information[1].substring(0, information[1].indexOf("::")));
         if (!outDir.exists()) outDir.mkdir();
-        final File fileOut = new File(outDir, information[1]);
+        this.outFile = new File(outDir, information[1]);
+
         //Open new URL connection
         URLConnection urlConnection = new URL(information[0]).openConnection();
         //Connect using a mac user agent
         urlConnection.setRequestProperty("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_2) AppleWebKit/601.3.9 (KHTML, like Gecko) Version/9.0.2 Safari/601.3.9");
         urlConnection.connect();
         //Open Stream
-        this.fileOutputStream = new FileOutputStream(fileOut);
+        this.fileOutputStream = new FileOutputStream(outFile);
         ReadableByteChannel readableByteChannel = Channels.newChannel(urlConnection.getInputStream());
         //Copy from channel to channel
         fileOutputStream.getChannel().transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
@@ -92,6 +96,7 @@ public class DownloadTask extends TaskExecutor implements Callable<String>, Task
                 .setSmallIcon(R.drawable.information).setColor(Color.GREEN).setContentText("Episode-download done")
                 .setContentTitle("Done downloading episode: " + result)
                 .setPriority(NotificationCompat.PRIORITY_MAX);
+
         //Notify, reuse old id
         if (!isCancelled()) notificationManagerCompat.notify(notifyID, notification.build());
         //Reset adapter
@@ -123,21 +128,23 @@ public class DownloadTask extends TaskExecutor implements Callable<String>, Task
         //Create notification
         this.notifyID = (int) System.currentTimeMillis() % 10000;
         this.notificationManagerCompat = NotificationManagerCompat.from(application);
-        Intent notificationActionIntent = new Intent(application, StopDownloadingReceiver.class);
+
+        final Intent notificationActionIntent = new Intent(application, StopDownloadingReceiver.class);
+        notificationActionIntent.setData(Uri.parse("" + notifyID));
+        Logger.log("Assigned thread id:" + notifyID, Logger.LogType.INFO);
         //Put object key
-        IntentHelper.addObjectForKey(this, "task");
-        PendingIntent stopDownloadingPendingIntent = PendingIntent.getBroadcast(application, 1, notificationActionIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        IntentHelper.addObjectForKey(this, String.valueOf(notifyID));
+        final PendingIntent stopDownloadingPendingIntent = PendingIntent.getBroadcast(application, 1, notificationActionIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         this.notification = new NotificationCompat.Builder(application, AnimeAppMain.NOTIFICATION_CHANNEL_ID)
                 .setSmallIcon(R.drawable.download)
-                .setContentText("Currently downloading episode")
+                .setContentText("Currently downloading episode: " + information[1])
                 .setContentTitle("Episode Download")
                 .setPriority(NotificationCompat.PRIORITY_HIGH).addAction(R.drawable.ic_cancel, "Stop downloading", stopDownloadingPendingIntent)
-                .setOngoing(true).setOnlyAlertOnce(true);
+                .setOngoing(true);
         this.notificationManagerCompat.notify(notifyID, notification.build());
     }
 
     /**
-     *
      * @return task cancelled
      */
     public boolean isCancelled() {
@@ -149,10 +156,11 @@ public class DownloadTask extends TaskExecutor implements Callable<String>, Task
      */
     public void cancel() {
         if (fileOutputStream == null) return;
-        //Flush streams
         try {
             fileOutputStream.flush();
             fileOutputStream.close();
+            outFile.delete();
+            application.resetAdapter();
         } catch (IOException e) {
             Logger.log("Error closing task stream", Logger.LogType.ERROR);
             e.printStackTrace();

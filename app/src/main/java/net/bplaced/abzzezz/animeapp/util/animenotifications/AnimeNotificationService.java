@@ -11,7 +11,7 @@ import android.content.Intent;
 import android.os.IBinder;
 import ga.abzzezz.util.logging.Logger;
 import net.bplaced.abzzezz.animeapp.AnimeAppMain;
-import net.bplaced.abzzezz.animeapp.util.reciver.Alarm;
+import net.bplaced.abzzezz.animeapp.util.receiver.Alarm;
 
 
 public class AnimeNotificationService extends Service {

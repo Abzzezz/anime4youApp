@@ -29,6 +29,11 @@
         <activity android:name=".activities.extra.PlayerActivity"
                   android:configChanges="keyboardHidden|orientation|screenSize|layoutDirection">
         </activity>
+
+        <activity android:name=".activities.extra.StreamPlayer"
+                  android:configChanges="keyboardHidden|orientation|screenSize|layoutDirection">
+        </activity>
+
         <activity
                 android:name=".activities.main.DrawerMainMenu"
                 android:label="@string/title_activity_drawer_main_menu"
@@ -60,7 +65,7 @@
 
         <!-- Receiver and service -->
         <receiver
-                android:name=".util.reciver.BootReceiver"
+                android:name=".util.receiver.BootReceiver"
                 android:enabled="true"
                 android:exported="true"
                 android:label="BootReceiver">
@@ -70,7 +75,7 @@
         </receiver>
 
         <receiver android:enabled="true"
-                  android:exported="true" android:name=".util.reciver.Alarm">
+                  android:exported="true" android:name=".util.receiver.Alarm">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
@@ -81,7 +86,7 @@
                 android:enabled="true" android:exported="true"
                 android:name=".util.animenotifications.AnimeNotificationService"
         />
-        <receiver android:name=".util.reciver.StopDownloadingReceiver"/>
+        <receiver android:name=".util.receiver.StopDownloadingReceiver"/>
         <!-- Receiver and Service -->
     </application>
 </manifest>

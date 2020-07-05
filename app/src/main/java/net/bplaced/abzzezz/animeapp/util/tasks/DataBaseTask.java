@@ -30,7 +30,7 @@ public class DataBaseTask implements Callable<String[]> {
         String realSeries = dataBaseSearch.getSubstringFromDB(aid);
         String[] re = new String[search.length];
         for (int i = 0; i < re.length; i++) {
-            String in = realSeries.isEmpty() ? "0" : StringUtil.getStringFromLong(realSeries, search[i], "\"");
+            String in = realSeries.isEmpty() ? "-1" : StringUtil.getStringFromLong(realSeries, search[i], "\"");
             re[i] = in;
         }
         return re;

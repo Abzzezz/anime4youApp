@@ -50,7 +50,7 @@ public class AnimeAppMain {
 
     public AnimeAppMain() {
         this.version = 44;
-        this.debugVersion = false;
+        this.debugVersion = true;
         this.notificationChannelName = "AnimeChannel";
     }
 
@@ -98,10 +98,8 @@ public class AnimeAppMain {
     public void createNotificationChannel(final Application application) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             Logger.log("Creating new notification channel", Logger.LogType.INFO);
-            String description = "Notification channel to display download notification";
-            int importance = NotificationManager.IMPORTANCE_LOW;
-            NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, notificationChannelName, importance);
-            channel.setDescription(description);
+            NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, notificationChannelName, NotificationManager.IMPORTANCE_HIGH);
+            channel.setDescription("Notification channel to display download notification");
             channel.setLightColor(Color.MAGENTA);
             NotificationManager notificationManager = application.getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
@@ -112,10 +110,6 @@ public class AnimeAppMain {
 
     public File getImageStorage() {
         return imageStorage;
-    }
-
-    public boolean isDarkMode() {
-        return darkMode;
     }
 
     public int getThemeID() {
@@ -132,10 +126,6 @@ public class AnimeAppMain {
 
     public AnimeSaver getAnimeSaver() {
         return animeSaver;
-    }
-
-    public String getNotificationChannelName() {
-        return notificationChannelName;
     }
 
     public boolean isDebugVersion() {
