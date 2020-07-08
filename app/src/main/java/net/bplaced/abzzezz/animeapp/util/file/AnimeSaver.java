@@ -11,6 +11,8 @@ import android.content.SharedPreferences;
 import androidx.preference.PreferenceManager;
 import ga.abzzezz.util.logging.Logger;
 import ga.abzzezz.util.stringing.StringUtil;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -33,6 +35,13 @@ public class AnimeSaver {
         this.editor = preferences.edit();
         this.publicPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         Logger.log("Anime Saver set up.", Logger.LogType.INFO);
+
+        preferences.getAll().values().forEach(o -> {
+            if (o.toString().contains(StringUtil.splitter)) {
+                editor.clear().commit();
+            }
+        });
+
     }
 
     /**
@@ -41,35 +50,23 @@ public class AnimeSaver {
      *
      * @param all
      */
-    public void add(final String... all) {
-        if (all[0].equals("ERROR")) return;
+    public void add(final JSONObject all) throws JSONException {
+        if (publicPreferences.getBoolean("check_existing", false) && containsID(all.getString("id"))) return;
 
-        boolean check = publicPreferences.getBoolean("check_existing", false);
-        String add = all[0].replaceAll(":", "") + StringUtil.splitter + all[1] + StringUtil.splitter + all[2] + StringUtil.splitter + all[3];
         String key = String.valueOf(preferences.getAll().size());
+        editor.putString(key, all.toString());
+        editor.commit();
+    }
 
-        if (check) {
-            if (!containsAid(all[3])) {
-                editor.putString(key, add);
-                editor.commit();
+    public boolean containsID(final String id) {
+        return preferences.getAll().values().stream().anyMatch(o -> {
+            try {
+                return new JSONObject(o.toString()).getString("id").equals(id);
+            } catch (JSONException e) {
+                e.printStackTrace();
+                return false;
             }
-        } else {
-            editor.putString(key, add);
-            editor.commit();
-        }
-    }
-
-    public boolean containsAid(final String aid) {
-        return preferences.getAll().values().stream().anyMatch(o -> o.toString().split(StringUtil.splitter)[3].equals(aid));
-    }
-
-    /**
-     * Calls @add
-     *
-     * @param string
-     */
-    public void add(String string) {
-        add(string.split(StringUtil.splitter));
+        });
     }
 
     /**
@@ -100,8 +97,13 @@ public class AnimeSaver {
      * @param index key
      * @return
      */
-    public String[] getAll(final int index) {
-        return preferences.getString(String.valueOf(index), "NULL").split(StringUtil.splitter);
+    public JSONObject getAll(final int index) {
+        try {
+            return new JSONObject(preferences.getString(String.valueOf(index), "-1"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     /**

@@ -23,7 +23,7 @@ import net.bplaced.abzzezz.animeapp.util.animenotifications.AnimeNotificationSer
 import net.bplaced.abzzezz.animeapp.util.file.AnimeNotifications;
 import net.bplaced.abzzezz.animeapp.util.file.AnimeSaver;
 import net.bplaced.abzzezz.animeapp.util.file.DownloadTracker;
-import net.bplaced.abzzezz.animeapp.util.scripter.URLHandler;
+import net.bplaced.abzzezz.animeapp.util.scripter.StringHandler;
 
 import java.io.File;
 
@@ -51,7 +51,7 @@ public class AnimeAppMain {
 
     public AnimeAppMain() {
         this.version = 46;
-        this.debugVersion = false;
+        this.debugVersion = true;
         this.notificationChannelName = "AnimeChannel";
     }
 
@@ -92,7 +92,7 @@ public class AnimeAppMain {
                 Manifest.permission.FOREGROUND_SERVICE};
 
         activity.requestPermissions(permissions, 101);
-        if (!URLHandler.isOnline(activity))
+        if (!StringHandler.isOnline(activity))
             Toast.makeText(activity, "You are not connected to the internet. If Images are not cached they will not show.", Toast.LENGTH_LONG).show();
     }
 

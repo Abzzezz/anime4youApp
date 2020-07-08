@@ -19,22 +19,6 @@
     </fragment>
 
     <fragment
-            android:id="@+id/nav_settings"
-            android:name="net.bplaced.abzzezz.animeapp.activities.main.ui.settings.SettingsFragment"
-            android:label="@string/action_settings"
-            tools:layout="@layout/settings_layout">
-        <action android:id="@+id/action_nav_settings_to_cloud_download" app:destination="@id/cloud_download"/>
-    </fragment>
-
-    <fragment
-            android:id="@+id/cloud_download"
-            android:name="net.bplaced.abzzezz.animeapp.activities.main.ui.cloud.CloudListFragment"
-            android:label="Cloud Download"
-            tools:layout="@layout/simplelist_layout">
-        <action android:id="@+id/action_cloud_download_to_download_tracker" app:destination="@id/download_tracker"/>
-    </fragment>
-
-    <fragment
             android:id="@+id/nav_changelog"
             android:name="net.bplaced.abzzezz.animeapp.activities.main.ui.chagelog.ChangelogFragment"
             android:label="@string/menu_changelog"

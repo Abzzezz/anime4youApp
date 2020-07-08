@@ -63,7 +63,7 @@ public class ScriptUtil {
                 "dataType: \"JSON\",\n" +
                 " success: function(data){},\n" +
                 " async: false, \n" +
-                " data: {epi:" + episode + ",aid:" + aid + ",act:1,vkey:'" + generateRandomKey() + "',username:\"\"}}).responseText;" +
+                " data: {epi:" + (episode + 1) + ",aid:" + aid + ",act:1,vkey:'" + generateRandomKey() + "',username:\"\"}}).responseText;" +
                 " var index = vivo.search(\"vivo.sx\"); \n" +
                 " var re = vivo.substring(index, index + 19); \n" +
                 " return re; \n" +

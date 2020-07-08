@@ -25,11 +25,11 @@ public class DataBaseSearch {
     public String getSubstringFromDB(final String aid) {
         String realSeries = "";
         try {
-            String line = URLUtil.getURLContentAsString(new URL(URLHandler.dataBase));
+            final String line = URLUtil.getURLContentAsString(new URL(StringHandler.dataBase));
             realSeries = StringUtil.getStringFromLong(line, "\"aid\"" + ":" + "\"" + aid + "\"", "}");
         } catch (StringIndexOutOfBoundsException | MalformedURLException e) {
             Logger.log("Checking Database: " + e.getMessage(), Logger.LogType.ERROR);
-            URLHandler.dataBase = "http://abzzezz.bplaced.net/list.txt";
+            StringHandler.dataBase = "http://abzzezz.bplaced.net/list.txt";
         }
         return realSeries;
     }

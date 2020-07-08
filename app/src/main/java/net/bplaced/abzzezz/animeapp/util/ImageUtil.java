@@ -8,6 +8,6 @@ package net.bplaced.abzzezz.animeapp.util;
 
 public class ImageUtil {
 
-    public static int[] dimensions = {390, 500};
+    public static final int[] DIMENSIONS = {390, 500};
 
 }

@@ -9,7 +9,7 @@ package net.bplaced.abzzezz.animeapp.util.scripter;
 import android.content.Context;
 import android.net.ConnectivityManager;
 
-public class URLHandler {
+public class StringHandler {
 
 
     /*
@@ -20,6 +20,8 @@ public class URLHandler {
     public static final String APP_VERSION_TXT = "http://abzzezz.bplaced.net/app/version.txt";
     public static final String APP_CHANGELOG_TXT = "http://abzzezz.bplaced.net/app/changelog.txt";
     public static String dataBase = "https://www.anime4you.one/speedlist.old.txt";
+    public static final String USER_AGENT = "Mozilla/5.0 (Linux; Android 7.0; Moto C Plus) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.73 Mobile Safari/537.36";
+
 
     public static boolean isOnline(Context context) {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);

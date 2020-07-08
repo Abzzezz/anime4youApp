@@ -29,7 +29,8 @@ public class OfflineImageLoader {
                 FileOutputStream fileOutputStream = new FileOutputStream(imageBitmap);
                 //Get imagebitmap and save to file
                 Logger.log("Getting image bitmap", Logger.LogType.INFO);
-                Picasso.with(context).load(url).get().compress(Bitmap.CompressFormat.JPEG, 90, fileOutputStream);
+                //Compress
+                Picasso.with(context).load(url).get().compress(Bitmap.CompressFormat.JPEG, 70, fileOutputStream);
                 //Close stream
                 fileOutputStream.close();
                 return null;
@@ -39,7 +40,7 @@ public class OfflineImageLoader {
                     /*
                      * If thread is done load image in
                      */
-                    Picasso.with(context).load(imageBitmap).resize(ImageUtil.dimensions[0], ImageUtil.dimensions[1]).into(imageView);
+                    Picasso.with(context).load(imageBitmap).resize(ImageUtil.DIMENSIONS[0], ImageUtil.DIMENSIONS[1]).into(imageView);
                 }
 
                 @Override
@@ -48,7 +49,7 @@ public class OfflineImageLoader {
             });
         } else {
             //Load image from saved
-            Picasso.with(context).load(imageBitmap).resize(ImageUtil.dimensions[0], ImageUtil.dimensions[1]).into(imageView);
+            Picasso.with(context).load(imageBitmap).resize(ImageUtil.DIMENSIONS[0], ImageUtil.DIMENSIONS[1]).into(imageView);
         }
     }
 }

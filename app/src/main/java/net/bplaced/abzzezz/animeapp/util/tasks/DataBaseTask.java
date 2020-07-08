@@ -8,39 +8,32 @@ package net.bplaced.abzzezz.animeapp.util.tasks;
 
 import ga.abzzezz.util.stringing.StringUtil;
 import net.bplaced.abzzezz.animeapp.util.scripter.DataBaseSearch;
+import org.json.JSONObject;
 
-import java.util.Arrays;
 import java.util.concurrent.Callable;
 
-public class DataBaseTask implements Callable<String[]> {
+public class DataBaseTask implements Callable<JSONObject> {
 
-    private final String aid;
+    private final String id;
     private final DataBaseSearch dataBaseSearch;
-    private final String[] search;
 
-    public DataBaseTask(final String aid, final DataBaseSearch dataBaseSearch, String... search) {
-        this.aid = aid;
+    public DataBaseTask(final String aid, final DataBaseSearch dataBaseSearch) {
+        this.id = aid;
         this.dataBaseSearch = dataBaseSearch;
-        this.search = search;
     }
 
 
     @Override
-    public String[] call() {
-        String realSeries = dataBaseSearch.getSubstringFromDB(aid);
-        String[] re = new String[search.length];
-        for (int i = 0; i < re.length; i++) {
-            String in = realSeries.isEmpty() ? "-1" : StringUtil.getStringFromLong(realSeries, search[i], "\"");
-            re[i] = in;
-        }
-        return re;
-
-/*
-        String coverURL = realSeries.isEmpty() ? "0" : StringUtil.getStringFromLong(realSeries, "src=\\\"", "\\\"");
-        String episodesString = realSeries.isEmpty() ? "0" : StringUtil.getStringFromLong(realSeries, "\"Letzte\":\"", "\"");
-        String seriesName = realSeries.isEmpty() ? "ERROR" : StringUtil.getStringFromLong(realSeries, "\"titel\":\"", "\"");
-        String language = realSeries.isEmpty() ? "ERROR" : StringUtil.getStringFromLong(realSeries, "\"Untertitel\":\"", "\"");
-
- */
+    public JSONObject call() throws Exception {
+        String realSeries = dataBaseSearch.getSubstringFromDB(id);
+        if (realSeries.isEmpty()) return null;
+        JSONObject inf = new JSONObject();
+        inf.put("id", id);
+        inf.put("image_url", StringUtil.getStringFromLong(realSeries, "src=\\\"", "\\\""));
+        inf.put("episodes", StringUtil.getStringFromLong(realSeries, "\"Letzte\":\"", "\""));
+        inf.put("name", StringUtil.getStringFromLong(realSeries, "\"titel\":\"", "\""));
+        inf.put("language", StringUtil.getStringFromLong(realSeries, "\"Untertitel\":\"", "\""));
+        inf.put("year", StringUtil.getStringFromLong(realSeries, "\"Jahr\":\"", "\""));
+        return inf;
     }
 }

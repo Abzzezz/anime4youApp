@@ -22,10 +22,7 @@
                 android:icon="@drawable/changelog"
                 android:title="@string/menu_changelog"/>
 
-        <item
-                android:id="@+id/cloud_download"
-                android:icon="@drawable/cloud_download"
-                android:title="@string/cloud_list"/>
+
 
         <item
                 android:id="@+id/download_tracker"

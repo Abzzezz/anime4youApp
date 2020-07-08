@@ -8,7 +8,7 @@
 
     <style name="DarkTheme" parent="Theme.AppCompat.NoActionBar">
         <!-- Background and item colors-->
-        <item name="android:colorPrimary">@color/primaryColorDark</item>
+        <item name="colorPrimary">@color/primaryColorDark</item>
         <item name="android:colorAccent">@color/accentColor</item>
         <item name="android:itemBackground">@color/primaryColorDark</item>
         <item name="android:actionBarItemBackground">@color/toolbarDark</item>

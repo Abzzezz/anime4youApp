@@ -12,7 +12,6 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
-import android.widget.Toast;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.preference.PreferenceManager;
@@ -22,6 +21,7 @@ import net.bplaced.abzzezz.animeapp.R;
 import net.bplaced.abzzezz.animeapp.activities.main.SelectedAnimeActivity;
 import net.bplaced.abzzezz.animeapp.util.IntentHelper;
 import net.bplaced.abzzezz.animeapp.util.receiver.StopDownloadingReceiver;
+import net.bplaced.abzzezz.animeapp.util.scripter.StringHandler;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -35,7 +35,6 @@ import java.util.concurrent.Callable;
 public class DownloadTask extends TaskExecutor implements Callable<String>, TaskExecutor.Callback<String> {
 
     private final SelectedAnimeActivity application;
-    private final String[] information;
     private final int[] count;
     private NotificationManagerCompat notificationManagerCompat;
     private NotificationCompat.Builder notification;
@@ -43,10 +42,14 @@ public class DownloadTask extends TaskExecutor implements Callable<String>, Task
     private boolean cancel;
     private FileOutputStream fileOutputStream;
     private File outFile;
+    private final String url;
+    private final String name;
 
-    public DownloadTask(final SelectedAnimeActivity application, final String[] information, final int[] count) {
+
+    public DownloadTask(final SelectedAnimeActivity application, final String url, final String name, final int[] count) {
         this.application = application;
-        this.information = information;
+        this.name = name;
+        this.url = url;
         this.count = count;
     }
 
@@ -64,24 +67,24 @@ public class DownloadTask extends TaskExecutor implements Callable<String>, Task
     @Override
     public String call() throws Exception {
         Logger.log("New download thread started" + notifyID, Logger.LogType.INFO);
-        final File outDir = new File(application.getFilesDir(), information[1].substring(0, information[1].indexOf("::")));
+        final File outDir = new File(application.getFilesDir(), name);
+
         if (!outDir.exists()) outDir.mkdir();
-        this.outFile = new File(outDir, information[1]);
+        this.outFile = new File(outDir, count[1] + ".mp4");
 
         //Open new URL connection
-        URLConnection urlConnection = new URL(information[0]).openConnection();
-        //Connect using a mac user agent
-        urlConnection.setRequestProperty("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_2) AppleWebKit/601.3.9 (KHTML, like Gecko) Version/9.0.2 Safari/601.3.9");
+        final URLConnection urlConnection = new URL(url).openConnection();
+        urlConnection.setRequestProperty("User-Agent", StringHandler.USER_AGENT);
         urlConnection.connect();
         //Open Stream
         this.fileOutputStream = new FileOutputStream(outFile);
-        ReadableByteChannel readableByteChannel = Channels.newChannel(urlConnection.getInputStream());
+        final ReadableByteChannel readableByteChannel = Channels.newChannel(urlConnection.getInputStream());
         //Copy from channel to channel
         fileOutputStream.getChannel().transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
         //Close stream
         Logger.log("Done copying streams, closing stream", Logger.LogType.INFO);
         fileOutputStream.close();
-        return information[1];
+        return name + count[1];
     }
 
     @Override
@@ -89,9 +92,9 @@ public class DownloadTask extends TaskExecutor implements Callable<String>, Task
         //Cancel notification
         notificationManagerCompat.cancel(notifyID);
         //Add to download tracker
-        AnimeAppMain.getInstance().getDownloadTracker().submitTrack("Downloaded Episode: " + result);
-        //Make toast text
-        Toast.makeText(application, isCancelled() ? "Download cancelled" : "Done downloading anime episode: " + result, Toast.LENGTH_SHORT).show();
+        if (!isCancelled())
+            AnimeAppMain.getInstance().getDownloadTracker().submitTrack("Downloaded Episode: " + result);
+
         this.notification = new NotificationCompat.Builder(application, AnimeAppMain.NOTIFICATION_CHANNEL_ID)
                 .setSmallIcon(R.drawable.information).setColor(Color.GREEN).setContentText("Episode-download done")
                 .setContentTitle("Done downloading episode: " + result)
@@ -137,7 +140,7 @@ public class DownloadTask extends TaskExecutor implements Callable<String>, Task
         final PendingIntent stopDownloadingPendingIntent = PendingIntent.getBroadcast(application, 1, notificationActionIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         this.notification = new NotificationCompat.Builder(application, AnimeAppMain.NOTIFICATION_CHANNEL_ID)
                 .setSmallIcon(R.drawable.download)
-                .setContentText("Currently downloading episode: " + information[1])
+                .setContentText("Currently downloading episode: " + count[1])
                 .setContentTitle("Episode Download")
                 .setPriority(NotificationCompat.PRIORITY_HIGH).addAction(R.drawable.ic_cancel, "Stop downloading", stopDownloadingPendingIntent)
                 .setOngoing(true);

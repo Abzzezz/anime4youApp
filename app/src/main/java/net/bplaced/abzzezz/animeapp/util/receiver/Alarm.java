@@ -20,9 +20,11 @@ import net.bplaced.abzzezz.animeapp.AnimeAppMain;
 import net.bplaced.abzzezz.animeapp.R;
 import net.bplaced.abzzezz.animeapp.util.file.AnimeNotifications;
 import net.bplaced.abzzezz.animeapp.util.scripter.DataBaseSearch;
-import net.bplaced.abzzezz.animeapp.util.scripter.URLHandler;
+import net.bplaced.abzzezz.animeapp.util.scripter.StringHandler;
 import net.bplaced.abzzezz.animeapp.util.tasks.DataBaseTask;
 import net.bplaced.abzzezz.animeapp.util.tasks.TaskExecutor;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class Alarm extends BroadcastReceiver {
 
@@ -40,7 +42,7 @@ public class Alarm extends BroadcastReceiver {
      */
     @Override
     public void onReceive(final Context context, final Intent intent) {
-        if (!URLHandler.isOnline(context)) return;
+        if (!StringHandler.isOnline(context)) return;
 
         PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
         PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Anime4you:tag");
@@ -49,12 +51,13 @@ public class Alarm extends BroadcastReceiver {
         if (AnimeAppMain.getInstance().isDebugVersion()) sendNotification(context);
         Logger.log("Checking for new episodes", Logger.LogType.INFO);
         animeNotifications.getPreferences().getAll().forEach((key, o) ->
-                new TaskExecutor().executeAsync(new DataBaseTask(key.split(StringUtil.splitter)[1], dataBaseSearch, "\"Letzte\":\""),
-                        new TaskExecutor.Callback<String[]>() {
+                new TaskExecutor().executeAsync(new DataBaseTask(key.split(StringUtil.splitter)[1], dataBaseSearch),
+                        new TaskExecutor.Callback<JSONObject>() {
                             @Override
-                            public void onComplete(String[] result) {
-                                if (Integer.parseInt(result[0]) > Integer.parseInt(animeNotifications.getPreferences().getString(key, "1"))) {
-                                    animeNotifications.updateKey(result[0] + StringUtil.splitter + result[3], result[0]);
+                            public void onComplete(JSONObject result) throws Exception {
+                                int newNumber = result.getInt("episodes");
+                                if (newNumber > Integer.parseInt(animeNotifications.getPreferences().getString(key, "1"))) {
+                                    animeNotifications.updateKey(key, newNumber);
                                     sendNotification(context, result);
                                 }
                             }
@@ -84,13 +87,13 @@ public class Alarm extends BroadcastReceiver {
      * @param context notification context
      * @param result  Anime information
      */
-    private void sendNotification(final Context context, final String[] result) {
+    private void sendNotification(final Context context, final JSONObject result) throws JSONException {
         NotificationCompat.Builder notificationCompat = new NotificationCompat.Builder(context, AnimeAppMain.NOTIFICATION_CHANNEL_ID)
-                .setSmallIcon(R.drawable.information).setContentText("New episode for anime: " + result[0] + " available!")
+                .setSmallIcon(R.drawable.information).setContentText("New episode for anime: " + result.getString("Name") + " available!")
                 .setContentTitle("New episode available!")
                 .setPriority(NotificationCompat.PRIORITY_MAX);
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
-        notificationManagerCompat.notify(Integer.parseInt(result[3]), notificationCompat.build());
+        notificationManagerCompat.notify(result.getInt("episode"), notificationCompat.build());
     }
 
     /**

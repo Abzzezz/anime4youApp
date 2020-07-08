@@ -54,4 +54,7 @@ dependencies {
     implementation 'com.github.oktavianto:ionalert:1.0.4'
     implementation 'androidx.preference:preference:1.1.1'
     implementation 'com.google.android.exoplayer:exoplayer:2.11.6'
+    implementation 'org.json:json:20171018'
+    implementation 'com.android.volley:volley:1.1.1'
+
 }

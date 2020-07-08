@@ -17,7 +17,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import ga.abzzezz.util.data.URLUtil;
 import net.bplaced.abzzezz.animeapp.R;
-import net.bplaced.abzzezz.animeapp.util.scripter.URLHandler;
+import net.bplaced.abzzezz.animeapp.util.scripter.StringHandler;
 import net.bplaced.abzzezz.animeapp.util.tasks.TaskExecutor;
 
 import java.net.URL;
@@ -33,7 +33,7 @@ public class ChangelogFragment extends Fragment {
         new TaskExecutor().executeAsync(new Callable<ArrayList<String>>() {
             @Override
             public ArrayList<String> call() throws Exception {
-                return URLUtil.getURLContentAsArray(new URL(URLHandler.APP_CHANGELOG_TXT));
+                return URLUtil.getURLContentAsArray(new URL(StringHandler.APP_CHANGELOG_TXT));
             }
         }, new TaskExecutor.Callback<ArrayList<String>>() {
             @Override

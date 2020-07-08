@@ -9,7 +9,6 @@ package net.bplaced.abzzezz.animeapp.util.file;
 import android.content.Context;
 import android.content.SharedPreferences;
 import ga.abzzezz.util.logging.Logger;
-import net.bplaced.abzzezz.animeapp.util.scripter.DataBaseSearch;
 
 /**
  * Keeps track of all animes marked with notifications. Every hour the list gets checked for a new episode
@@ -52,9 +51,9 @@ public class AnimeNotifications {
      * @param key
      * @param newCount
      */
-    public void updateKey(final String key, final String newCount) {
+    public void updateKey(final String key, final int newCount) {
         editor.remove(key);
-        editor.putString(key, newCount);
+        editor.putString(key, String.valueOf(newCount));
         editor.apply();
     }
 
