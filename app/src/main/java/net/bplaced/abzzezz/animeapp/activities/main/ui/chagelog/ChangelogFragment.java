@@ -29,7 +29,7 @@ public class ChangelogFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.simplelist_layout, container, false);
+        final View root = inflater.inflate(R.layout.simplelist_layout, container, false);
         new TaskExecutor().executeAsync(new Callable<ArrayList<String>>() {
             @Override
             public ArrayList<String> call() throws Exception {
@@ -39,8 +39,8 @@ public class ChangelogFragment extends Fragment {
             @Override
             public void onComplete(ArrayList<String> result) {
                 getActivity().runOnUiThread(() -> {
-                    ListView listView = getActivity().findViewById(R.id.simple_list_view);
-                    ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1);
+                    final ListView listView = getActivity().findViewById(R.id.simple_list_view);
+                    final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1);
                     arrayAdapter.addAll(result);
                     listView.setAdapter(arrayAdapter);
                 });

@@ -164,7 +164,7 @@ public class SelectedActivity extends AppCompatActivity {
         int itemID = item.getItemId();
         switch (itemID) {
             case R.id.download_bound:
-                InputDialogBuilder dialogBuilder = new InputDialogBuilder(new InputDialogListener() {
+                final InputDialogBuilder dialogBuilder = new InputDialogBuilder(new InputDialogListener() {
                     @Override
                     public void onDialogInput(String text) {
                         downloadEpisode(getLatestEpisode(), Integer.parseInt(text), 0);
@@ -191,8 +191,7 @@ public class SelectedActivity extends AppCompatActivity {
      */
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(this, DrawerMainMenu.class);
-        startActivity(intent);
+        startActivity(new Intent(this, DrawerMainMenu.class));
         finish();
         super.onBackPressed();
     }

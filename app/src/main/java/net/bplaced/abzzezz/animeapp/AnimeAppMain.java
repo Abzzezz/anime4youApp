@@ -34,7 +34,6 @@ import net.bplaced.abzzezz.animeapp.util.tasks.TaskExecutor;
 
 import java.io.File;
 
-//TODO: Recode project
 public class AnimeAppMain {
 
     public static final String NOTIFICATION_CHANNEL_ID = "Anime Channel";
@@ -51,7 +50,7 @@ public class AnimeAppMain {
     private ShowNotifications animeNotifications;
 
     public AnimeAppMain() {
-        this.version = 47;
+        this.version = 48;
         this.debugVersion = false;
         this.notificationChannelName = "AnimeChannel";
     }
