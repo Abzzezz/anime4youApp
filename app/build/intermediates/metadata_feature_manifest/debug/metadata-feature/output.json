@@ -10,8 +10,8 @@
       "apkData": {
         "type": "MAIN",
         "splits": [],
-        "versionCode": 15,
-        "versionName": "12.0.2",
+        "versionCode": 16,
+        "versionName": "12.0.3",
         "outputFile": "app-debug.apk",
         "fullName": "debug",
         "baseName": "debug",

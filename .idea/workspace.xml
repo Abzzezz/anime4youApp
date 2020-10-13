@@ -36,7 +36,6 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="R58N66DY2GV" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -46,6 +45,9 @@
     <system id="GRADLE">
       <state>
         <task path="$PROJECT_DIR$">
+          <activation />
+        </task>
+        <task path="$PROJECT_DIR$/app">
           <activation />
         </task>
         <projects_view>
@@ -133,7 +135,7 @@
       <recent name="net.bplaced.abzzezz.animeapp.util.tasks" />
     </key>
   </component>
-  <component name="RunManager" selected="Android App.anime4youApp.app">
+  <component name="RunManager" selected="Gradle.anime4youApp:app [lintFix]">
     <configuration name="anime4youApp.app" type="AndroidRunConfigurationType" factoryName="Android App" activateToolWindowBeforeRun="false">
       <module name="anime4youApp.app" />
       <option name="DEPLOY" value="true" />
@@ -190,6 +192,70 @@
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
       </method>
     </configuration>
+    <configuration name="anime4youApp [check]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="check" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="anime4youApp [lintFix]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="lintFix" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="anime4youApp:app [lintFix]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/app" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="lintFix" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Gradle.anime4youApp:app [lintFix]" />
+        <item itemvalue="Gradle.anime4youApp [lintFix]" />
+        <item itemvalue="Gradle.anime4youApp [check]" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="SvnConfiguration">
@@ -262,22 +328,22 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="666" y="264" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1602597991765" />
-    <state width="1877" height="424" key="GridCell.Tab.0.bottom" timestamp="1602599172657">
+    <state width="1877" height="186" key="GridCell.Tab.0.bottom" timestamp="1602600059099">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="424" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1602599172657" />
-    <state width="1877" height="424" key="GridCell.Tab.0.center" timestamp="1602599172657">
+    <state width="1877" height="186" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1602600059099" />
+    <state width="1877" height="186" key="GridCell.Tab.0.center" timestamp="1602600059099">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="424" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1602599172657" />
-    <state width="1877" height="424" key="GridCell.Tab.0.left" timestamp="1602599172657">
+    <state width="1877" height="186" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1602600059099" />
+    <state width="1877" height="186" key="GridCell.Tab.0.left" timestamp="1602600059099">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="424" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1602599172657" />
-    <state width="1877" height="424" key="GridCell.Tab.0.right" timestamp="1602599172657">
+    <state width="1877" height="186" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1602600059099" />
+    <state width="1877" height="186" key="GridCell.Tab.0.right" timestamp="1602600059099">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="424" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1602599172657" />
+    <state width="1877" height="186" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1602600059099" />
     <state width="1877" height="444" key="GridCell.Tab.1.bottom" timestamp="1595000812760">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>

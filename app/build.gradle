@@ -6,7 +6,7 @@ android {
     buildToolsVersion '29.0.3'
     defaultConfig {
         applicationId "net.bplaced.abzzezz.animeapp"
-        minSdkVersion 25
+        minSdkVersion 28
         targetSdkVersion 30
         versionCode 16
         versionName "12.0.3"
