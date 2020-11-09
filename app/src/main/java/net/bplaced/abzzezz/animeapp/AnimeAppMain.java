@@ -53,7 +53,7 @@ public class AnimeAppMain {
     private boolean isVersionOutdated;
 
     public AnimeAppMain() {
-        this.version = BuildConfig.VERSION_CODE;
+        this.version = Float.parseFloat(BuildConfig.VERSION_NAME.replaceAll("\\.", ""));
         this.debugVersion = false;
         this.notificationChannelName = "AnimeChannel";
     }

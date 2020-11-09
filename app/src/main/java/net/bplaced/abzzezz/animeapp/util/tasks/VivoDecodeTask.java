@@ -6,6 +6,7 @@
 
 package net.bplaced.abzzezz.animeapp.util.tasks;
 
+import net.bplaced.abzzezz.animeapp.util.scripter.StringHandler;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -32,7 +33,7 @@ public class VivoDecodeTask extends TaskExecutor implements Callable<String> {
     public String call() throws Exception {
         final StringBuilder finalUrl = new StringBuilder();
         final Pattern pattern = Pattern.compile("Core\\.InitializeStream\\s*\\(\\s*\\{[^)}]*source\\s*:\\s*'(.*?)',\\n");
-        final Document document = Jsoup.connect("https://vivo.sx/605301b221").userAgent("Mozilla/5.0 (Linux; Android 7.0; Moto C Plus) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.73 Mobile Safari/537.36").get();
+        final Document document = Jsoup.connect(url).userAgent(StringHandler.USER_AGENT).get();
         final Element body = document.body();
         
         String source = body.getElementsByClass("vivo-website-wrapper").first().getElementsByTag("script").get(2).data();

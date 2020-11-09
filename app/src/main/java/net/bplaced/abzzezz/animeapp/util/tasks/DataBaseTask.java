@@ -59,11 +59,11 @@ public class DataBaseTask implements Callable<JSONObject> {
                     }
                 }
             } else {
-                Logger.log("Timeout/MalformedURL/IoException identified. Requesting Backup database", Logger.LogType.INFO);
+                Logger.log("Timeout/MalformedURL/IOException identified. Requesting Backup database", Logger.LogType.INFO);
                 try {
                     return getDetails(new JSONObject(dataBaseSearch.getShowDetails(search, StringHandler.BACKUP_DATABASE)));
                 } catch (Exception exception) {
-                    Logger.log("Requesting backup database exception thrown. Result might be null", Logger.LogType.WARNING);
+                    Logger.log("Requesting backup database exception thrown. Result might be null: " + exception.getMessage(), Logger.LogType.WARNING);
                     return details;
                 }
             }
