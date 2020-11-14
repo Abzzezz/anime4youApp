@@ -10,8 +10,6 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 
 public class StringHandler {
-
-
     /*
     Just for the purpose of keeping the code clean and organized ;)
      */
@@ -26,8 +24,6 @@ public class StringHandler {
     public static final String BACKUP_DATABASE = "http://abzzezz.bplaced.net/list.txt";
     public static final String COVER_DATABASE = "https://cdn.anime4you.one/covers/";
 
-
-    
     /*
     JSON keys
      */
@@ -38,12 +34,9 @@ public class StringHandler {
     public static final String SHOW_LANG = "language";
     public static final String SHOW_YEAR = "year";
 
-
     public static boolean isOnline(Context context) {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnectedOrConnecting();
     }
-
-
 }
 

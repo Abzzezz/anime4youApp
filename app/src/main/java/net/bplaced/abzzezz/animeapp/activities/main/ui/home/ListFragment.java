@@ -72,19 +72,16 @@ public class ListFragment extends Fragment {
         });
 
         final FloatingActionButton addButton = root.findViewById(R.id.add_aid);
-        addButton.setOnClickListener(v -> {
-            final InputDialogBuilder inputDialogBuilder = new InputDialogBuilder(new InputDialogBuilder.InputDialogListener() {
-                @Override
-                public void onDialogInput(String text) {
-                    animeAdapter.addItem(text);
-                }
+        addButton.setOnClickListener(v -> new InputDialogBuilder(new InputDialogBuilder.InputDialogListener() {
+            @Override
+            public void onDialogInput(String text) {
+                animeAdapter.addItem(text);
+            }
 
-                @Override
-                public void onDialogDenied() {
-                }
-            });
-            inputDialogBuilder.showInput("Enter AID", "Enter AID to add anime", getActivity());
-        });
+            @Override
+            public void onDialogDenied() {
+            }
+        }).showInput("Enter AID", "Enter AID to add anime", getActivity()));
 
         if (AnimeAppMain.getInstance().isVersionOutdated()) {
             new IonAlert(getActivity(), IonAlert.WARNING_TYPE)

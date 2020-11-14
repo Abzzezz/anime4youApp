@@ -19,6 +19,8 @@ import ga.abzzezz.util.logging.Logger;
 import id.ionbit.ionalert.IonAlert;
 import net.bplaced.abzzezz.animeapp.AnimeAppMain;
 import net.bplaced.abzzezz.animeapp.R;
+import net.bplaced.abzzezz.animeapp.util.InputDialogBuilder;
+import net.bplaced.abzzezz.animeapp.util.tasks.ImportMalTask;
 import net.bplaced.abzzezz.animeapp.util.tasks.TaskExecutor;
 
 import java.io.File;
@@ -41,6 +43,7 @@ public class SettingsFragment extends Fragment {
             final Preference clearOfflineImages = findPreference("clear_offline_images_button");
             final Preference clearTacker = findPreference("clear_tracker");
             final Preference copySdCard = findPreference("copy_sd_card");
+            final Preference importMal = findPreference("import_mal");
 
             clearOfflineImages.setOnPreferenceClickListener(preference -> {
                 new IonAlert(getActivity(), IonAlert.WARNING_TYPE)
@@ -81,16 +84,29 @@ public class SettingsFragment extends Fragment {
                 return true;
             });
 
+            importMal.setOnPreferenceClickListener(preference -> {
+                new InputDialogBuilder(new InputDialogBuilder.InputDialogListener() {
+                    @Override
+                    public void onDialogInput(final String text) {
+                        new ImportMalTask(text).executeAsync(new TaskExecutor.Callback<String>() {
+                            @Override
+                            public void onComplete(final String result) {
+                                Toast.makeText(getActivity(), "Your Mal was imported", Toast.LENGTH_LONG).show();
+                            }
 
-            /*
-            Preference manageAnimeNotifications = findPreference("manage_anime_notifications");
-            Fragment newFragment = new AnimeNotificationsFragment();
-            manageAnimeNotifications.setOnPreferenceClickListener(preference -> {
-                getActivity().getSupportFragmentManager().beginTransaction().add(R.id.simple_list_layout, newFragment).commit();
+                            @Override
+                            public void preExecute() {
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onDialogDenied() {
+
+                    }
+                }).showInput("Import MAL", "Import", getActivity());
                 return true;
             });
-
-             */
         }
 
         private void moveFiles() {

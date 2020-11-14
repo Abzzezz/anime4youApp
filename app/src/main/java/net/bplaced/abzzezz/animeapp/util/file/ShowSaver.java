@@ -51,8 +51,9 @@ public class ShowSaver {
 
     /**
      * Refresh show index
+     *
      * @param details show details to overwrite
-     * @param index shows index
+     * @param index   shows index
      */
     public void refreshShow(final JSONObject details, final int index) {
         editor.putString(String.valueOf(index), details.toString());
@@ -61,6 +62,7 @@ public class ShowSaver {
 
     /**
      * Check if preferences contain a certain id
+     *
      * @param id it to search
      * @return id contained
      */
@@ -108,7 +110,6 @@ public class ShowSaver {
     }
 
     /**
-     *
      * @return all size
      */
     public int getShowSize() {

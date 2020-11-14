@@ -33,6 +33,8 @@
                 app:title="@string/image_compression_strength"
                 app:defaultValue="50"/>
 
+        <Preference android:title="Import from MAL"
+                    android:key="import_mal"/>
     </PreferenceCategory>
     <PreferenceCategory
             android:title="@string/global_video">
@@ -65,10 +67,8 @@
 
         <PreferenceCategory
                 android:title="@string/download_tracker">
-
             <Preference android:title="Clear tracker"
                         android:key="clear_tracker"/>
-
         </PreferenceCategory>
     </PreferenceCategory>
 

@@ -29,6 +29,4 @@ public class DownloadTrackerFragment extends Fragment {
         listView.setAdapter(arrayAdapter);
         return root;
     }
-
-
 }

@@ -35,7 +35,7 @@ public class VivoDecodeTask extends TaskExecutor implements Callable<String> {
         final Pattern pattern = Pattern.compile("Core\\.InitializeStream\\s*\\(\\s*\\{[^)}]*source\\s*:\\s*'(.*?)',\\n");
         final Document document = Jsoup.connect(url).userAgent(StringHandler.USER_AGENT).get();
         final Element body = document.body();
-        
+
         String source = body.getElementsByClass("vivo-website-wrapper").first().getElementsByTag("script").get(2).data();
 
         final Matcher matcher = pattern.matcher(source);
