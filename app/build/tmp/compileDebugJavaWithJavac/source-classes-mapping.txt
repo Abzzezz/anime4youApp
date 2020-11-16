@@ -6,8 +6,8 @@ net/bplaced/abzzezz/animeapp/activities/extra/PlayerActivity.java
  net.bplaced.abzzezz.animeapp.activities.extra.PlayerActivity
 net/bplaced/abzzezz/animeapp/util/receiver/BootReceiver.java
  net.bplaced.abzzezz.animeapp.util.receiver.BootReceiver
-net/bplaced/abzzezz/animeapp/util/scripter/StringHandler.java
- net.bplaced.abzzezz.animeapp.util.scripter.StringHandler
+net/bplaced/abzzezz/animeapp/util/tasks/ImportMalTask.java
+ net.bplaced.abzzezz.animeapp.util.tasks.ImportMalTask
 net/bplaced/abzzezz/animeapp/util/tasks/PermissionTask.java
  net.bplaced.abzzezz.animeapp.util.tasks.PermissionTask
 net/bplaced/abzzezz/animeapp/util/animenotifications/NotificationService.java
@@ -19,8 +19,12 @@ net/bplaced/abzzezz/animeapp/util/receiver/Alarm.java
  net.bplaced.abzzezz.animeapp.util.receiver.Alarm$1
 net/bplaced/abzzezz/animeapp/BuildConfig.java
  net.bplaced.abzzezz.animeapp.BuildConfig
-net/bplaced/abzzezz/animeapp/util/tasks/DownloadTask.java
- net.bplaced.abzzezz.animeapp.util.tasks.DownloadTask
+net/bplaced/abzzezz/animeapp/activities/main/ui/settings/SettingsFragment.java
+ net.bplaced.abzzezz.animeapp.activities.main.ui.settings.SettingsFragment
+ net.bplaced.abzzezz.animeapp.activities.main.ui.settings.SettingsFragment$SettingsFragmentInner
+ net.bplaced.abzzezz.animeapp.activities.main.ui.settings.SettingsFragment$SettingsFragmentInner$1
+ net.bplaced.abzzezz.animeapp.activities.main.ui.settings.SettingsFragment$SettingsFragmentInner$1$1
+ net.bplaced.abzzezz.animeapp.activities.main.ui.settings.SettingsFragment$SettingsFragmentInner$2
 net/bplaced/abzzezz/animeapp/util/tasks/DataBaseTask.java
  net.bplaced.abzzezz.animeapp.util.tasks.DataBaseTask
 net/bplaced/abzzezz/animeapp/util/tasks/TaskExecutor.java
@@ -92,11 +96,7 @@ net/bplaced/abzzezz/animeapp/activities/extra/StreamPlayer.java
 net/bplaced/abzzezz/animeapp/util/file/OfflineImageLoader.java
  net.bplaced.abzzezz.animeapp.util.file.OfflineImageLoader
  net.bplaced.abzzezz.animeapp.util.file.OfflineImageLoader$1
-net/bplaced/abzzezz/animeapp/util/tasks/ImportMalTask.java
- net.bplaced.abzzezz.animeapp.util.tasks.ImportMalTask
-net/bplaced/abzzezz/animeapp/activities/main/ui/settings/SettingsFragment.java
- net.bplaced.abzzezz.animeapp.activities.main.ui.settings.SettingsFragment
- net.bplaced.abzzezz.animeapp.activities.main.ui.settings.SettingsFragment$SettingsFragmentInner
- net.bplaced.abzzezz.animeapp.activities.main.ui.settings.SettingsFragment$SettingsFragmentInner$1
- net.bplaced.abzzezz.animeapp.activities.main.ui.settings.SettingsFragment$SettingsFragmentInner$1$1
- net.bplaced.abzzezz.animeapp.activities.main.ui.settings.SettingsFragment$SettingsFragmentInner$2
+net/bplaced/abzzezz/animeapp/util/scripter/StringHandler.java
+ net.bplaced.abzzezz.animeapp.util.scripter.StringHandler
+net/bplaced/abzzezz/animeapp/util/tasks/DownloadTask.java
+ net.bplaced.abzzezz.animeapp.util.tasks.DownloadTask

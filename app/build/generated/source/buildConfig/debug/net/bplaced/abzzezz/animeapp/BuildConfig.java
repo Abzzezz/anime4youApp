@@ -8,5 +8,5 @@ public final class BuildConfig {
   public static final String APPLICATION_ID = "net.bplaced.abzzezz.animeapp";
   public static final String BUILD_TYPE = "debug";
   public static final int VERSION_CODE = 17;
-  public static final String VERSION_NAME = "12.0.5";
+  public static final String VERSION_NAME = "12.0.6";
 }

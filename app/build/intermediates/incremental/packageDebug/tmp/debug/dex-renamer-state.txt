@@ -1,4 +1,4 @@
-#Sat Nov 14 22:20:15 CET 2020
+#Sat Nov 14 22:26:30 CET 2020
 base.1=E\:\\Code\\Projects\\anime4youApp\\app\\build\\intermediates\\dex\\debug\\mergeProjectDexDebug\\classes.dex
 path.1=classes.dex
 base.0=E\:\\Code\\Projects\\anime4youApp\\app\\build\\intermediates\\dex\\debug\\mergeExtDexDebug\\classes.dex

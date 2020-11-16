@@ -81,7 +81,7 @@ public class ImportMalTask extends TaskExecutor implements Callable<String> {
     }
 
     private Collection<String[]> getSimilar() throws MalformedURLException {
-        final List<String> allAvailable = getAllTitle();
+        final List<String> allAvailable = getAllTitles();
         final List<String> animeMAL = getMalTitles();
 
         return allAvailable.parallelStream().map(s -> s.split(StringUtil.splitter)).filter(strings -> {
@@ -90,7 +90,7 @@ public class ImportMalTask extends TaskExecutor implements Callable<String> {
         }).collect(Collectors.toList());
     }
 
-    private List<String> getAllTitle() {
+    private List<String> getAllTitles() {
         final List<String> titleList = new ArrayList<>();
         final StringBuilder stringBuilder = new StringBuilder(dataBase);
         final String title = "\"titel\":\"";

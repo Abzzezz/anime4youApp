@@ -211,7 +211,6 @@ public class ListFragment extends Fragment {
                     AnimeAppMain.getInstance().getShowSaver().addShow(result);
                     notifyDataSetChanged();
                 }
-
                 @Override
                 public void preExecute() {
                 }
