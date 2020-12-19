@@ -4,23 +4,6 @@
             "outputFile": "E:\\Code\\Projects\\anime4youApp\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-hu\\values-hu.xml",
             "map": [
                 {
-                    "source": "E:\\gradle\\caches\\transforms-2\\files-2.1\\c70212e301c5d42cb93b84b89f7f472e\\navigation-ui-2.3.1\\res\\values-hu\\values-hu.xml",
-                    "from": {
-                        "startLines": "2,3",
-                        "startColumns": "4,4",
-                        "startOffsets": "55,167",
-                        "endColumns": "111,119",
-                        "endOffsets": "162,282"
-                    },
-                    "to": {
-                        "startLines": "71,72",
-                        "startColumns": "4,4",
-                        "startOffsets": "5822,5934",
-                        "endColumns": "111,119",
-                        "endOffsets": "5929,6049"
-                    }
-                },
-                {
                     "source": "E:\\gradle\\caches\\transforms-2\\files-2.1\\9d4169682451d32dd4622dddb23cd8cb\\preference-1.1.1\\res\\values-hu\\values-hu.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8",
@@ -69,6 +52,23 @@
                         "startOffsets": "2930,3008,3093,3167,3240,3313,3381,3454,3540,3619,3702,3776,3849,3934,4018,4086,4149,4224,4286,4360,4432,4510,4591,4644,4702,4750,4811,4875,4942,5006,5074,5139,5198,5263,5329,5395,5448,5513,5595,5677",
                         "endColumns": "77,84,73,72,72,67,72,85,78,82,73,72,84,83,67,62,74,61,73,71,77,80,52,57,47,60,63,66,63,67,64,58,64,65,65,52,64,81,81,56",
                         "endOffsets": "3003,3088,3162,3235,3308,3376,3449,3535,3614,3697,3771,3844,3929,4013,4081,4144,4219,4281,4355,4427,4505,4586,4639,4697,4745,4806,4870,4937,5001,5069,5134,5193,5258,5324,5390,5443,5508,5590,5672,5729"
+                    }
+                },
+                {
+                    "source": "E:\\gradle\\caches\\transforms-2\\files-2.1\\ef51078610c37d0622b96bcf4e5b05a8\\navigation-ui-2.3.2\\res\\values-hu\\values-hu.xml",
+                    "from": {
+                        "startLines": "2,3",
+                        "startColumns": "4,4",
+                        "startOffsets": "55,167",
+                        "endColumns": "111,119",
+                        "endOffsets": "162,282"
+                    },
+                    "to": {
+                        "startLines": "71,72",
+                        "startColumns": "4,4",
+                        "startOffsets": "5822,5934",
+                        "endColumns": "111,119",
+                        "endOffsets": "5929,6049"
                     }
                 },
                 {

@@ -14,12 +14,15 @@
             android:layout_width="wrap_content"
             android:maxLength="30"
             android:textSize="16sp"
-            android:layout_height="wrap_content" android:id="@+id/episode_name"/>
+            android:layout_height="wrap_content"
+            android:id="@+id/episode_name"/>
 
 
     <ImageView
             android:layout_width="44dp"
-            android:layout_height="36dp" app:srcCompat="@drawable/download" android:id="@+id/download_button"
+            android:layout_height="36dp"
+            app:srcCompat="@drawable/download"
+            android:id="@+id/download_button"
             app:layout_constraintHorizontal_bias="0.58"
             android:layout_marginStart="30dp"
             android:layout_alignParentEnd="true"/>

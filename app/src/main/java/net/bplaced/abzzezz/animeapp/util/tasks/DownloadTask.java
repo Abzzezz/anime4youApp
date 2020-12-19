@@ -26,6 +26,7 @@ import net.bplaced.abzzezz.animeapp.util.scripter.StringHandler;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.channels.Channels;
@@ -71,20 +72,24 @@ public class DownloadTask extends TaskExecutor implements Callable<String>, Task
 
         if (!outDir.exists()) outDir.mkdir();
         this.outFile = new File(outDir, count[1] + ".mp4");
-
-        //Open new URL connection
-        final URLConnection urlConnection = new URL(url).openConnection();
-        urlConnection.setRequestProperty("User-Agent", StringHandler.USER_AGENT);
-        urlConnection.connect();
-        //Open Stream
-        this.fileOutputStream = new FileOutputStream(outFile);
-        final ReadableByteChannel readableByteChannel = Channels.newChannel(urlConnection.getInputStream());
-        //Copy from channel to channel
-        fileOutputStream.getChannel().transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
-        //Close stream
-        Logger.log("Done copying streams, closing stream", Logger.LogType.INFO);
-        fileOutputStream.close();
-        return name.concat(": ") + count[1];
+        try {
+            //Open new URL connection
+            final URLConnection urlConnection = new URL(url).openConnection();
+            urlConnection.setRequestProperty("User-Agent", StringHandler.USER_AGENT);
+            urlConnection.connect();
+            //Open Stream
+            this.fileOutputStream = new FileOutputStream(outFile);
+            final ReadableByteChannel readableByteChannel = Channels.newChannel(urlConnection.getInputStream());
+            //Copy from channel to channel
+            fileOutputStream.getChannel().transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
+            //Close stream
+            Logger.log("Done copying streams, closing stream", Logger.LogType.INFO);
+            fileOutputStream.close();
+            return name.concat(": ") + count[1];
+        } catch (MalformedURLException e) {
+            cancel();
+            return name.concat(": ") + count[1];
+        }
     }
 
     @Override
@@ -106,7 +111,7 @@ public class DownloadTask extends TaskExecutor implements Callable<String>, Task
                 if (count[0] < count[2]) {
                     count[0]++;
                     count[1]++;
-                    application.downloadEpisode(count[1], count[2], count[0]);
+                    application.getEpisode(count[1], count[2], count[0], false);
                 }
             }, Long.parseLong(PreferenceManager.getDefaultSharedPreferences(application).getString("download_delay", "0")) * 1000);
         }

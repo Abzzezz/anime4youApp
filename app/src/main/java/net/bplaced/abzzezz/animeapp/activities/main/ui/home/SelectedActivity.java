@@ -19,9 +19,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.FileProvider;
 import androidx.preference.PreferenceManager;
+import com.htetznaing.lowcostvideo.LowCostVideo;
+import com.htetznaing.lowcostvideo.Model.XModel;
+import com.htetznaing.lowcostvideo.Sites.Vidoza;
 import com.squareup.picasso.Picasso;
 import ga.abzzezz.util.data.FileUtil;
-import ga.abzzezz.util.data.URLUtil;
 import ga.abzzezz.util.logging.Logger;
 import ga.abzzezz.util.stringing.StringUtil;
 import id.ionbit.ionalert.IonAlert;
@@ -34,20 +36,18 @@ import net.bplaced.abzzezz.animeapp.util.ImageUtil;
 import net.bplaced.abzzezz.animeapp.util.InputDialogBuilder;
 import net.bplaced.abzzezz.animeapp.util.InputDialogBuilder.InputDialogListener;
 import net.bplaced.abzzezz.animeapp.util.file.OfflineImageLoader;
-import net.bplaced.abzzezz.animeapp.util.scripter.ScriptUtil;
 import net.bplaced.abzzezz.animeapp.util.scripter.StringHandler;
 import net.bplaced.abzzezz.animeapp.util.tasks.DownloadTask;
 import net.bplaced.abzzezz.animeapp.util.tasks.TaskExecutor;
 import net.bplaced.abzzezz.animeapp.util.tasks.VideoFindTask;
 import net.bplaced.abzzezz.animeapp.util.tasks.VivoDecodeTask;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.OptionalInt;
+import java.util.*;
+import java.util.function.Consumer;
 
 public class SelectedActivity extends AppCompatActivity {
 
@@ -63,7 +63,7 @@ public class SelectedActivity extends AppCompatActivity {
         setContentView(R.layout.selected_show_layout);
 
         /*
-         * Get intent varaibles
+         * Get intent variables
          */
         try {
             final JSONObject inf = new JSONObject(getIntent().getStringExtra("details"));
@@ -85,7 +85,7 @@ public class SelectedActivity extends AppCompatActivity {
             final ImageView cover = findViewById(R.id.anime_cover_image);
             final Toolbar toolbar = findViewById(R.id.selected_anime_toolbar);
             setSupportActionBar(toolbar);
-            getSupportActionBar().setTitle(title);
+            Objects.requireNonNull(getSupportActionBar()).setTitle(title);
             /*
              * If offline mode is enabled use image offline loader
              */
@@ -107,7 +107,7 @@ public class SelectedActivity extends AppCompatActivity {
                 final boolean isDownloaded = isEpisodeDownloaded(i);
                 new IonAlert(SelectedActivity.this, IonAlert.NORMAL_TYPE)
                         .setConfirmText("Stream")
-                        .setConfirmClickListener(ionAlert -> streamEpisode(i))
+                        .setConfirmClickListener(ionAlert -> getEpisode(i, 1, 0, true))
                         .setCancelText(isDownloaded ? "Play downloaded" : "Cancel")
                         .setCancelClickListener(ionAlert -> {
                             if (isDownloaded)
@@ -116,8 +116,7 @@ public class SelectedActivity extends AppCompatActivity {
                                 ionAlert.dismissWithAnimation();
                         }).show();
             });
-
-            findViewById(R.id.download_anime_button).setOnClickListener(v -> downloadEpisode(getLatestEpisode(), episodes, 0));
+            findViewById(R.id.download_anime_button).setOnClickListener(v -> getEpisode(getLatestEpisode(), episodes, 0, false));
         } catch (JSONException e) {
             Logger.log("Error parsing JSON", Logger.LogType.INFO);
             e.printStackTrace();
@@ -170,7 +169,7 @@ public class SelectedActivity extends AppCompatActivity {
                 final InputDialogBuilder dialogBuilder = new InputDialogBuilder(new InputDialogListener() {
                     @Override
                     public void onDialogInput(final String text) {
-                        downloadEpisode(getLatestEpisode(), Integer.parseInt(text), 0);
+                        getEpisode(getLatestEpisode(), Integer.parseInt(text), 0, false);
                     }
 
                     @Override
@@ -206,9 +205,9 @@ public class SelectedActivity extends AppCompatActivity {
      * @param countMax     max download
      * @param currentCount current episode
      */
-    public void downloadEpisode(final int start, final int countMax, final int currentCount) {
+    public void getEpisode(final int start, final int countMax, final int currentCount, final boolean stream) {
         Logger.log("Next episode: " + start, Logger.LogType.INFO);
-        int[] count = {currentCount, start};
+        final int[] count = {currentCount, start};
         /*
          * Check if count is bigger than the max episodes to download
          */
@@ -231,29 +230,58 @@ public class SelectedActivity extends AppCompatActivity {
 
         new VideoFindTask(id, count[1]).executeAsync(new TaskExecutor.Callback<String>() {
             @Override
-            public void onComplete(String result) {
+            public void onComplete(String foundEntry) {
                 webView.setWebViewClient(new WebViewClient() {
                     @Override
-                    public void onPageFinished(WebView view, String url) {
-                        view.evaluateJavascript(result, returnCaptcha -> {
-                            if (returnCaptcha.contains("vivo")) {
-                                Logger.log("Found link for vivo:" + returnCaptcha, Logger.LogType.INFO);
-                                makeText("Found vivo.sx link");
+                    public void onPageFinished(final WebView view, final String url) {
+                        view.evaluateJavascript(foundEntry, resultFromCaptcha -> {
+                            try {
+                                final JSONArray resultJSON = new JSONObject(resultFromCaptcha).getJSONArray("hosts");
+                                final String vivoURLEncoded = resultJSON.getJSONObject(2).getString("href");
+                                final String vidozaHash = resultJSON.getJSONObject(1).getString("crypt");
 
-                                new VivoDecodeTask(URLUtil.toUrl(StringUtil.removeBadCharacters(returnCaptcha, "\\\\", "\""), "https")).executeAsync(new TaskExecutor.Callback<String>() {
-                                    @Override
-                                    public void onComplete(final String result) {
-                                        new DownloadTask(SelectedActivity.this, result.replaceAll("\"", ""), title, new int[]{count[0], count[1], countMax}).executeAsync();
-                                    }
+                                final String[] urls = new String[2];
 
-                                    @Override
-                                    public void preExecute() {
-                                        webView.destroy();
-                                    }
+                                final Consumer<String> onDone = vivoURLDecoded -> {
+                                    urls[0] = vivoURLDecoded;
+                                    webView.destroy();
+                                    view.destroy();
+
+                                    String finalURL = urls[0];
+                                    if (urls[0] == null && urls[1] == null) {
+                                        makeText("No link found for requested video");
+                                        return;
+                                    } else if (urls[0] == null) finalURL = urls[1];
+                                    else if (urls[0].isEmpty()) finalURL = urls[1];
+
+                                    finalURL = finalURL.replace("\"", "");
+
+                                    if (stream) {
+                                        final Intent intent = new Intent(SelectedActivity.this, StreamPlayer.class);
+                                        intent.putExtra("stream", finalURL);
+                                        startActivity(intent);
+                                        finish();
+                                    } else
+                                        new DownloadTask(SelectedActivity.this, finalURL, title, new int[]{count[0], count[1], countMax}).executeAsync();
+                                };
+
+                                view.evaluateJavascript(String.format(StringHandler.VIDOZA_SCRIPT, vidozaHash), vidozaURL -> {
+                                    Vidoza.fetch(vidozaURL.replace("\"", ""), new LowCostVideo.OnTaskCompleted() {
+                                        @Override
+                                        public void onTaskCompleted(final ArrayList<XModel> vidURL, final boolean multiple_quality) {
+                                            vidURL.stream().max(XModel::compareTo).ifPresent(xModel -> urls[1] = xModel.getUrl());
+                                            decodeVivo(vivoURLEncoded, onDone);
+                                        }
+
+                                        @Override
+                                        public void onError() {
+                                            System.out.println("Error vidoza");
+                                            decodeVivo(vivoURLEncoded, onDone);
+                                        }
+                                    });
                                 });
-                            } else {
-                                makeText("Error getting vivo link. Anime4you might be down / Anime done downloading");
-                                Logger.log(returnCaptcha, Logger.LogType.WARNING);
+                            } catch (final Exception e) {
+                                e.printStackTrace();
                             }
                         });
                         super.onPageFinished(view, url);
@@ -263,84 +291,21 @@ public class SelectedActivity extends AppCompatActivity {
 
             @Override
             public void preExecute() {
-
             }
         });
     }
 
-    /**
-     * TODO: Merge
-     *
-     * @param episode
-     */
-    public void streamEpisode(final int episode) {
-        final WebView webView = new WebView(getApplicationContext());
-        webView.getSettings().setJavaScriptEnabled(true);
-        webView.loadUrl(StringHandler.CAPTCHA_ANIME_4_YOU_ONE);
-
-        WebStorage.getInstance().deleteAllData();
-        CookieManager.getInstance().removeAllCookies(null);
-        CookieManager.getInstance().flush();
-        webView.clearCache(true);
-        webView.clearFormData();
-        webView.clearHistory();
-        webView.clearSslPreferences();
-
-        new VideoFindTask(id, episode).executeAsync(new TaskExecutor.Callback<String>() {
+    private void decodeVivo(final String vivoURL, final Consumer<String> url) {
+        new VivoDecodeTask(vivoURL).executeAsync(new TaskExecutor.Callback<String>() {
             @Override
             public void onComplete(String result) {
-                webView.getSettings().setJavaScriptEnabled(true);
-                /*
-                 * Clear all previous data and Cookies, so no code 400 appears: Cookie too large (yummy ;) )
-                 */
-                WebStorage.getInstance().deleteAllData();
-                CookieManager.getInstance().removeAllCookies(null);
-                CookieManager.getInstance().flush();
-                webView.clearCache(true);
-                webView.clearFormData();
-                webView.clearHistory();
-                webView.clearSslPreferences();
-                webView.loadUrl(StringHandler.CAPTCHA_ANIME_4_YOU_ONE);
-                webView.setWebViewClient(new WebViewClient() {
-                    @Override
-                    public void onPageFinished(WebView view, String url) {
-                        view.evaluateJavascript(result, returnCaptcha -> {
-                            if (returnCaptcha.contains("vivo")) {
-                                Logger.log("Found link for vivo:" + returnCaptcha, Logger.LogType.INFO);
-                                makeText("Found VIVO link");
-                                view.loadUrl(URLUtil.toUrl(StringUtil.removeBadCharacters(returnCaptcha, "\\\\", "\""), "https"));
-                                view.setWebViewClient(new WebViewClient() {
-                                    @Override
-                                    public void onPageFinished(WebView view, String url) {
-                                        view.evaluateJavascript(ScriptUtil.VIVO_EXPLOIT, s -> {
-                                            if (s.contains("node")) {
-                                                final Intent intent = new Intent(SelectedActivity.this, StreamPlayer.class);
-                                                intent.putExtra("stream", s.replaceAll("\"", ""));
-                                                startActivity(intent);
-                                                finish();
-                                                webView.destroy();
-                                                view.destroy();
-                                            } else makeText("Error getting direct vivo link: " + s);
-                                        });
-                                        super.onPageFinished(view, url);
-                                    }
-                                });
-                            } else {
-                                makeText("Error getting vivo link. Anime4you might be down / Anime done downloading");
-                                Logger.log(returnCaptcha, Logger.LogType.WARNING);
-                            }
-                        });
-                        super.onPageFinished(view, url);
-                    }
-                });
+                url.accept(result);
             }
 
             @Override
             public void preExecute() {
-
             }
         });
-
     }
 
     /**
@@ -443,7 +408,7 @@ public class SelectedActivity extends AppCompatActivity {
             } else {
                 textView.setTextColor(0xFFFFFFF);
                 actionButton.setImageResource(R.drawable.download);
-                actionButton.setOnClickListener(view -> downloadEpisode(position, 1, 0));
+                actionButton.setOnClickListener(view -> getEpisode(position, 1, 0, false));
             }
             return convertView;
         }

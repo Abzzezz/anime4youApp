@@ -1,7 +1,5 @@
-
 *.lock
 .gitattributes
 .gradle/6.5-milestone-1/executionHistory/executionHistory.bin
-*.bin
 *.bin
 *.ser

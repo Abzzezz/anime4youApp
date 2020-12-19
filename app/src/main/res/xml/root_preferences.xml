@@ -5,7 +5,8 @@
   -->
 
 <PreferenceScreen
-        xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:background="@color/primaryColorDark">
 
     <PreferenceCategory
@@ -13,7 +14,8 @@
 
         <SwitchPreferenceCompat
                 app:key="dark_mode"
-                app:title="@string/dark_mode_toggle" app:summaryOff="Toggle dark theme"
+                app:title="@string/dark_mode_toggle"
+                app:summaryOff="Toggle dark theme"
                 app:summaryOn="Dark mode on!"
                 app:defaultValue="true"/>
         <SwitchPreferenceCompat
@@ -33,42 +35,51 @@
                 app:title="@string/image_compression_strength"
                 app:defaultValue="50"/>
 
-        <Preference android:title="Import from MAL"
-                    android:key="import_mal"/>
+        <Preference
+                android:title="Import from MAL"
+                android:key="import_mal"/>
     </PreferenceCategory>
     <PreferenceCategory
             android:title="@string/global_video">
         <ListPreference
                 android:defaultValue="0"
-                android:title="@string/video_fill_mode" android:entries="@array/video_zoom_entries"
-                android:entryValues="@array/video_zoom_values" android:key="video_stretch_preference"/>
+                android:title="@string/video_fill_mode"
+                android:entries="@array/video_zoom_entries"
+                android:entryValues="@array/video_zoom_values"
+                android:key="video_stretch_preference"/>
 
         <ListPreference
                 android:defaultValue="0"
-                android:title="Video player" android:entries="@array/video_player_entries"
-                android:entryValues="@array/video_player_values" android:key="video_player_preference"/>
+                android:title="Video player"
+                android:entries="@array/video_player_entries"
+                android:entryValues="@array/video_player_values"
+                android:key="video_player_preference"/>
     </PreferenceCategory>
     <PreferenceCategory
             android:title="Storage">
 
         <SwitchPreference
                 android:defaultValue="false"
-                android:title="@string/offline_mode" android:key="offline_mode"
+                android:title="@string/offline_mode"
+                android:key="offline_mode"
                 android:summaryOn="@string/offline_mode_attachment_summary_on"
                 android:summaryOff="@string/offline_mode_attachment_summary_off"/>
 
-        <Preference android:title="Clear offline images"
-                    android:key="clear_offline_images_button"
-                    android:summary="Clear all offline images"/>
+        <Preference
+                android:title="Clear offline images"
+                android:key="clear_offline_images_button"
+                android:summary="Clear all offline images"/>
 
-        <Preference android:title="Copy files to sd card"
-                    android:key="copy_sd_card"/>
+        <Preference
+                android:title="Copy files to sd card"
+                android:key="copy_sd_card"/>
 
 
         <PreferenceCategory
                 android:title="@string/download_tracker">
-            <Preference android:title="Clear tracker"
-                        android:key="clear_tracker"/>
+            <Preference
+                    android:title="Clear tracker"
+                    android:key="clear_tracker"/>
         </PreferenceCategory>
     </PreferenceCategory>
 

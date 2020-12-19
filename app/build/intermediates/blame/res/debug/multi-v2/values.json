@@ -42,25 +42,6 @@
                     }
                 },
                 {
-                    "source": "E:\\gradle\\caches\\transforms-2\\files-2.1\\d32f7a139c29628632c4b196f35907ce\\navigation-runtime-2.3.1\\res\\values\\values.xml",
-                    "from": {
-                        "startLines": "2,3,10,13",
-                        "startColumns": "4,4,4,4",
-                        "startOffsets": "55,108,412,527",
-                        "endLines": "2,9,12,15",
-                        "endColumns": "52,24,24,24",
-                        "endOffsets": "103,407,522,637"
-                    },
-                    "to": {
-                        "startLines": "1068,5414,7468,7474",
-                        "startColumns": "4,4,4,4",
-                        "startOffsets": "63196,348729,478653,478895",
-                        "endLines": "1068,5420,7470,7476",
-                        "endColumns": "52,24,24,24",
-                        "endOffsets": "63244,349028,478763,479005"
-                    }
-                },
-                {
                     "source": "E:\\gradle\\caches\\transforms-2\\files-2.1\\9db810d0c381ea0c42033b84d7b77acc\\drawerlayout-1.1.1\\res\\values\\values.xml",
                     "from": {
                         "startLines": "2,3,4,5",
@@ -173,7 +154,7 @@
                     }
                 },
                 {
-                    "source": "E:\\gradle\\caches\\transforms-2\\files-2.1\\9eaf7880b7d96f2148c85d808f2f7004\\navigation-fragment-2.3.1\\res\\values\\values.xml",
+                    "source": "E:\\gradle\\caches\\transforms-2\\files-2.1\\3a00271076a8343aba7f75e9fe9b6c1e\\navigation-fragment-2.3.2\\res\\values\\values.xml",
                     "from": {
                         "startLines": "2,3,6,9",
                         "startColumns": "4,4,4,4",
@@ -380,24 +361,7 @@
                     }
                 },
                 {
-                    "source": "E:\\Code\\Projects\\anime4youApp\\app\\src\\main\\res\\values\\colors.xml",
-                    "from": {
-                        "startLines": "12,10,11,9",
-                        "startColumns": "4,4,4,4",
-                        "startOffsets": "342,246,298,199",
-                        "endColumns": "45,50,42,45",
-                        "endOffsets": "383,292,336,240"
-                    },
-                    "to": {
-                        "startLines": "471,580,600,602",
-                        "startColumns": "4,4,4,4",
-                        "startOffsets": "24602,31854,33249,33337",
-                        "endColumns": "45,50,42,45",
-                        "endOffsets": "24643,31900,33287,33378"
-                    }
-                },
-                {
-                    "source": "E:\\gradle\\caches\\transforms-2\\files-2.1\\c70212e301c5d42cb93b84b89f7f472e\\navigation-ui-2.3.1\\res\\values\\values.xml",
+                    "source": "E:\\gradle\\caches\\transforms-2\\files-2.1\\ef51078610c37d0622b96bcf4e5b05a8\\navigation-ui-2.3.2\\res\\values\\values.xml",
                     "from": {
                         "startLines": "2,3,4",
                         "startColumns": "4,4,4",
@@ -414,7 +378,7 @@
                     }
                 },
                 {
-                    "source": "E:\\gradle\\caches\\transforms-2\\files-2.1\\6b285d95f6aab8a36b09f206a066f225\\navigation-common-2.3.1\\res\\values\\values.xml",
+                    "source": "E:\\gradle\\caches\\transforms-2\\files-2.1\\b5d074d8173f93cd24dddf686261532a\\navigation-common-2.3.2\\res\\values\\values.xml",
                     "from": {
                         "startLines": "2,13,19,25,28",
                         "startColumns": "4,4,4,4,4",
@@ -430,6 +394,23 @@
                         "endLines": "7452,7458,7464,7467,7528",
                         "endColumns": "24,24,24,24,24",
                         "endOffsets": "478024,478268,478515,478648,482363"
+                    }
+                },
+                {
+                    "source": "E:\\Code\\Projects\\anime4youApp\\app\\src\\main\\res\\values\\colors.xml",
+                    "from": {
+                        "startLines": "12,10,11,9",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "342,246,298,199",
+                        "endColumns": "45,50,42,45",
+                        "endOffsets": "383,292,336,240"
+                    },
+                    "to": {
+                        "startLines": "471,580,600,602",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "24602,31854,33249,33337",
+                        "endColumns": "45,50,42,45",
+                        "endOffsets": "24643,31900,33287,33378"
                     }
                 },
                 {
@@ -468,6 +449,25 @@
                         "endLines": "5,10,15",
                         "endColumns": "12,19,19",
                         "endOffsets": "347,2072,3662"
+                    }
+                },
+                {
+                    "source": "E:\\gradle\\caches\\transforms-2\\files-2.1\\5a0c850c7265f97e96cb45aef2606ec6\\navigation-runtime-2.3.2\\res\\values\\values.xml",
+                    "from": {
+                        "startLines": "2,3,10,13",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "55,108,412,527",
+                        "endLines": "2,9,12,15",
+                        "endColumns": "52,24,24,24",
+                        "endOffsets": "103,407,522,637"
+                    },
+                    "to": {
+                        "startLines": "1068,5414,7468,7474",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "63196,348729,478653,478895",
+                        "endLines": "1068,5420,7470,7476",
+                        "endColumns": "52,24,24,24",
+                        "endOffsets": "63244,349028,478763,479005"
                     }
                 },
                 {
