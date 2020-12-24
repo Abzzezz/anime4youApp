@@ -23,7 +23,6 @@ import android.widget.Toast;
 import androidx.annotation.RequiresApi;
 import androidx.preference.PreferenceManager;
 import ga.abzzezz.util.logging.Logger;
-import id.ionbit.ionalert.IonAlert;
 import net.bplaced.abzzezz.animeapp.util.customnotification.NotificationService;
 import net.bplaced.abzzezz.animeapp.util.file.DownloadTracker;
 import net.bplaced.abzzezz.animeapp.util.file.ShowNotifications;
@@ -88,15 +87,12 @@ public class AnimeAppMain {
             public void onComplete(final Boolean permit) {
                 if (permit) {
                     Logger.log("Unregistered device", Logger.LogType.INFO);
-                    new IonAlert(context).setTitleText("You are not registered").setContentText("You are not registered. Please contact the developer and give him your clipboard id").setConfirmText("Exit").setConfirmClickListener(new IonAlert.ClickListener() {
-                        @Override
-                        public void onClick(IonAlert ionAlert) {
-                            final ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-                            final ClipData clip = ClipData.newPlainText("ID", androidId);
-                            clipboard.setPrimaryClip(clip);
-                            System.exit(0);
-                        }
-                    }).show();
+
+                    final ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+                    final ClipData clip = ClipData.newPlainText("ID", androidId);
+                    clipboard.setPrimaryClip(clip);
+                    System.exit(0);
+                    Toast.makeText(context, "You are not registered. Please contact the developer and give him your clipboard id", Toast.LENGTH_SHORT).show();
                 }
             }
 

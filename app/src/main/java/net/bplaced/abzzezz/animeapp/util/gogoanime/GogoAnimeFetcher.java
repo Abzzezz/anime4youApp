@@ -47,41 +47,6 @@ public class GogoAnimeFetcher {
     }
 
     /**
-     * Fetches the show's image from it's url
-     *
-     * @return the file's location
-     * @throws IOException if copy process goes wrong
-     */
-    public File fetchImage() throws IOException {
-        final URL imageURL = new URL(showDocument.selectFirst("meta[property=og:image]").attr("content"));
-        final File cacheFile = new File(CACHE_DIRECTORY, sanitizeString(imageURL.getFile()));
-        this.copyFileFromURL(imageURL, cacheFile);
-        return cacheFile;
-    }
-
-    /**
-     * Fetch videos
-     * @param start start
-     * @param end end
-     * @throws IOException if something goes wrong
-     */
-    public void fetch(final int start, final int end) throws IOException, JSONException {
-        //Create output directory
-        final File outputDirectory = new File(DOWNLOAD_DIRECTORY, showTitle);
-        if (!outputDirectory.exists()) outputDirectory.mkdir();
-
-        for (int i = start; i < end; i++) {
-            //Get direct video url
-            final String formatted = String.format(API_URL, fetchedDirectURLs[i]);
-            final URL vidURL = new URL(getVidURL(collectLines(new URL(formatted), "")));
-            //Copy file from url (Download)
-            copyFileFromURL(vidURL, new File(outputDirectory, showTitle.concat(" " + i).concat(".mp4")));
-            System.out.println("Done downloading " + i + "/" + end);
-        }
-        System.out.println("Done downloading!");
-    }
-
-    /**
      * Fetches all ids from the given url
      *
      * @param urlIn url to first get id from
@@ -119,6 +84,42 @@ public class GogoAnimeFetcher {
                         return "";
                     }
                 }).toArray(String[]::new);
+    }
+
+    /**
+     * Fetches the show's image from it's url
+     *
+     * @return the file's location
+     * @throws IOException if copy process goes wrong
+     */
+    public File fetchImage() throws IOException {
+        final URL imageURL = new URL(showDocument.selectFirst("meta[property=og:image]").attr("content"));
+        final File cacheFile = new File(CACHE_DIRECTORY, sanitizeString(imageURL.getFile()));
+        this.copyFileFromURL(imageURL, cacheFile);
+        return cacheFile;
+    }
+
+    /**
+     * Fetch videos
+     *
+     * @param start start
+     * @param end   end
+     * @throws IOException if something goes wrong
+     */
+    public void fetch(final int start, final int end) throws IOException, JSONException {
+        //Create output directory
+        final File outputDirectory = new File(DOWNLOAD_DIRECTORY, showTitle);
+        if (!outputDirectory.exists()) outputDirectory.mkdir();
+
+        for (int i = start; i < end; i++) {
+            //Get direct video url
+            final String formatted = String.format(API_URL, fetchedDirectURLs[i]);
+            final URL vidURL = new URL(getVidURL(collectLines(new URL(formatted), "")));
+            //Copy file from url (Download)
+            copyFileFromURL(vidURL, new File(outputDirectory, showTitle.concat(" " + i).concat(".mp4")));
+            System.out.println("Done downloading " + i + "/" + end);
+        }
+        System.out.println("Done downloading!");
     }
 
     /**

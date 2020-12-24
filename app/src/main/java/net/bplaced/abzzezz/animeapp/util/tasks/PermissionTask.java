@@ -10,13 +10,7 @@ import net.bplaced.abzzezz.animeapp.AnimeAppMain;
 import net.bplaced.abzzezz.animeapp.util.connection.URLUtil;
 import net.bplaced.abzzezz.animeapp.util.scripter.StringHandler;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.concurrent.Callable;
-import java.util.stream.Collectors;
 
 public class PermissionTask extends TaskExecutor implements Callable<Boolean> {
 
@@ -26,6 +20,6 @@ public class PermissionTask extends TaskExecutor implements Callable<Boolean> {
 
     @Override
     public Boolean call() throws Exception {
-        return !URLUtil.createHTTPURLConnection(StringHandler.USER_URL, "POST", new String[]{"Referer", AnimeAppMain.getInstance().getAndroidId()}).getResponseMessage().equals("200");
+        return URLUtil.createHTTPURLConnection(StringHandler.USER_URL, "POST", new String[]{"Referer", AnimeAppMain.getInstance().getAndroidId()}).getResponseCode() != 200;
     }
 }

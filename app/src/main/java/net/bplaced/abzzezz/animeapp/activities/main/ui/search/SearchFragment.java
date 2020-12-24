@@ -6,27 +6,138 @@
 
 package net.bplaced.abzzezz.animeapp.activities.main.ui.search;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import net.bplaced.abzzezz.animeapp.AnimeAppMain;
 import net.bplaced.abzzezz.animeapp.R;
+import net.bplaced.abzzezz.animeapp.util.scripter.StringHandler;
+import net.bplaced.abzzezz.animeapp.util.tasks.SearchDBTask;
+import net.bplaced.abzzezz.animeapp.util.tasks.TaskExecutor;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SearchFragment extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View root = inflater.inflate(R.layout.simple_list_layout, container, false);
+        final View root = inflater.inflate(R.layout.search_layout, container, false);
         final ListView listView = root.findViewById(R.id.simple_list_view);
-        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1);
-        arrayAdapter.addAll(AnimeAppMain.getInstance().getDownloadTracker().getList());
-        listView.setAdapter(arrayAdapter);
+        final SearchView showSearch = root.findViewById(R.id.show_search_view);
+        /*
+        Set adapter
+         */
+        listView.setAdapter(new SearchAdapter(new ArrayList<>(), root.getContext()));
+
+        showSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                new SearchDBTask(query).executeAsync(new TaskExecutor.Callback<List<JSONObject>>() {
+                    @Override
+                    public void onComplete(final List<JSONObject> result) {
+                        showSearch.clearFocus();
+
+                        ((SearchAdapter) listView.getAdapter()).getEntries().clear();
+                        ((SearchAdapter) listView.getAdapter()).getEntries().addAll(result);
+                        ((SearchAdapter) listView.getAdapter()).notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void preExecute() {
+                        Log.i("Search", "Staring search");
+                    }
+                });
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
         return root;
+    }
+
+    static class SearchAdapter extends BaseAdapter {
+        private final List<JSONObject> entries;
+        private final Context context;
+
+        public SearchAdapter(final List<JSONObject> entries, final Context context) {
+            this.entries = entries;
+            this.context = context;
+        }
+
+        @Override
+        public int getCount() {
+            return entries.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return entries.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            if (convertView == null) {
+                convertView = LayoutInflater.from(context).inflate(R.layout.show_item_layout, parent, false);
+
+                final JSONObject show = (JSONObject) getItem(position);
+
+                convertView.setOnClickListener(listener -> {
+                    try {
+                        final JSONObject inf = new JSONObject();
+                        inf.put(StringHandler.SHOW_ID, show.getInt("aid"));
+                        inf.put(StringHandler.SHOW_IMAGE_URL, StringHandler.COVER_DATABASE.concat(show.getString("image_id")));
+                        inf.put(StringHandler.SHOW_EPISODES_COUNT, show.getString("Letzte"));
+                        inf.put(StringHandler.SHOW_TITLE, show.getString("titel"));
+                        inf.put(StringHandler.SHOW_LANG, show.getString("Untertitel"));
+                        inf.put(StringHandler.SHOW_YEAR, show.getString("Jahr"));
+                        AnimeAppMain.getInstance().getShowSaver().addShow(inf);
+                        Toast.makeText(context, "Added show!", Toast.LENGTH_SHORT).show();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                });
+
+                final TextView showTitle = convertView.findViewById(R.id.show_title);
+                final TextView showEpisodes = convertView.findViewById(R.id.show_episodes);
+                final TextView showLanguage = convertView.findViewById(R.id.show_language);
+                final TextView showYear = convertView.findViewById(R.id.show_year);
+
+                try {
+                    showTitle.append(show.getString("titel"));
+                    showEpisodes.append(show.getString("Letzte"));
+                    showLanguage.append(show.getString("Untertitel"));
+                    showYear.append(show.getString("Jahr"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+
+
+            return convertView;
+        }
+
+        public List<JSONObject> getEntries() {
+            return entries;
+        }
     }
 }

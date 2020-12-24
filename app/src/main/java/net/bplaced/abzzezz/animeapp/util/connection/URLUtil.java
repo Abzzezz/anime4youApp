@@ -17,7 +17,7 @@ public class URLUtil {
         final HttpsURLConnection connection = (HttpsURLConnection) new URL(urlIn).openConnection();
         connection.setRequestMethod(requestMethod);
         for (final String[] requestProperty : requestProperties) {
-            connection.addRequestProperty(requestProperty[0], requestProperty[1]);
+            connection.setRequestProperty(requestProperty[0], requestProperty[1]);
         }
         return connection;
     }
@@ -26,7 +26,23 @@ public class URLUtil {
         final HttpURLConnection connection = (HttpURLConnection) new URL(urlIn).openConnection();
         connection.setRequestMethod(requestMethod);
         for (final String[] requestProperty : requestProperties) {
-            connection.addRequestProperty(requestProperty[0], requestProperty[1]);
+            connection.setRequestProperty(requestProperty[0], requestProperty[1]);
+        }
+        return connection;
+    }
+
+    public static HttpsURLConnection createHTTPSURLConnection(final String urlIn, final String[]... requestProperties) throws IOException {
+        final HttpsURLConnection connection = (HttpsURLConnection) new URL(urlIn).openConnection();
+        for (final String[] requestProperty : requestProperties) {
+            connection.setRequestProperty(requestProperty[0], requestProperty[1]);
+        }
+        return connection;
+    }
+
+    public static HttpURLConnection createHTTPURLConnection(final String urlIn, final String[]... requestProperties) throws IOException {
+        final HttpURLConnection connection = (HttpURLConnection) new URL(urlIn).openConnection();
+        for (final String[] requestProperty : requestProperties) {
+            connection.setRequestProperty(requestProperty[0], requestProperty[1]);
         }
         return connection;
     }

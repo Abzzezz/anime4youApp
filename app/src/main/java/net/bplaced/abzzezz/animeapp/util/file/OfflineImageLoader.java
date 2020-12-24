@@ -13,8 +13,8 @@ import androidx.preference.PreferenceManager;
 import com.squareup.picasso.Picasso;
 import ga.abzzezz.util.logging.Logger;
 import net.bplaced.abzzezz.animeapp.AnimeAppMain;
-import net.bplaced.abzzezz.animeapp.util.ui.ImageUtil;
 import net.bplaced.abzzezz.animeapp.util.tasks.TaskExecutor;
+import net.bplaced.abzzezz.animeapp.util.ui.ImageUtil;
 
 import java.io.File;
 import java.io.FileOutputStream;

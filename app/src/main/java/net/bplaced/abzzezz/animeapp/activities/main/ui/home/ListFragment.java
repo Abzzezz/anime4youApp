@@ -25,17 +25,18 @@ import ga.abzzezz.util.logging.Logger;
 import id.ionbit.ionalert.IonAlert;
 import net.bplaced.abzzezz.animeapp.AnimeAppMain;
 import net.bplaced.abzzezz.animeapp.R;
-import net.bplaced.abzzezz.animeapp.util.ui.ImageUtil;
-import net.bplaced.abzzezz.animeapp.util.ui.InputDialogBuilder;
 import net.bplaced.abzzezz.animeapp.util.file.OfflineImageLoader;
 import net.bplaced.abzzezz.animeapp.util.scripter.AniDBSearch;
 import net.bplaced.abzzezz.animeapp.util.scripter.StringHandler;
 import net.bplaced.abzzezz.animeapp.util.tasks.DataBaseTask;
 import net.bplaced.abzzezz.animeapp.util.tasks.TaskExecutor;
+import net.bplaced.abzzezz.animeapp.util.ui.ImageUtil;
+import net.bplaced.abzzezz.animeapp.util.ui.InputDialogBuilder;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.util.Objects;
 import java.util.Optional;
 
 public class ListFragment extends Fragment {
@@ -102,7 +103,7 @@ public class ListFragment extends Fragment {
     private void getInformation(final int index, final Intent intent) {
         final Optional<JSONObject> savedInformation = AnimeAppMain.getInstance().getShowSaver().getShow(index);
 
-        if (!StringHandler.isOnline(getActivity().getApplicationContext()) && savedInformation.isPresent()) {
+        if (!StringHandler.isOnline(Objects.requireNonNull(getActivity()).getApplicationContext()) && savedInformation.isPresent()) {
             startActivity(intent.putExtra("details", savedInformation.get().toString()));
             getActivity().finish();
             return;
@@ -211,6 +212,7 @@ public class ListFragment extends Fragment {
                     AnimeAppMain.getInstance().getShowSaver().addShow(result);
                     notifyDataSetChanged();
                 }
+
                 @Override
                 public void preExecute() {
                 }

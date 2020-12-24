@@ -9,11 +9,11 @@ package net.bplaced.abzzezz.animeapp.util.scripter;
 import ga.abzzezz.util.logging.Logger;
 import net.bplaced.abzzezz.animeapp.util.connection.URLUtil;
 
+import javax.net.ssl.HttpsURLConnection;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.stream.Collectors;
 
 
@@ -27,13 +27,14 @@ public class AniDBSearch {
 
     public final String getDataBase() {
         try {
-            final HttpURLConnection urlConnection = createConnection(StringHandler.DATABASE);
+            final HttpsURLConnection urlConnection = URLUtil.createHTTPSURLConnection(StringHandler.DATABASE, new String[]{"User-Agent", StringHandler.USER_AGENT});
             urlConnection.connect();
             return new BufferedReader(new InputStreamReader(urlConnection.getInputStream())).lines().collect(Collectors.joining());
         } catch (final Exception e) {
+            e.printStackTrace();
             Logger.log("Timeout/MalformedURL/IOException identified. Requesting Backup database", Logger.LogType.INFO);
             try {
-                final HttpURLConnection urlConnection = createConnection(StringHandler.BACKUP_DATABASE);
+                final HttpURLConnection urlConnection = URLUtil.createHTTPURLConnection(StringHandler.BACKUP_DATABASE, new String[]{"User-Agent", StringHandler.USER_AGENT});
                 urlConnection.connect();
                 return new BufferedReader(new InputStreamReader(urlConnection.getInputStream())).lines().collect(Collectors.joining());
             } catch (final IOException ioException) {
@@ -43,9 +44,4 @@ public class AniDBSearch {
         }
     }
 
-    private HttpURLConnection createConnection(final String url) throws IOException {
-        final HttpURLConnection urlConnection = URLUtil.createHTTPURLConnection(url, "POST", new String[]{"User-Agent", StringHandler.USER_AGENT});
-        urlConnection.setConnectTimeout(4000);
-        return urlConnection;
-    }
 }
