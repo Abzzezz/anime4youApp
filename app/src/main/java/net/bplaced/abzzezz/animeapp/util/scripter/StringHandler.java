@@ -31,7 +31,7 @@ public class StringHandler {
      */
     public static final String SHOW_ID = "id";
     public static final String SHOW_IMAGE_URL = "image_url";
-    public static final String SHOW_EPISODES_COUNT = "episodes";
+    public static final String SHOW_EPISODE_COUNT = "episodes";
     public static final String SHOW_TITLE = "title";
     public static final String SHOW_LANG = "language";
     public static final String SHOW_YEAR = "year";

@@ -22,6 +22,9 @@ public abstract class Provider {
 
     public abstract JSONObject format(final Show show) throws JSONException;
 
+    public abstract void handleDownload();
+
+
     public ProviderType getType() {
         return type;
     }

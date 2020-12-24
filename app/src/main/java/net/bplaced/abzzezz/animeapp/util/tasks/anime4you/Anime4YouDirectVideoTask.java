@@ -20,10 +20,10 @@ import java.util.stream.Collectors;
 
 public class Anime4YouDirectVideoTask extends TaskExecutor implements Callable<String> {
 
-    private final int aid;
+    private final String aid;
     private final int episode;
 
-    public Anime4YouDirectVideoTask(int aid, int episode) {
+    public Anime4YouDirectVideoTask(String aid, int episode) {
         this.aid = aid;
         this.episode = (episode + 1);
     }

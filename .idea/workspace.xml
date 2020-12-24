@@ -31,32 +31,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="073d73e0-45c8-4f1c-9113-eff2883226e0" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/provider/Provider.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/provider/ProviderType.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/provider/providers/Anime4you.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/provider/providers/GogoAnime.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/show/Show.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/tasks/gogoanime/GogoAnimeFetchTask.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/AnimeAppMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/AnimeAppMain.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/activities/main/ui/home/ListFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/activities/main/ui/home/ListFragment.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/activities/main/ui/home/SelectedActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/activities/main/ui/home/SelectedActivity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/activities/main/ui/search/SearchFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/activities/main/ui/search/SearchFragment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/activities/main/ui/settings/SettingsFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/activities/main/ui/settings/SettingsFragment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/file/DownloadTracker.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/file/ShowSaver.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/file/ShowSaver.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/gogoanime/GogoAnimeFetcher.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/gogoanime/GogoAnimeFetcher.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/provider/Provider.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/provider/Provider.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/provider/ProviderType.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/provider/ProviderType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/provider/providers/Anime4you.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/provider/providers/Anime4you.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/receiver/ShowAlarm.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/receiver/ShowAlarm.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/receiver/StopDownloadReceiver.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/receiver/StopDownloadReceiver.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/scripter/AniDBSearch.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/scripter/Anime4YouDBSearch.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/scripter/StringHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/scripter/StringHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/tasks/DataBaseTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/tasks/anime4you/Anime4YouDataBaseTask.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/tasks/DownloadTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/tasks/anime4you/Anime4YouDownloadTask.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/tasks/ImportMalTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/tasks/anime4you/Anime4YouImportMAL.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/tasks/SearchDBTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/tasks/anime4you/Anime4YouSearchDBTask.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/tasks/VideoFindTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/tasks/anime4you/Anime4YouDirectVideoTask.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/list_fragment_layout.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/list_fragment_layout.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/search_layout.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/search_layout.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/show/Show.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/show/Show.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/tasks/anime4you/Anime4YouDataBaseTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/tasks/anime4you/Anime4YouDataBaseTask.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -276,7 +262,14 @@
       <option name="project" value="LOCAL" />
       <updated>1608838951659</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Started on providers">
+      <created>1608841921000</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1608841921000</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -297,7 +290,8 @@
     <MESSAGE value="Files" />
     <MESSAGE value="Start on searching" />
     <MESSAGE value="Anime4you searching" />
-    <option name="LAST_COMMIT_MESSAGE" value="Anime4you searching" />
+    <MESSAGE value="Started on providers" />
+    <option name="LAST_COMMIT_MESSAGE" value="Started on providers" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

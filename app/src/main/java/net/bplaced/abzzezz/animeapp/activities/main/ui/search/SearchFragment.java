@@ -149,7 +149,7 @@ public class SearchFragment extends Fragment {
                         final JSONObject inf = new JSONObject();
                         inf.put(StringHandler.SHOW_ID, show.getInt("aid"));
                         inf.put(StringHandler.SHOW_IMAGE_URL, StringHandler.COVER_DATABASE.concat(show.getString("image_id")));
-                        inf.put(StringHandler.SHOW_EPISODES_COUNT, show.getString("Letzte"));
+                        inf.put(StringHandler.SHOW_EPISODE_COUNT, show.getString("Letzte"));
                         inf.put(StringHandler.SHOW_TITLE, show.getString("titel"));
                         inf.put(StringHandler.SHOW_LANG, show.getString("Untertitel"));
                         inf.put(StringHandler.SHOW_YEAR, show.getString("Jahr"));

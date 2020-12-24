@@ -27,11 +27,11 @@ import net.bplaced.abzzezz.animeapp.R;
 import net.bplaced.abzzezz.animeapp.util.file.OfflineImageLoader;
 import net.bplaced.abzzezz.animeapp.util.scripter.Anime4YouDBSearch;
 import net.bplaced.abzzezz.animeapp.util.scripter.StringHandler;
-import net.bplaced.abzzezz.animeapp.util.tasks.anime4you.Anime4YouDataBaseTask;
+import net.bplaced.abzzezz.animeapp.util.show.Show;
+import net.bplaced.abzzezz.animeapp.util.tasks.IntentHelper;
 import net.bplaced.abzzezz.animeapp.util.tasks.TaskExecutor;
+import net.bplaced.abzzezz.animeapp.util.tasks.anime4you.Anime4YouDataBaseTask;
 import net.bplaced.abzzezz.animeapp.util.ui.ImageUtil;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.File;
 import java.util.Objects;
@@ -87,27 +87,30 @@ public class ListFragment extends Fragment {
      * @param intent intent
      */
     private void getInformation(final int index, final Intent intent) {
-        final Optional<JSONObject> savedInformation = AnimeAppMain.getInstance().getShowSaver().getShow(index);
+        final Optional<Show> showAtIndex = AnimeAppMain.getInstance().getShowSaver().getShow(index);
 
-        if (!StringHandler.isOnline(Objects.requireNonNull(getActivity()).getApplicationContext()) && savedInformation.isPresent()) {
-            startActivity(intent.putExtra("details", savedInformation.get().toString()));
+        if (!StringHandler.isOnline(Objects.requireNonNull(getActivity()).getApplicationContext()) && showAtIndex.isPresent()) {
+            startActivity(intent.putExtra("details", showAtIndex.get().toString()));
             getActivity().finish();
             return;
         }
 
-        savedInformation.ifPresent(jsonObject -> new TaskExecutor().executeAsync(new Anime4YouDataBaseTask(jsonObject, anime4YouDBSearch), new TaskExecutor.Callback<JSONObject>() {
-            @Override
-            public void onComplete(JSONObject result) {
-                AnimeAppMain.getInstance().getShowSaver().refreshShow(result, index);
-                startActivity(intent.putExtra("details", result.toString()));
-                getActivity().finish();
-            }
+        showAtIndex.ifPresent(show -> {
+            new TaskExecutor().executeAsync(new Anime4YouDataBaseTask(show.getID(), anime4YouDBSearch), new TaskExecutor.Callback<Show>() {
+                @Override
+                public void onComplete(Show result) {
+                    AnimeAppMain.getInstance().getShowSaver().refreshShow(result, index);
+                    IntentHelper.addObjectForKey(show, "show");
+                    startActivity(intent);//.putExtra("details", result.toString())*/);
+                    Objects.requireNonNull(getActivity()).finish();
+                }
 
-            @Override
-            public void preExecute() {
-                Logger.log("Fetching anime information", Logger.LogType.INFO);
-            }
-        }));
+                @Override
+                public void preExecute() {
+                    Logger.log("Fetching anime information", Logger.LogType.INFO);
+                }
+            });
+        });
     }
 
     class AnimeAdapter extends BaseAdapter {
@@ -138,50 +141,43 @@ public class ListFragment extends Fragment {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             final ImageView coverImage = new ImageView(context);
-            try {
-                final Optional<JSONObject> optionalJSONObject = AnimeAppMain.getInstance().getShowSaver().getShow(position);
-                if (optionalJSONObject.isPresent()) {
-                    final String imageURL = optionalJSONObject.get().getString(StringHandler.SHOW_IMAGE_URL);
 
-                    if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean("offline_mode", false)) {
-                        OfflineImageLoader.loadImage(imageURL, optionalJSONObject.get().getString(StringHandler.SHOW_ID), coverImage, getContext());
-                    } else {
-                        Picasso.with(context).load(imageURL).resize(ImageUtil.DIMENSIONS[0], ImageUtil.DIMENSIONS[1]).into(coverImage);
-                    }
+            final Optional<Show> showAtIndex = AnimeAppMain.getInstance().getShowSaver().getShow(position);
+            showAtIndex.ifPresent(show -> {
+                final String imageURL = show.getImageURL();
+
+                if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean("offline_mode", false)) {
+                    OfflineImageLoader.loadImage(imageURL, show, coverImage, getContext());
+                } else {
+                    Picasso.with(context).load(imageURL).resize(ImageUtil.DIMENSIONS[0], ImageUtil.DIMENSIONS[1]).into(coverImage);
                 }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            });
             coverImage.setAdjustViewBounds(true);
             return coverImage;
         }
 
         public void removeItem(final int index) {
-            final Optional<JSONObject> itemToRemove = (Optional<JSONObject>) getItem(index);
-            if (itemToRemove.isPresent()) {
+            final Optional<Show> itemToRemove = (Optional<Show>) getItem(index);
+            itemToRemove.ifPresent(show -> {
                 this.size--;
-                try {
-                    final File dir = new File(getActivity().getFilesDir(), itemToRemove.get().getString(StringHandler.SHOW_TITLE));
-                    if (dir.listFiles() != null && dir.listFiles().length > 0) {
-                        new IonAlert(getActivity(), IonAlert.WARNING_TYPE)
-                                .setTitleText("Delete all remaining episodes?")
-                                .setContentText("Won't be able to recover the files!")
-                                .setConfirmText("Yes, delete!")
-                                .setConfirmClickListener(ionAlert -> {
-                                    for (final File file : dir.listFiles()) {
-                                        Logger.log("Deleting file: " + file.delete(), Logger.LogType.INFO);
-                                    }
-                                    Toast.makeText(context, "Remaining files deleted.", Toast.LENGTH_SHORT).show();
-                                    ionAlert.dismissWithAnimation();
-                                }).setCancelText("Abort").setCancelClickListener(IonAlert::dismissWithAnimation)
-                                .show();
-                    }
-                } catch (final JSONException e) {
-                    e.printStackTrace();
+                final File dir = new File(getActivity().getFilesDir(), show.getTitle());
+                if (dir.listFiles() != null && dir.listFiles().length > 0) {
+                    new IonAlert(getActivity(), IonAlert.WARNING_TYPE)
+                            .setTitleText("Delete all remaining episodes?")
+                            .setContentText("Won't be able to recover the files!")
+                            .setConfirmText("Yes, delete!")
+                            .setConfirmClickListener(ionAlert -> {
+                                for (final File file : dir.listFiles()) {
+                                    Logger.log("Deleting file: " + file.delete(), Logger.LogType.INFO);
+                                }
+                                Toast.makeText(context, "Remaining files deleted.", Toast.LENGTH_SHORT).show();
+                                ionAlert.dismissWithAnimation();
+                            }).setCancelText("Abort").setCancelClickListener(IonAlert::dismissWithAnimation)
+                            .show();
                 }
                 AnimeAppMain.getInstance().getShowSaver().remove(index);
                 notifyDataSetChanged();
-            }
+            });
         }
 /*
         public void addItem(final String item) {

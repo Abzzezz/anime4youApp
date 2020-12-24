@@ -22,12 +22,17 @@ public class Anime4you extends Provider {
     @Override
     public JSONObject format(final Show show) throws JSONException {
         return new JSONObject()
-                .put(StringHandler.SHOW_ID, show.getId())
+                .put(StringHandler.SHOW_ID, show.getID())
                 .put(StringHandler.SHOW_IMAGE_URL, StringHandler.COVER_DATABASE.concat(show.getShowJSON().getString("image_id")))
-                .put(StringHandler.SHOW_EPISODES_COUNT, show.getShowJSON().getString("Letzte"))
+                .put(StringHandler.SHOW_EPISODE_COUNT, show.getShowJSON().getString("Letzte"))
                 .put(StringHandler.SHOW_TITLE, show.getShowJSON().getString("titel"))
                 .put(StringHandler.SHOW_LANG, show.getShowJSON().getString("Untertitel"))
                 .put(StringHandler.SHOW_YEAR, show.getShowJSON().getString("Jahr"))
                 .put(StringHandler.SHOW_PROVIDER, StringHandler.SHOW_PROVIDER_ANIME4YOU);
+    }
+
+    @Override
+    public void handleDownload() {
+
     }
 }

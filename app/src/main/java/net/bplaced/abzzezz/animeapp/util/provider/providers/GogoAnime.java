@@ -22,4 +22,9 @@ public class GogoAnime extends Provider {
     public JSONObject format(Show show) throws JSONException {
         return null;
     }
+
+    @Override
+    public void handleDownload() {
+
+    }
 }

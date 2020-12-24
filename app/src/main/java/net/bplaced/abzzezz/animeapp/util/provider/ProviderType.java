@@ -6,7 +6,24 @@
 
 package net.bplaced.abzzezz.animeapp.util.provider;
 
+import net.bplaced.abzzezz.animeapp.util.provider.providers.Anime4you;
+import net.bplaced.abzzezz.animeapp.util.provider.providers.GogoAnime;
+
 public enum ProviderType {
 
-    ANIME4YOU, GOGOANIME
+    ANIME4YOU(new Anime4you()), GOGOANIME(new GogoAnime());
+
+    private Provider provider;
+
+    ProviderType(Provider provider) {
+        this.provider = provider;
+    }
+
+    public Provider getProvider() {
+        return provider;
+    }
+
+    public static Provider getProvider(final String enumValue) {
+        return valueOf(enumValue).getProvider();
+    }
 }

@@ -13,6 +13,7 @@ import androidx.preference.PreferenceManager;
 import com.squareup.picasso.Picasso;
 import ga.abzzezz.util.logging.Logger;
 import net.bplaced.abzzezz.animeapp.AnimeAppMain;
+import net.bplaced.abzzezz.animeapp.util.show.Show;
 import net.bplaced.abzzezz.animeapp.util.tasks.TaskExecutor;
 import net.bplaced.abzzezz.animeapp.util.ui.ImageUtil;
 
@@ -21,9 +22,9 @@ import java.io.FileOutputStream;
 
 public class OfflineImageLoader {
 
-    public static void loadImage(final String url, final String id, final ImageView imageView, final Context context) {
+    public static void loadImage(final String url, final Show show, final ImageView imageView, final Context context) {
         //Get image Bitmap file
-        final File imageBitmap = new File(AnimeAppMain.getInstance().getImageStorage(), id);
+        final File imageBitmap = new File(AnimeAppMain.getInstance().getImageStorage(), show.getProvider().getType() + show.getID());
         if (!imageBitmap.exists()) {
             //Create new task
             new TaskExecutor().executeAsync(() -> {

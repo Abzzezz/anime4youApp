@@ -7,11 +7,15 @@
 package net.bplaced.abzzezz.animeapp.util.show;
 
 import net.bplaced.abzzezz.animeapp.util.provider.Provider;
+import net.bplaced.abzzezz.animeapp.util.provider.ProviderType;
+import net.bplaced.abzzezz.animeapp.util.scripter.StringHandler;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Show {
 
     private String id;
+    private String year;
     private String title;
     private String episodes;
     private String imageURL;
@@ -39,6 +43,24 @@ public class Show {
         this.showJSON = showJSON;
     }
 
+    public Show(JSONObject showJSON) throws JSONException {
+        this.id = showJSON.getString(StringHandler.SHOW_ID);
+        this.title = showJSON.getString(StringHandler.SHOW_TITLE);
+        this.episodes = showJSON.getString(StringHandler.SHOW_EPISODE_COUNT);
+        this.imageURL = showJSON.getString(StringHandler.SHOW_IMAGE_URL);
+        this.language = showJSON.getString(StringHandler.SHOW_LANG);
+        this.provider = ProviderType.getProvider(showJSON.getString(StringHandler.SHOW_PROVIDER));
+    }
+
+    @Override
+    public String toString() {
+        try {
+            return provider.format(this).toString();
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
 
     public JSONObject getShowJSON() {
         return showJSON;
@@ -48,7 +70,11 @@ public class Show {
         this.showJSON = showJSON;
     }
 
-    public String getId() {
+    public String getYear() {
+        return year;
+    }
+
+    public String getID() {
         return id;
     }
 
@@ -95,4 +121,5 @@ public class Show {
     public void setProvider(Provider provider) {
         this.provider = provider;
     }
+
 }

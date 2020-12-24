@@ -15,14 +15,11 @@ import android.os.PowerManager;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import ga.abzzezz.util.logging.Logger;
-import ga.abzzezz.util.stringing.StringUtil;
 import net.bplaced.abzzezz.animeapp.AnimeAppMain;
 import net.bplaced.abzzezz.animeapp.R;
 import net.bplaced.abzzezz.animeapp.util.file.ShowNotifications;
 import net.bplaced.abzzezz.animeapp.util.scripter.Anime4YouDBSearch;
 import net.bplaced.abzzezz.animeapp.util.scripter.StringHandler;
-import net.bplaced.abzzezz.animeapp.util.tasks.anime4you.Anime4YouDataBaseTask;
-import net.bplaced.abzzezz.animeapp.util.tasks.TaskExecutor;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -50,12 +47,14 @@ public class ShowAlarm extends BroadcastReceiver {
 
         if (AnimeAppMain.getInstance().isDebugVersion()) sendNotification(context);
         Logger.log("Checking for new episodes", Logger.LogType.INFO);
+        /*
+        TODO: Rework
         showNotifications.getPreferences().getAll().forEach((key, o) ->
                 new TaskExecutor().executeAsync(new Anime4YouDataBaseTask(key.split(StringUtil.splitter)[1], anime4YouDBSearch),
                         new TaskExecutor.Callback<JSONObject>() {
                             @Override
                             public void onComplete(JSONObject result) throws Exception {
-                                int newNumber = result.getInt(StringHandler.SHOW_EPISODES_COUNT);
+                                int newNumber = result.getInt(StringHandler.SHOW_EPISODE_COUNT);
                                 if (newNumber > Integer.parseInt(showNotifications.getPreferences().getString(key, "1"))) {
                                     sendNotification(context, result);
                                     showNotifications.updateKey(key, newNumber);
@@ -65,7 +64,10 @@ public class ShowAlarm extends BroadcastReceiver {
                             @Override
                             public void preExecute() {
                             }
+
+
                         }));
+              */
         wl.release();
     }
 
@@ -74,7 +76,7 @@ public class ShowAlarm extends BroadcastReceiver {
      */
     private void sendNotification(final Context context) {
         final NotificationCompat.Builder notificationCompat = new NotificationCompat.Builder(context, AnimeAppMain.NOTIFICATION_CHANNEL_ID)
-                .setSmallIcon(R.drawable.information).setContentText("Alarmmanager fired")
+                .setSmallIcon(R.drawable.information).setContentText("Alarm-manager fired")
                 .setContentTitle("Alarm executed")
                 .setPriority(NotificationCompat.PRIORITY_MAX);
         final NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
