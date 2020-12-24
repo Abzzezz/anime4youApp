@@ -6,6 +6,7 @@
 
 package net.bplaced.abzzezz.animeapp.util.file;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import androidx.preference.PreferenceManager;
@@ -29,6 +30,7 @@ public class ShowSaver {
      * Aids used as keys. The other values stay the same
      */
 
+    @SuppressLint("CommitPrefEdits")
     public ShowSaver(final Context context) {
         this.preferences = context.getSharedPreferences("List", Context.MODE_PRIVATE);
         this.editor = preferences.edit();

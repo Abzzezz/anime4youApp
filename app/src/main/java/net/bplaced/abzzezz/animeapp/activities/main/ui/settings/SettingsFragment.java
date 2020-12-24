@@ -19,7 +19,7 @@ import ga.abzzezz.util.logging.Logger;
 import id.ionbit.ionalert.IonAlert;
 import net.bplaced.abzzezz.animeapp.AnimeAppMain;
 import net.bplaced.abzzezz.animeapp.R;
-import net.bplaced.abzzezz.animeapp.util.tasks.ImportMalTask;
+import net.bplaced.abzzezz.animeapp.util.tasks.anime4you.Anime4YouImportMAL;
 import net.bplaced.abzzezz.animeapp.util.tasks.TaskExecutor;
 import net.bplaced.abzzezz.animeapp.util.ui.InputDialogBuilder;
 
@@ -59,19 +59,6 @@ public class SettingsFragment extends Fragment {
                 return true;
             });
 
-            clearTacker.setOnPreferenceClickListener(preference -> {
-                new IonAlert(getActivity(), IonAlert.WARNING_TYPE)
-                        .setTitleText("Clear download tracker?")
-                        .setContentText("Your log will be deleted.")
-                        .setConfirmText("Yes, delete!")
-                        .setConfirmClickListener(ionAlert -> {
-                            AnimeAppMain.getInstance().getDownloadTracker().clearTrack();
-                            ionAlert.dismissWithAnimation();
-                        }).setCancelText("Abort").setCancelClickListener(IonAlert::dismissWithAnimation)
-                        .show();
-                return true;
-            });
-
             copySdCard.setOnPreferenceClickListener(preference -> {
                 new IonAlert(getActivity(), IonAlert.WARNING_TYPE)
                         .setTitleText("Move files?")
@@ -88,7 +75,7 @@ public class SettingsFragment extends Fragment {
                 new InputDialogBuilder(new InputDialogBuilder.InputDialogListener() {
                     @Override
                     public void onDialogInput(final String text) {
-                        new ImportMalTask(text).executeAsync(new TaskExecutor.Callback<String>() {
+                        new Anime4YouImportMAL(text).executeAsync(new TaskExecutor.Callback<String>() {
                             @Override
                             public void onComplete(final String result) {
                                 Toast.makeText(getActivity(), "Your Mal was imported", Toast.LENGTH_LONG).show();

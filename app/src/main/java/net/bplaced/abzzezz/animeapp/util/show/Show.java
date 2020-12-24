@@ -1,0 +1,98 @@
+/*
+ * Copyright (c) 2020. Roman P.
+ * All code is owned by Roman P. APIs are mentioned.
+ * Last modified: 24.12.20, 21:23
+ */
+
+package net.bplaced.abzzezz.animeapp.util.show;
+
+import net.bplaced.abzzezz.animeapp.util.provider.Provider;
+import org.json.JSONObject;
+
+public class Show {
+
+    private String id;
+    private String title;
+    private String episodes;
+    private String imageURL;
+    private String language;
+
+    private Provider provider;
+    private JSONObject showJSON;
+
+    public Show(String id, String title, String episodes, String imageURL, String language, Provider provider) {
+        this.id = id;
+        this.title = title;
+        this.episodes = episodes;
+        this.imageURL = imageURL;
+        this.language = language;
+        this.provider = provider;
+    }
+
+    public Show(String id, String title, String episodes, String imageURL, String language, Provider provider, JSONObject showJSON) {
+        this.id = id;
+        this.title = title;
+        this.episodes = episodes;
+        this.imageURL = imageURL;
+        this.language = language;
+        this.provider = provider;
+        this.showJSON = showJSON;
+    }
+
+
+    public JSONObject getShowJSON() {
+        return showJSON;
+    }
+
+    public void setShowJSON(JSONObject showJSON) {
+        this.showJSON = showJSON;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getEpisodes() {
+        return episodes;
+    }
+
+    public void setEpisodes(String episodes) {
+        this.episodes = episodes;
+    }
+
+    public String getImageURL() {
+        return imageURL;
+    }
+
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    public Provider getProvider() {
+        return provider;
+    }
+
+    public void setProvider(Provider provider) {
+        this.provider = provider;
+    }
+}

@@ -34,9 +34,9 @@ import net.bplaced.abzzezz.animeapp.activities.extra.StreamPlayer;
 import net.bplaced.abzzezz.animeapp.activities.main.DrawerMainMenu;
 import net.bplaced.abzzezz.animeapp.util.file.OfflineImageLoader;
 import net.bplaced.abzzezz.animeapp.util.scripter.StringHandler;
-import net.bplaced.abzzezz.animeapp.util.tasks.DownloadTask;
+import net.bplaced.abzzezz.animeapp.util.tasks.anime4you.Anime4YouDownloadTask;
 import net.bplaced.abzzezz.animeapp.util.tasks.TaskExecutor;
-import net.bplaced.abzzezz.animeapp.util.tasks.VideoFindTask;
+import net.bplaced.abzzezz.animeapp.util.tasks.anime4you.Anime4YouDirectVideoTask;
 import net.bplaced.abzzezz.animeapp.util.tasks.VivoDecodeTask;
 import net.bplaced.abzzezz.animeapp.util.ui.ImageUtil;
 import net.bplaced.abzzezz.animeapp.util.ui.InputDialogBuilder;
@@ -228,7 +228,7 @@ public class SelectedActivity extends AppCompatActivity {
         webView.clearHistory();
         webView.clearSslPreferences();
 
-        new VideoFindTask(id, count[1]).executeAsync(new TaskExecutor.Callback<String>() {
+        new Anime4YouDirectVideoTask(id, count[1]).executeAsync(new TaskExecutor.Callback<String>() {
             @Override
             public void onComplete(String foundEntry) {
                 webView.setWebViewClient(new WebViewClient() {
@@ -267,7 +267,7 @@ public class SelectedActivity extends AppCompatActivity {
                                         startActivity(intent);
                                         finish();
                                     } else
-                                        new DownloadTask(SelectedActivity.this, finalURL, title, new int[]{count[0], count[1], countMax}).executeAsync();
+                                        new Anime4YouDownloadTask(SelectedActivity.this, finalURL, title, new int[]{count[0], count[1], countMax}).executeAsync();
                                 };
 
                                 view.evaluateJavascript(String.format(StringHandler.VIDOZA_SCRIPT, vidozaHash), vidozaURL -> {

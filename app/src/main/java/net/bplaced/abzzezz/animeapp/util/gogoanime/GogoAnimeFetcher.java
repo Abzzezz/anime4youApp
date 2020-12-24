@@ -93,10 +93,36 @@ public class GogoAnimeFetcher {
      * @throws IOException if copy process goes wrong
      */
     public File fetchImage() throws IOException {
-        final URL imageURL = new URL(showDocument.selectFirst("meta[property=og:image]").attr("content"));
+        final URL imageURL = new URL(fetchImage0());
         final File cacheFile = new File(CACHE_DIRECTORY, sanitizeString(imageURL.getFile()));
         this.copyFileFromURL(imageURL, cacheFile);
         return cacheFile;
+    }
+
+    /**
+     * Fetches the show's image from it's url
+     *
+     * @return the image's url
+     */
+    public String fetchImage0() {
+        return showDocument.selectFirst("meta[property=og:image]").attr("content");
+    }
+
+    /**
+     * Returns the show's id
+     *
+     * @return
+     */
+    public String getID() {
+        return showDocument.body().selectFirst("input#movie_id").val();
+    }
+
+    public String getEpisodeStart() {
+        return showDocument.body().selectFirst("#episode_page a.active").attr("ep_start");
+    }
+
+    public String getEpisodeEnd() {
+        return showDocument.body().selectFirst("#episode_page a.active").attr("ep_end");
     }
 
     /**
@@ -162,13 +188,18 @@ public class GogoAnimeFetcher {
                 }).toArray(String[]::new);
     }
 
+
+    public static String getDirectVideoURL(final String urlIn) throws JSONException {
+        return getVidURL(String.format(API_URL, urlIn));
+    }
+
     /**
      * Gets the direct video url from the formatted api link
      *
      * @param in read in lines
      * @return url to mp4
      */
-    private String getVidURL(final String in) throws JSONException {
+    private static String getVidURL(final String in) throws JSONException {
         return new JSONObject(in).getJSONArray("source").getJSONObject(0).getString("file");
     }
 

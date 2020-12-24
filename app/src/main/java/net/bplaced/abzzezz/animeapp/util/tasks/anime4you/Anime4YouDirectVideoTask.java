@@ -1,28 +1,29 @@
 /*
  * Copyright (c) 2020. Roman P.
  * All code is owned by Roman P. APIs are mentioned.
- * Last modified: 09.07.20, 22:54
+ * Last modified: 24.12.20, 21:05
  */
 
-package net.bplaced.abzzezz.animeapp.util.tasks;
+package net.bplaced.abzzezz.animeapp.util.tasks.anime4you;
 
 import ga.abzzezz.util.stringing.StringUtil;
 import net.bplaced.abzzezz.animeapp.AnimeAppMain;
 import net.bplaced.abzzezz.animeapp.util.connection.URLUtil;
 import net.bplaced.abzzezz.animeapp.util.scripter.ScriptUtil;
 import net.bplaced.abzzezz.animeapp.util.scripter.StringHandler;
+import net.bplaced.abzzezz.animeapp.util.tasks.TaskExecutor;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.concurrent.Callable;
 import java.util.stream.Collectors;
 
-public class VideoFindTask extends TaskExecutor implements Callable<String> {
+public class Anime4YouDirectVideoTask extends TaskExecutor implements Callable<String> {
 
     private final int aid;
     private final int episode;
 
-    public VideoFindTask(int aid, int episode) {
+    public Anime4YouDirectVideoTask(int aid, int episode) {
         this.aid = aid;
         this.episode = (episode + 1);
     }

@@ -17,7 +17,7 @@ import java.net.HttpURLConnection;
 import java.util.stream.Collectors;
 
 
-public class AniDBSearch {
+public class Anime4YouDBSearch {
 
     public final String getShowDetails(final String search) {
         final StringBuilder builder = new StringBuilder(getDataBase());

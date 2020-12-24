@@ -24,7 +24,6 @@ import androidx.annotation.RequiresApi;
 import androidx.preference.PreferenceManager;
 import ga.abzzezz.util.logging.Logger;
 import net.bplaced.abzzezz.animeapp.util.customnotification.NotificationService;
-import net.bplaced.abzzezz.animeapp.util.file.DownloadTracker;
 import net.bplaced.abzzezz.animeapp.util.file.ShowNotifications;
 import net.bplaced.abzzezz.animeapp.util.file.ShowSaver;
 import net.bplaced.abzzezz.animeapp.util.scripter.StringHandler;
@@ -46,7 +45,6 @@ public class AnimeAppMain {
     private File imageStorage;
 
     private ShowSaver showSaver;
-    private DownloadTracker downloadTracker;
     private ShowNotifications animeNotifications;
 
     private boolean isVersionOutdated;
@@ -68,7 +66,6 @@ public class AnimeAppMain {
     public void configureHandlers(final Application application) {
         this.androidId = Settings.Secure.getString(application.getContentResolver(), Settings.Secure.ANDROID_ID);
         this.showSaver = new ShowSaver(application);
-        this.downloadTracker = new DownloadTracker(application);
         this.animeNotifications = new ShowNotifications(application);
         this.imageStorage = new File(application.getDataDir(), "StoredImagesOffline");
         if (!imageStorage.exists()) Logger.log("Image file created: " + imageStorage.mkdir(), Logger.LogType.INFO);
@@ -140,10 +137,6 @@ public class AnimeAppMain {
 
     public int getThemeId() {
         return themeId;
-    }
-
-    public DownloadTracker getDownloadTracker() {
-        return downloadTracker;
     }
 
     public ShowNotifications getAnimeNotifications() {

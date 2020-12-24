@@ -1,16 +1,17 @@
 /*
  * Copyright (c) 2020. Roman P.
  * All code is owned by Roman P. APIs are mentioned.
- * Last modified: 14.11.20, 21:37
+ * Last modified: 24.12.20, 21:05
  */
 
-package net.bplaced.abzzezz.animeapp.util.tasks;
+package net.bplaced.abzzezz.animeapp.util.tasks.anime4you;
 
 import ga.abzzezz.util.data.URLUtil;
 import ga.abzzezz.util.logging.Logger;
 import ga.abzzezz.util.stringing.StringUtil;
 import net.bplaced.abzzezz.animeapp.AnimeAppMain;
 import net.bplaced.abzzezz.animeapp.util.scripter.StringHandler;
+import net.bplaced.abzzezz.animeapp.util.tasks.TaskExecutor;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -23,12 +24,12 @@ import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.stream.Collectors;
 
-public class ImportMalTask extends TaskExecutor implements Callable<String> {
+public class Anime4YouImportMAL extends TaskExecutor implements Callable<String> {
 
     private final String url;
     private String dataBase;
 
-    public ImportMalTask(final String url) {
+    public Anime4YouImportMAL(final String url) {
         this.url = url;
     }
 

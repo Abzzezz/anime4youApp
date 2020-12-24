@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2020. Roman P.
  * All code is owned by Roman P. APIs are mentioned.
- * Last modified: 03.07.20, 23:30
+ * Last modified: 24.12.20, 21:09
  */
 
-package net.bplaced.abzzezz.animeapp.util.tasks;
+package net.bplaced.abzzezz.animeapp.util.tasks.anime4you;
 
 import android.app.PendingIntent;
 import android.content.Intent;
@@ -21,6 +21,8 @@ import net.bplaced.abzzezz.animeapp.R;
 import net.bplaced.abzzezz.animeapp.activities.main.ui.home.SelectedActivity;
 import net.bplaced.abzzezz.animeapp.util.receiver.StopDownloadReceiver;
 import net.bplaced.abzzezz.animeapp.util.scripter.StringHandler;
+import net.bplaced.abzzezz.animeapp.util.tasks.IntentHelper;
+import net.bplaced.abzzezz.animeapp.util.tasks.TaskExecutor;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -32,7 +34,7 @@ import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.util.concurrent.Callable;
 
-public class DownloadTask extends TaskExecutor implements Callable<String>, TaskExecutor.Callback<String> {
+public class Anime4YouDownloadTask extends TaskExecutor implements Callable<String>, TaskExecutor.Callback<String> {
 
     private final SelectedActivity application;
     private final int[] count;
@@ -46,7 +48,7 @@ public class DownloadTask extends TaskExecutor implements Callable<String>, Task
     private File outFile;
 
 
-    public DownloadTask(SelectedActivity application, String url, String name, int[] count) {
+    public Anime4YouDownloadTask(SelectedActivity application, String url, String name, int[] count) {
         this.application = application;
         this.name = name;
         this.url = url;
@@ -97,7 +99,6 @@ public class DownloadTask extends TaskExecutor implements Callable<String>, Task
         notificationManagerCompat.cancel(notifyID);
 
         if (!isCancelled()) {
-            AnimeAppMain.getInstance().getDownloadTracker().submitTrack("Downloaded Episode: " + result);
             //Create new "download-done" notification
             this.notification = new NotificationCompat.Builder(application, AnimeAppMain.NOTIFICATION_CHANNEL_ID)
                     .setSmallIcon(R.drawable.information).setColor(Color.GREEN).setContentText("Episode-download done")

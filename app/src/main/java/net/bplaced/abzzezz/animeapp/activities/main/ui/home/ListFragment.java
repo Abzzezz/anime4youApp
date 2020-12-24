@@ -19,19 +19,17 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.squareup.picasso.Picasso;
 import ga.abzzezz.util.logging.Logger;
 import id.ionbit.ionalert.IonAlert;
 import net.bplaced.abzzezz.animeapp.AnimeAppMain;
 import net.bplaced.abzzezz.animeapp.R;
 import net.bplaced.abzzezz.animeapp.util.file.OfflineImageLoader;
-import net.bplaced.abzzezz.animeapp.util.scripter.AniDBSearch;
+import net.bplaced.abzzezz.animeapp.util.scripter.Anime4YouDBSearch;
 import net.bplaced.abzzezz.animeapp.util.scripter.StringHandler;
-import net.bplaced.abzzezz.animeapp.util.tasks.DataBaseTask;
+import net.bplaced.abzzezz.animeapp.util.tasks.anime4you.Anime4YouDataBaseTask;
 import net.bplaced.abzzezz.animeapp.util.tasks.TaskExecutor;
 import net.bplaced.abzzezz.animeapp.util.ui.ImageUtil;
-import net.bplaced.abzzezz.animeapp.util.ui.InputDialogBuilder;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -41,7 +39,7 @@ import java.util.Optional;
 
 public class ListFragment extends Fragment {
 
-    private final AniDBSearch aniDBSearch = new AniDBSearch();
+    private final Anime4YouDBSearch anime4YouDBSearch = new Anime4YouDBSearch();
     private AnimeAdapter animeAdapter;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -72,18 +70,6 @@ public class ListFragment extends Fragment {
             return true;
         });
 
-        final FloatingActionButton addButton = root.findViewById(R.id.add_aid);
-        addButton.setOnClickListener(v -> new InputDialogBuilder(new InputDialogBuilder.InputDialogListener() {
-            @Override
-            public void onDialogInput(String text) {
-                animeAdapter.addItem(text);
-            }
-
-            @Override
-            public void onDialogDenied() {
-            }
-        }).showInput("Enter AID", "Enter AID to add anime", getActivity()));
-
         if (AnimeAppMain.getInstance().isVersionOutdated()) {
             new IonAlert(getActivity(), IonAlert.WARNING_TYPE)
                     .setTitleText("Outdated version")
@@ -109,7 +95,7 @@ public class ListFragment extends Fragment {
             return;
         }
 
-        savedInformation.ifPresent(jsonObject -> new TaskExecutor().executeAsync(new DataBaseTask(jsonObject, aniDBSearch), new TaskExecutor.Callback<JSONObject>() {
+        savedInformation.ifPresent(jsonObject -> new TaskExecutor().executeAsync(new Anime4YouDataBaseTask(jsonObject, anime4YouDBSearch), new TaskExecutor.Callback<JSONObject>() {
             @Override
             public void onComplete(JSONObject result) {
                 AnimeAppMain.getInstance().getShowSaver().refreshShow(result, index);
@@ -175,7 +161,6 @@ public class ListFragment extends Fragment {
             if (itemToRemove.isPresent()) {
                 this.size--;
                 try {
-
                     final File dir = new File(getActivity().getFilesDir(), itemToRemove.get().getString(StringHandler.SHOW_TITLE));
                     if (dir.listFiles() != null && dir.listFiles().length > 0) {
                         new IonAlert(getActivity(), IonAlert.WARNING_TYPE)
@@ -198,7 +183,7 @@ public class ListFragment extends Fragment {
                 notifyDataSetChanged();
             }
         }
-
+/*
         public void addItem(final String item) {
             if (!StringHandler.isOnline(getActivity())) {
                 Toast.makeText(context, "You are currently not connected to the internet", Toast.LENGTH_LONG).show();
@@ -218,5 +203,7 @@ public class ListFragment extends Fragment {
                 }
             });
         }
+ */
     }
+
 }
