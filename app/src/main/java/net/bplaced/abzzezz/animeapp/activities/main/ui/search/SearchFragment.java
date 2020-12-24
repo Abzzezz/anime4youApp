@@ -4,7 +4,7 @@
  * Last modified: 23.06.20, 18:16
  */
 
-package net.bplaced.abzzezz.animeapp.activities.main.ui.tracker;
+package net.bplaced.abzzezz.animeapp.activities.main.ui.search;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -18,11 +18,11 @@ import androidx.fragment.app.Fragment;
 import net.bplaced.abzzezz.animeapp.AnimeAppMain;
 import net.bplaced.abzzezz.animeapp.R;
 
-public class DownloadTrackerFragment extends Fragment {
+public class SearchFragment extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View root = inflater.inflate(R.layout.simplelist_layout, container, false);
+        final View root = inflater.inflate(R.layout.simple_list_layout, container, false);
         final ListView listView = root.findViewById(R.id.simple_list_view);
         final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1);
         arrayAdapter.addAll(AnimeAppMain.getInstance().getDownloadTracker().getList());

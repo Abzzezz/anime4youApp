@@ -7,6 +7,7 @@
 package net.bplaced.abzzezz.animeapp.util.scripter;
 
 import ga.abzzezz.util.logging.Logger;
+import net.bplaced.abzzezz.animeapp.util.connection.URLUtil;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -43,8 +44,7 @@ public class AniDBSearch {
     }
 
     private HttpURLConnection createConnection(final String url) throws IOException {
-        final HttpURLConnection urlConnection = (HttpURLConnection) new URL(StringHandler.DATABASE).openConnection();
-        urlConnection.addRequestProperty("User-Agent", StringHandler.USER_AGENT);
+        final HttpURLConnection urlConnection = URLUtil.createHTTPURLConnection(url, "POST", new String[]{"User-Agent", StringHandler.USER_AGENT});
         urlConnection.setConnectTimeout(4000);
         return urlConnection;
     }

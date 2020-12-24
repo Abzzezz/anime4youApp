@@ -25,9 +25,9 @@
 
 
         <item
-                android:id="@+id/download_tracker"
-                android:icon="@drawable/list"
-                android:title="@string/download_tracker"/>
+                android:id="@+id/show_search"
+                android:icon="@drawable/search"
+                android:title="@string/show_search"/>
 
         <item
                 android:id="@+id/anime_notification"

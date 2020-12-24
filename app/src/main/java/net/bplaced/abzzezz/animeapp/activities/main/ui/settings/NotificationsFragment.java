@@ -23,7 +23,7 @@ public class NotificationsFragment extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View root = inflater.inflate(R.layout.simplelist_layout, container, false);
+        final View root = inflater.inflate(R.layout.simple_list_layout, container, false);
 
         final ListView listView = root.findViewById(R.id.simple_list_view);
         final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1);

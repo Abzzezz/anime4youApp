@@ -46,7 +46,7 @@
 
     <string name="anime_notification_service_description">Service checks every 4 hours if a new episode of your selected anime is available.</string>
     <string name="anime_notifications">Anime Notifications</string>
-    <string name="download_tracker">Download Tracker</string>
+    <string name="show_search">Search</string>
     <string name="cloud_list">Cloud list</string>
 
 </resources>

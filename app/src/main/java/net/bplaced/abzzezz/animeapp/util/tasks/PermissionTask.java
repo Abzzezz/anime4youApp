@@ -7,6 +7,7 @@
 package net.bplaced.abzzezz.animeapp.util.tasks;
 
 import net.bplaced.abzzezz.animeapp.AnimeAppMain;
+import net.bplaced.abzzezz.animeapp.util.connection.URLUtil;
 import net.bplaced.abzzezz.animeapp.util.scripter.StringHandler;
 
 import java.io.BufferedReader;
@@ -25,13 +26,6 @@ public class PermissionTask extends TaskExecutor implements Callable<Boolean> {
 
     @Override
     public Boolean call() throws Exception {
-        final URL url = new URL(StringHandler.USER_URL);
-        final HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        connection.setRequestMethod("POST");
-        connection.addRequestProperty("Referer", AnimeAppMain.getInstance().getAndroidId());
-        connection.connect();
-        final InputStream inputStream = connection.getInputStream();
-        final String response = new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining());
-        return !response.equals("200");
+        return !URLUtil.createHTTPURLConnection(StringHandler.USER_URL, "POST", new String[]{"Referer", AnimeAppMain.getInstance().getAndroidId()}).getResponseMessage().equals("200");
     }
 }

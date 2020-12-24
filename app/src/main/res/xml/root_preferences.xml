@@ -76,7 +76,7 @@
 
 
         <PreferenceCategory
-                android:title="@string/download_tracker">
+                android:title="@string/show_search">
             <Preference
                     android:title="Clear tracker"
                     android:key="clear_tracker"/>

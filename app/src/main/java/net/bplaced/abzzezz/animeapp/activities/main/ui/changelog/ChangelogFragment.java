@@ -4,7 +4,7 @@
  * Last modified: 14.06.20, 20:08
  */
 
-package net.bplaced.abzzezz.animeapp.activities.main.ui.chagelog;
+package net.bplaced.abzzezz.animeapp.activities.main.ui.changelog;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -28,7 +28,7 @@ public class ChangelogFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View root = inflater.inflate(R.layout.simplelist_layout, container, false);
+        final View root = inflater.inflate(R.layout.simple_list_layout, container, false);
         new TaskExecutor().executeAsync(() -> URLUtil.getURLContentAsArray(new URL(StringHandler.APP_CHANGELOG_TXT)), new TaskExecutor.Callback<ArrayList<String>>() {
             @Override
             public void onComplete(ArrayList<String> result) {

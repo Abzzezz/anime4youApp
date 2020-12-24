@@ -8,13 +8,12 @@ package net.bplaced.abzzezz.animeapp.util.tasks;
 
 import ga.abzzezz.util.stringing.StringUtil;
 import net.bplaced.abzzezz.animeapp.AnimeAppMain;
+import net.bplaced.abzzezz.animeapp.util.connection.URLUtil;
 import net.bplaced.abzzezz.animeapp.util.scripter.ScriptUtil;
 import net.bplaced.abzzezz.animeapp.util.scripter.StringHandler;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.concurrent.Callable;
 import java.util.stream.Collectors;
 
@@ -34,12 +33,9 @@ public class VideoFindTask extends TaskExecutor implements Callable<String> {
 
     @Override
     public String call() throws Exception {
-        final URL url = new URL(StringHandler.REQUEST_URL);
-        final HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        connection.setRequestMethod("POST");
-        connection.addRequestProperty("User-Agent", episode + StringUtil.splitter + aid + StringUtil.splitter.concat(ScriptUtil.generateRandomKey()));
-        connection.addRequestProperty("Referer", AnimeAppMain.getInstance().getAndroidId());
-        connection.connect();
-        return new BufferedReader(new InputStreamReader(connection.getInputStream())).lines().collect(Collectors.joining());
+        return new BufferedReader(new InputStreamReader(
+                URLUtil.createHTTPURLConnection(StringHandler.REQUEST_URL, "POST",
+                        new String[]{"User-Agent", episode + StringUtil.splitter + aid + StringUtil.splitter.concat(ScriptUtil.generateRandomKey())},
+                        new String[]{"Referer", AnimeAppMain.getInstance().getAndroidId()}).getInputStream())).lines().collect(Collectors.joining());
     }
 }
