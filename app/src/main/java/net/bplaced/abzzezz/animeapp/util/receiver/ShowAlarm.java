@@ -19,17 +19,17 @@ import ga.abzzezz.util.stringing.StringUtil;
 import net.bplaced.abzzezz.animeapp.AnimeAppMain;
 import net.bplaced.abzzezz.animeapp.R;
 import net.bplaced.abzzezz.animeapp.util.file.ShowNotifications;
-import net.bplaced.abzzezz.animeapp.util.scripter.DataBaseSearch;
+import net.bplaced.abzzezz.animeapp.util.scripter.AniDBSearch;
 import net.bplaced.abzzezz.animeapp.util.scripter.StringHandler;
 import net.bplaced.abzzezz.animeapp.util.tasks.DataBaseTask;
 import net.bplaced.abzzezz.animeapp.util.tasks.TaskExecutor;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class Alarm extends BroadcastReceiver {
+public class ShowAlarm extends BroadcastReceiver {
 
     //Databasesearch instance
-    private final DataBaseSearch dataBaseSearch = new DataBaseSearch();
+    private final AniDBSearch aniDBSearch = new AniDBSearch();
     private final ShowNotifications showNotifications = AnimeAppMain.getInstance().getAnimeNotifications();
     //Alarm ID
     private final int alarmID = 1337;
@@ -51,7 +51,7 @@ public class Alarm extends BroadcastReceiver {
         if (AnimeAppMain.getInstance().isDebugVersion()) sendNotification(context);
         Logger.log("Checking for new episodes", Logger.LogType.INFO);
         showNotifications.getPreferences().getAll().forEach((key, o) ->
-                new TaskExecutor().executeAsync(new DataBaseTask(key.split(StringUtil.splitter)[1], dataBaseSearch),
+                new TaskExecutor().executeAsync(new DataBaseTask(key.split(StringUtil.splitter)[1], aniDBSearch),
                         new TaskExecutor.Callback<JSONObject>() {
                             @Override
                             public void onComplete(JSONObject result) throws Exception {
@@ -104,7 +104,7 @@ public class Alarm extends BroadcastReceiver {
     public void setAlarm(final Context context) {
         Logger.log("Alarm set", Logger.LogType.INFO);
         final AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        final Intent intent = new Intent(context, Alarm.class);
+        final Intent intent = new Intent(context, ShowAlarm.class);
         final PendingIntent pi = PendingIntent.getBroadcast(context, alarmID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         //Triggers every two hours (eg. 12x a day)
         am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 1000 * 60 * 60 * 2, pi);
@@ -117,7 +117,7 @@ public class Alarm extends BroadcastReceiver {
      */
     public void cancelAlarm(final Context context) {
         Logger.log("Alarm cancelled", Logger.LogType.INFO);
-        final Intent intent = new Intent(context, Alarm.class);
+        final Intent intent = new Intent(context, ShowAlarm.class);
         final PendingIntent sender = PendingIntent.getBroadcast(context, alarmID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         final AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         alarmManager.cancel(sender);

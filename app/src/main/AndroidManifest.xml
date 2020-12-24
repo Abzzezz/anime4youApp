@@ -75,7 +75,7 @@
         </receiver>
 
         <receiver android:enabled="true"
-                  android:exported="true" android:name=".util.receiver.Alarm">
+                  android:exported="true" android:name=".util.receiver.ShowAlarm">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
@@ -84,7 +84,7 @@
                 android:label="Anime Notification Service"
                 android:description="@string/anime_notification_service_description"
                 android:enabled="true" android:exported="true"
-                android:name=".util.animenotifications.NotificationService"
+                android:name=".util.customnotification.NotificationService"
         />
         <receiver android:name=".util.receiver.StopDownloadReceiver"/>
         <!-- Receiver and Service -->

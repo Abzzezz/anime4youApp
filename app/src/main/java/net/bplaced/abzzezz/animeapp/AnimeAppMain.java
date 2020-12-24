@@ -24,7 +24,7 @@ import androidx.annotation.RequiresApi;
 import androidx.preference.PreferenceManager;
 import ga.abzzezz.util.logging.Logger;
 import id.ionbit.ionalert.IonAlert;
-import net.bplaced.abzzezz.animeapp.util.animenotifications.NotificationService;
+import net.bplaced.abzzezz.animeapp.util.customnotification.NotificationService;
 import net.bplaced.abzzezz.animeapp.util.file.DownloadTracker;
 import net.bplaced.abzzezz.animeapp.util.file.ShowNotifications;
 import net.bplaced.abzzezz.animeapp.util.file.ShowSaver;

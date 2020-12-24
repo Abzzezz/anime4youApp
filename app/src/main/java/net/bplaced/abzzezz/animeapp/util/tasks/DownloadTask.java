@@ -19,7 +19,6 @@ import ga.abzzezz.util.logging.Logger;
 import net.bplaced.abzzezz.animeapp.AnimeAppMain;
 import net.bplaced.abzzezz.animeapp.R;
 import net.bplaced.abzzezz.animeapp.activities.main.ui.home.SelectedActivity;
-import net.bplaced.abzzezz.animeapp.util.IntentHelper;
 import net.bplaced.abzzezz.animeapp.util.receiver.StopDownloadReceiver;
 import net.bplaced.abzzezz.animeapp.util.scripter.StringHandler;
 

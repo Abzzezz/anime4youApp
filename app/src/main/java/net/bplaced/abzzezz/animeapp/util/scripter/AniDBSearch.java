@@ -16,7 +16,7 @@ import java.net.URL;
 import java.util.stream.Collectors;
 
 
-public class DataBaseSearch {
+public class AniDBSearch {
 
     public final String getShowDetails(final String search) {
         final StringBuilder builder = new StringBuilder(getDataBase());

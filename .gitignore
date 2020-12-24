@@ -3,3 +3,8 @@
 .gradle/6.5-milestone-1/executionHistory/executionHistory.bin
 *.bin
 *.ser
+*.json
+*.json5
+/build
+*.dex
+

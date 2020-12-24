@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2020. Roman P.
  * All code is owned by Roman P. APIs are mentioned.
- * Last modified: 28.06.20, 15:08
+ * Last modified: 21.08.20, 18:50
  */
 
-package net.bplaced.abzzezz.animeapp.util;
+package net.bplaced.abzzezz.animeapp.util.ui;
 
 import android.app.AlertDialog;
 import android.content.Context;

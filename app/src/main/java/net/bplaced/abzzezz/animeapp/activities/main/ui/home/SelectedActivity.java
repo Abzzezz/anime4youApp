@@ -32,9 +32,9 @@ import net.bplaced.abzzezz.animeapp.R;
 import net.bplaced.abzzezz.animeapp.activities.extra.PlayerActivity;
 import net.bplaced.abzzezz.animeapp.activities.extra.StreamPlayer;
 import net.bplaced.abzzezz.animeapp.activities.main.DrawerMainMenu;
-import net.bplaced.abzzezz.animeapp.util.ImageUtil;
-import net.bplaced.abzzezz.animeapp.util.InputDialogBuilder;
-import net.bplaced.abzzezz.animeapp.util.InputDialogBuilder.InputDialogListener;
+import net.bplaced.abzzezz.animeapp.util.ui.ImageUtil;
+import net.bplaced.abzzezz.animeapp.util.ui.InputDialogBuilder;
+import net.bplaced.abzzezz.animeapp.util.ui.InputDialogBuilder.InputDialogListener;
 import net.bplaced.abzzezz.animeapp.util.file.OfflineImageLoader;
 import net.bplaced.abzzezz.animeapp.util.scripter.StringHandler;
 import net.bplaced.abzzezz.animeapp.util.tasks.DownloadTask;
@@ -251,8 +251,14 @@ public class SelectedActivity extends AppCompatActivity {
                                     if (urls[0] == null && urls[1] == null) {
                                         makeText("No link found for requested video");
                                         return;
-                                    } else if (urls[0] == null) finalURL = urls[1];
-                                    else if (urls[0].isEmpty()) finalURL = urls[1];
+                                    } else if (urls[0] == null) {
+                                        finalURL = urls[1];
+                                        makeText("Downloading from vidoza");
+                                    }
+                                    else if (urls[0].isEmpty()) {
+                                        finalURL = urls[1];
+                                        makeText("Downloading from vidoza");
+                                    }
 
                                     finalURL = finalURL.replace("\"", "");
 

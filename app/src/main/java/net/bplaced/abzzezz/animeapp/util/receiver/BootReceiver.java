@@ -10,7 +10,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
-import net.bplaced.abzzezz.animeapp.util.animenotifications.NotificationService;
+import net.bplaced.abzzezz.animeapp.util.customnotification.NotificationService;
 
 public class BootReceiver extends BroadcastReceiver {
 

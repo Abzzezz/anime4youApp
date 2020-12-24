@@ -25,10 +25,10 @@ import ga.abzzezz.util.logging.Logger;
 import id.ionbit.ionalert.IonAlert;
 import net.bplaced.abzzezz.animeapp.AnimeAppMain;
 import net.bplaced.abzzezz.animeapp.R;
-import net.bplaced.abzzezz.animeapp.util.ImageUtil;
-import net.bplaced.abzzezz.animeapp.util.InputDialogBuilder;
+import net.bplaced.abzzezz.animeapp.util.ui.ImageUtil;
+import net.bplaced.abzzezz.animeapp.util.ui.InputDialogBuilder;
 import net.bplaced.abzzezz.animeapp.util.file.OfflineImageLoader;
-import net.bplaced.abzzezz.animeapp.util.scripter.DataBaseSearch;
+import net.bplaced.abzzezz.animeapp.util.scripter.AniDBSearch;
 import net.bplaced.abzzezz.animeapp.util.scripter.StringHandler;
 import net.bplaced.abzzezz.animeapp.util.tasks.DataBaseTask;
 import net.bplaced.abzzezz.animeapp.util.tasks.TaskExecutor;
@@ -40,7 +40,7 @@ import java.util.Optional;
 
 public class ListFragment extends Fragment {
 
-    private final DataBaseSearch dataBaseSearch = new DataBaseSearch();
+    private final AniDBSearch aniDBSearch = new AniDBSearch();
     private AnimeAdapter animeAdapter;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -108,7 +108,7 @@ public class ListFragment extends Fragment {
             return;
         }
 
-        savedInformation.ifPresent(jsonObject -> new TaskExecutor().executeAsync(new DataBaseTask(jsonObject, dataBaseSearch), new TaskExecutor.Callback<JSONObject>() {
+        savedInformation.ifPresent(jsonObject -> new TaskExecutor().executeAsync(new DataBaseTask(jsonObject, aniDBSearch), new TaskExecutor.Callback<JSONObject>() {
             @Override
             public void onComplete(JSONObject result) {
                 AnimeAppMain.getInstance().getShowSaver().refreshShow(result, index);
@@ -204,7 +204,7 @@ public class ListFragment extends Fragment {
                 return;
             }
             //Create new database request. get episodes, imageURL, name
-            new TaskExecutor().executeAsync(new DataBaseTask(item, dataBaseSearch), new TaskExecutor.Callback<JSONObject>() {
+            new TaskExecutor().executeAsync(new DataBaseTask(item, aniDBSearch), new TaskExecutor.Callback<JSONObject>() {
                 @Override
                 public void onComplete(final JSONObject result) throws Exception {
                     size++;
