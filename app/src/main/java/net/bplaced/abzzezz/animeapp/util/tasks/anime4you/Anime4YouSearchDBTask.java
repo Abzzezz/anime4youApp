@@ -6,7 +6,7 @@
 
 package net.bplaced.abzzezz.animeapp.util.tasks.anime4you;
 
-import net.bplaced.abzzezz.animeapp.util.scripter.Anime4YouDBSearch;
+import net.bplaced.abzzezz.animeapp.util.provider.providers.Anime4you;
 import net.bplaced.abzzezz.animeapp.util.tasks.TaskExecutor;
 import net.ricecode.similarity.JaroStrategy;
 import net.ricecode.similarity.SimilarityStrategy;
@@ -20,7 +20,6 @@ import java.util.concurrent.Callable;
 public class Anime4YouSearchDBTask extends TaskExecutor implements Callable<List<JSONObject>> {
 
     private final String input;
-    private final Anime4YouDBSearch anime4YouDBSearch = new Anime4YouDBSearch();
     private final SimilarityStrategy stringSimilarity = new JaroStrategy();
 
     public Anime4YouSearchDBTask(final String input) {
@@ -34,7 +33,7 @@ public class Anime4YouSearchDBTask extends TaskExecutor implements Callable<List
     @Override
     public List<JSONObject> call() throws Exception {
         final List<JSONObject> showsOut = new ArrayList<>();
-        final JSONArray showsIn = new JSONArray(anime4YouDBSearch.getDataBase());
+        final JSONArray showsIn = new JSONArray(Anime4you.ANIME_4_YOU_DB_SEARCH.getDataBase());
 
         for (int i = 0; i < showsIn.length(); i++) {
             final JSONObject show = showsIn.getJSONObject(i);

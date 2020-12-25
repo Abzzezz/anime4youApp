@@ -4,7 +4,7 @@
  * Last modified: 24.12.20, 21:09
  */
 
-package net.bplaced.abzzezz.animeapp.util.tasks.anime4you;
+package net.bplaced.abzzezz.animeapp.util.tasks.gogoanime;
 
 import android.app.PendingIntent;
 import android.content.Intent;
@@ -34,11 +34,14 @@ import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.util.concurrent.Callable;
 
-public class Anime4YouDownloadTask extends TaskExecutor implements Callable<String>, TaskExecutor.Callback<String> {
+/*
+TODO: Create parent class
+ */
+public class GogoAnimeDownloadTask extends TaskExecutor implements Callable<String>, TaskExecutor.Callback<String> {
 
     private final SelectedActivity application;
     private final int[] count;
-    private final String url;
+    private final URL url;
     private final String name;
     private final File outDir;
     private NotificationManagerCompat notificationManagerCompat;
@@ -49,7 +52,7 @@ public class Anime4YouDownloadTask extends TaskExecutor implements Callable<Stri
     private File outFile;
 
 
-    public Anime4YouDownloadTask(SelectedActivity application, String url, String name, File outDir, int[] count) {
+    public GogoAnimeDownloadTask(SelectedActivity application, URL url, String name, File outDir, int[] count) {
         this.application = application;
         this.name = name;
         this.url = url;
@@ -75,7 +78,7 @@ public class Anime4YouDownloadTask extends TaskExecutor implements Callable<Stri
         this.outFile = new File(outDir, count[1] + ".mp4");
         try {
             //Open new URL connection
-            final URLConnection urlConnection = new URL(url).openConnection();
+            final URLConnection urlConnection = url.openConnection();
             urlConnection.setRequestProperty("User-Agent", StringHandler.USER_AGENT);
             urlConnection.connect();
             //Open Stream

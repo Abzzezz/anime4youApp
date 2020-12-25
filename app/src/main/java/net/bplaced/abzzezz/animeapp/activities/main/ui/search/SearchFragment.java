@@ -8,7 +8,6 @@ package net.bplaced.abzzezz.animeapp.activities.main.ui.search;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,10 +17,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import net.bplaced.abzzezz.animeapp.AnimeAppMain;
 import net.bplaced.abzzezz.animeapp.R;
-import net.bplaced.abzzezz.animeapp.util.provider.ProviderType;
+import net.bplaced.abzzezz.animeapp.util.provider.Providers;
 import net.bplaced.abzzezz.animeapp.util.show.Show;
 import net.bplaced.abzzezz.animeapp.util.tasks.TaskExecutor;
-import net.bplaced.abzzezz.animeapp.util.tasks.anime4you.Anime4YouSearchDBTask;
 import net.bplaced.abzzezz.animeapp.util.tasks.gogoanime.GogoAnimeFetchTask;
 import net.bplaced.abzzezz.animeapp.util.ui.InputDialogBuilder;
 import org.json.JSONException;
@@ -45,21 +43,15 @@ public class SearchFragment extends Fragment {
         showSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                new Anime4YouSearchDBTask(query).executeAsync(new TaskExecutor.Callback<List<JSONObject>>() {
-                    @Override
-                    public void onComplete(final List<JSONObject> result) {
-                        showSearch.clearFocus();
+                ((SearchAdapter) listView.getAdapter()).getEntries().clear();
+                for (final Providers value : Providers.values()) {
+                    value.getProvider().handleSearch(query, jsonObjects -> {
+                        ((SearchAdapter) listView.getAdapter()).getEntries().addAll(jsonObjects);
 
-                        ((SearchAdapter) listView.getAdapter()).getEntries().clear();
-                        ((SearchAdapter) listView.getAdapter()).getEntries().addAll(result);
-                        ((SearchAdapter) listView.getAdapter()).notifyDataSetChanged();
-                    }
-
-                    @Override
-                    public void preExecute() {
-                        Log.i("Search", "Staring search");
-                    }
-                });
+                    });
+                }
+                showSearch.clearFocus();
+                ((SearchAdapter) listView.getAdapter()).notifyDataSetChanged();
                 return true;
             }
 
@@ -147,7 +139,7 @@ public class SearchFragment extends Fragment {
 
                 convertView.setOnClickListener(listener -> {
                     try {
-                        AnimeAppMain.getInstance().getShowSaver().addShow(ProviderType.ANIME4YOU.getProvider().getShow(jsonAtIndex));
+                        AnimeAppMain.getInstance().getShowSaver().addShow(Providers.ANIME4YOU.getProvider().getShow(jsonAtIndex));
                         Toast.makeText(context, "Added show!", Toast.LENGTH_SHORT).show();
                     } catch (JSONException e) {
                         e.printStackTrace();

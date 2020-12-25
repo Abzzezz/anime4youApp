@@ -26,7 +26,6 @@ import org.json.JSONObject;
 public class ShowAlarm extends BroadcastReceiver {
 
     //Databasesearch instance
-    private final Anime4YouDBSearch anime4YouDBSearch = new Anime4YouDBSearch();
     private final ShowNotifications showNotifications = AnimeAppMain.getInstance().getAnimeNotifications();
     //Alarm ID
     private final int alarmID = 1337;

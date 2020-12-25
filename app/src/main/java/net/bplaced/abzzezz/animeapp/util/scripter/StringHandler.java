@@ -25,7 +25,7 @@ public class StringHandler {
     public static final String BACKUP_DATABASE = "http://abzzezz.bplaced.net/list.txt";
     public static final String COVER_DATABASE = "https://cdn.anime4you.one/covers/";
 
-
+//https://gogoanime.so/search.html?keyword=Darling
     /*
     JSON keys
      */
@@ -37,9 +37,6 @@ public class StringHandler {
     public static final String SHOW_YEAR = "year";
 
     public static final String SHOW_PROVIDER = "provider";
-
-    public static final String SHOW_PROVIDER_ANIME4YOU = "anime4you";
-    public static final String SHOW_PROVIDER_GOGO = "gogo_anime";
 
     public static final String VIDOZA_SCRIPT = "call(); function call() { vidoza = $.ajax({type: 'POST',url: '/check_video.php',async: false,success: function(data){},data: {vidhash:\"%s\"}}).responseJSON[\"url\"];return vidoza;}";
 

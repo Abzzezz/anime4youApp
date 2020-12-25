@@ -10,18 +10,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.*;
-import android.webkit.CookieManager;
-import android.webkit.WebStorage;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
-import android.widget.*;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.FileProvider;
 import androidx.preference.PreferenceManager;
-import com.htetznaing.lowcostvideo.LowCostVideo;
-import com.htetznaing.lowcostvideo.Model.XModel;
-import com.htetznaing.lowcostvideo.Sites.Vidoza;
 import com.squareup.picasso.Picasso;
 import ga.abzzezz.util.data.FileUtil;
 import ga.abzzezz.util.logging.Logger;
@@ -33,28 +29,22 @@ import net.bplaced.abzzezz.animeapp.activities.extra.PlayerActivity;
 import net.bplaced.abzzezz.animeapp.activities.extra.StreamPlayer;
 import net.bplaced.abzzezz.animeapp.activities.main.DrawerMainMenu;
 import net.bplaced.abzzezz.animeapp.util.file.OfflineImageLoader;
-import net.bplaced.abzzezz.animeapp.util.scripter.StringHandler;
 import net.bplaced.abzzezz.animeapp.util.show.Show;
 import net.bplaced.abzzezz.animeapp.util.tasks.IntentHelper;
-import net.bplaced.abzzezz.animeapp.util.tasks.TaskExecutor;
-import net.bplaced.abzzezz.animeapp.util.tasks.VivoDecodeTask;
-import net.bplaced.abzzezz.animeapp.util.tasks.anime4you.Anime4YouDirectVideoTask;
-import net.bplaced.abzzezz.animeapp.util.tasks.anime4you.Anime4YouDownloadTask;
 import net.bplaced.abzzezz.animeapp.util.ui.ImageUtil;
 import net.bplaced.abzzezz.animeapp.util.ui.InputDialogBuilder;
 import net.bplaced.abzzezz.animeapp.util.ui.InputDialogBuilder.InputDialogListener;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.File;
-import java.util.*;
-import java.util.function.Consumer;
+import java.util.Arrays;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.OptionalInt;
 
 public class SelectedActivity extends AppCompatActivity {
 
     public EpisodeAdapter episodeAdapter;
-    private File file;
+    private File showDirectory;
 
     private Show show;
 
@@ -69,7 +59,7 @@ public class SelectedActivity extends AppCompatActivity {
          */
         this.show = (Show) IntentHelper.getObjectForKey("show");
 
-        this.file = new File(getFilesDir(), show.getTitle());
+        this.showDirectory = new File(getFilesDir(), show.getProvider().getType().name() + show.getTitle());
 
         final String coverUrl = show.getImageURL();
 
@@ -79,7 +69,7 @@ public class SelectedActivity extends AppCompatActivity {
         ((TextView) findViewById(R.id.selected_anime_aid)).append(show.getID());
         ((TextView) findViewById(R.id.selected_anime_language)).append(show.getLanguage());
         ((TextView) findViewById(R.id.selected_anime_year)).append(show.getYear());
-        ((TextView) findViewById(R.id.anime_directory_size)).append(FileUtil.calculateFileSize(file));
+        ((TextView) findViewById(R.id.anime_directory_size)).append(FileUtil.calculateFileSize(showDirectory));
 
         final ImageView cover = findViewById(R.id.anime_cover_image);
         final Toolbar toolbar = findViewById(R.id.selected_anime_toolbar);
@@ -115,7 +105,7 @@ public class SelectedActivity extends AppCompatActivity {
                             ionAlert.dismissWithAnimation();
                     }).show();
         });
-        findViewById(R.id.download_anime_button).setOnClickListener(v -> getEpisode(getLatestEpisode(), Integer.parseInt(show.getEpisodes()), 0, false));
+        findViewById(R.id.download_anime_button).setOnClickListener(listener -> getEpisode(getLatestEpisode(), Integer.parseInt(show.getEpisodes()), 0, false));
     }
 
 
@@ -132,8 +122,8 @@ public class SelectedActivity extends AppCompatActivity {
     }
 
     public int getLatestEpisode() {
-        if (file.list() != null) {
-            final OptionalInt highest = Arrays.stream(file.list()).map(s -> StringUtil.extractNumberI(s.substring(0, s.lastIndexOf(".")))).mapToInt(integer -> integer).max();
+        if (showDirectory.list() != null) {
+            final OptionalInt highest = Arrays.stream(showDirectory.list()).map(s -> StringUtil.extractNumberI(s.substring(0, s.lastIndexOf(".")))).mapToInt(integer -> integer).max();
             if (highest.isPresent()) return highest.getAsInt() + 1;
         }
         return 0;
@@ -144,8 +134,8 @@ public class SelectedActivity extends AppCompatActivity {
     }
 
     private boolean isEpisodeDownloaded(final int index) {
-        if (file.list() != null) {
-            return Arrays.stream(file.list()).anyMatch(s -> s.substring(0, s.lastIndexOf(".")).equals(String.valueOf(index)));
+        if (showDirectory.list() != null) {
+            return Arrays.stream(showDirectory.list()).anyMatch(s -> s.substring(0, s.lastIndexOf(".")).equals(String.valueOf(index)));
         }
         return false;
     }
@@ -178,7 +168,7 @@ public class SelectedActivity extends AppCompatActivity {
                 /*
                  * TODO: Rework
                  */
-             //  AnimeAppMain.getInstance().getAnimeNotifications().add(title.concat(StringUtil.splitter) + id, String.valueOf(episodes));
+                //  AnimeAppMain.getInstance().getAnimeNotifications().add(title.concat(StringUtil.splitter) + id, String.valueOf(episodes));
                 break;
             default:
                 break;
@@ -214,99 +204,14 @@ public class SelectedActivity extends AppCompatActivity {
             return;
         }
 
-        final WebView webView = new WebView(getApplicationContext());
-        webView.getSettings().setJavaScriptEnabled(true);
-        webView.loadUrl(StringHandler.CAPTCHA_ANIME_4_YOU_ONE);
-
-        WebStorage.getInstance().deleteAllData();
-        CookieManager.getInstance().removeAllCookies(null);
-        CookieManager.getInstance().flush();
-        webView.clearCache(true);
-        webView.clearFormData();
-        webView.clearHistory();
-        webView.clearSslPreferences();
-
-        new Anime4YouDirectVideoTask(show.getID(), count[1]).executeAsync(new TaskExecutor.Callback<String>() {
-            @Override
-            public void onComplete(String foundEntry) {
-                webView.setWebViewClient(new WebViewClient() {
-                    @Override
-                    public void onPageFinished(final WebView view, final String url) {
-                        view.evaluateJavascript(foundEntry, resultFromCaptcha -> {
-                            try {
-                                final JSONArray resultJSON = new JSONObject(resultFromCaptcha).getJSONArray("hosts");
-                                final String vivoURLEncoded = resultJSON.getJSONObject(2).getString("href");
-                                final String vidozaHash = resultJSON.getJSONObject(1).getString("crypt");
-
-                                final String[] urls = new String[2];
-
-                                final Consumer<String> onDone = vivoURLDecoded -> {
-                                    urls[0] = vivoURLDecoded;
-                                    webView.destroy();
-                                    view.destroy();
-
-                                    String finalURL = urls[0];
-                                    if (urls[0] == null && urls[1] == null) {
-                                        makeText("No link found for requested video");
-                                        return;
-                                    } else if (urls[0] == null) {
-                                        finalURL = urls[1];
-                                        makeText("Downloading from vidoza");
-                                    } else if (urls[0].isEmpty()) {
-                                        finalURL = urls[1];
-                                        makeText("Downloading from vidoza");
-                                    }
-
-                                    finalURL = finalURL.replace("\"", "");
-
-                                    if (stream) {
-                                        final Intent intent = new Intent(SelectedActivity.this, StreamPlayer.class);
-                                        intent.putExtra("stream", finalURL);
-                                        startActivity(intent);
-                                        finish();
-                                    } else
-                                        new Anime4YouDownloadTask(SelectedActivity.this, finalURL, show.getTitle(), new int[]{count[0], count[1], countMax}).executeAsync();
-                                };
-
-                                view.evaluateJavascript(String.format(StringHandler.VIDOZA_SCRIPT, vidozaHash), vidozaURL -> {
-                                    Vidoza.fetch(vidozaURL.replace("\"", ""), new LowCostVideo.OnTaskCompleted() {
-                                        @Override
-                                        public void onTaskCompleted(final ArrayList<XModel> vidURL, final boolean multiple_quality) {
-                                            vidURL.stream().max(XModel::compareTo).ifPresent(xModel -> urls[1] = xModel.getUrl());
-                                            decodeVivo(vivoURLEncoded, onDone);
-                                        }
-
-                                        @Override
-                                        public void onError() {
-                                            System.out.println("Error vidoza");
-                                            decodeVivo(vivoURLEncoded, onDone);
-                                        }
-                                    });
-                                });
-                            } catch (final Exception e) {
-                                e.printStackTrace();
-                            }
-                        });
-                        super.onPageFinished(view, url);
-                    }
-                });
-            }
-
-            @Override
-            public void preExecute() {
-            }
-        });
-    }
-
-    private void decodeVivo(final String vivoURL, final Consumer<String> url) {
-        new VivoDecodeTask(vivoURL).executeAsync(new TaskExecutor.Callback<String>() {
-            @Override
-            public void onComplete(String result) {
-                url.accept(result);
-            }
-
-            @Override
-            public void preExecute() {
+        show.getProvider().handleURLRequest(show, getApplicationContext(), count[0], count[1], countMax).ifPresent(url -> {
+            if (stream) {
+                final Intent intent = new Intent(SelectedActivity.this, StreamPlayer.class);
+                intent.putExtra("stream", url);
+                startActivity(intent);
+                finish();
+            } else {
+                show.getProvider().handleDownload(this, url, show, showDirectory, count[0], count[1], countMax);
             }
         });
     }
@@ -335,23 +240,14 @@ public class SelectedActivity extends AppCompatActivity {
     }
 
     /**
-     * Make text
-     *
-     * @param text
-     */
-    public void makeText(final String text) {
-        Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
-    }
-
-    /**
      * Get episode file
      *
      * @param index
      * @return
      */
     public Optional<File> getEpisodeFile(final int index) {
-        if (file.listFiles() != null) {
-            return Arrays.stream(file.listFiles()).filter(file -> file.getName().substring(0, file.getName().lastIndexOf(".")).equals(String.valueOf(index))).findFirst();
+        if (showDirectory.listFiles() != null) {
+            return Arrays.stream(showDirectory.listFiles()).filter(file -> file.getName().substring(0, file.getName().lastIndexOf(".")).equals(String.valueOf(index))).findFirst();
         }
         return Optional.empty();
     }

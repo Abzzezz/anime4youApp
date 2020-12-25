@@ -9,13 +9,13 @@ package net.bplaced.abzzezz.animeapp.util.provider;
 import net.bplaced.abzzezz.animeapp.util.provider.providers.Anime4you;
 import net.bplaced.abzzezz.animeapp.util.provider.providers.GogoAnime;
 
-public enum ProviderType {
+public enum Providers {
 
     ANIME4YOU(new Anime4you()), GOGOANIME(new GogoAnime());
 
-    private Provider provider;
+    private final Provider provider;
 
-    ProviderType(Provider provider) {
+    Providers(Provider provider) {
         this.provider = provider;
     }
 

@@ -7,7 +7,7 @@
 package net.bplaced.abzzezz.animeapp.util.tasks.gogoanime;
 
 import net.bplaced.abzzezz.animeapp.util.gogoanime.GogoAnimeFetcher;
-import net.bplaced.abzzezz.animeapp.util.provider.ProviderType;
+import net.bplaced.abzzezz.animeapp.util.provider.Providers;
 import net.bplaced.abzzezz.animeapp.util.scripter.StringHandler;
 import net.bplaced.abzzezz.animeapp.util.show.Show;
 import net.bplaced.abzzezz.animeapp.util.tasks.TaskExecutor;
@@ -32,6 +32,7 @@ public class GogoAnimeFetchTask extends TaskExecutor implements Callable<Show> {
     public Show call() throws Exception {
         final GogoAnimeFetcher fetcher = new GogoAnimeFetcher(urlIn);
         final String id = fetcher.getID();
+        final String title = fetcher.getShowTitle();
         final String imageURL = fetcher.fetchImage0();
         final String episodeStart = fetcher.getEpisodeStart();
         final String episodeEnd = fetcher.getEpisodeEnd();
@@ -40,12 +41,13 @@ public class GogoAnimeFetchTask extends TaskExecutor implements Callable<Show> {
 
         for (final String fetchedDirectURL : fetcher.getFetchedDirectURLs()) episodes.put(fetchedDirectURL);
 
-        return new Show(new JSONObject()
+        return Providers.GOGOANIME.getProvider().getShow(new JSONObject()
                 .put(StringHandler.SHOW_ID, id)
-                .put(StringHandler.SHOW_LANG, "english")
+                .put(StringHandler.SHOW_TITLE, title)
+                .put(StringHandler.SHOW_LANG, "eng")
                 .put("ep_start", episodeStart)
                 .put("ep_end", episodeEnd)
                 .put(StringHandler.SHOW_IMAGE_URL, imageURL)
-                .put("episodes", episodes), ProviderType.GOGOANIME);
+                .put("episodes", episodes));
     }
 }

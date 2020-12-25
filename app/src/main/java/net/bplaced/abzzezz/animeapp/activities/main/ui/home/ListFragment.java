@@ -39,7 +39,6 @@ import java.util.Optional;
 
 public class ListFragment extends Fragment {
 
-    private final Anime4YouDBSearch anime4YouDBSearch = new Anime4YouDBSearch();
     private AnimeAdapter animeAdapter;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -91,24 +90,16 @@ public class ListFragment extends Fragment {
 
         if (!StringHandler.isOnline(Objects.requireNonNull(getActivity()).getApplicationContext()) && showAtIndex.isPresent()) {
             startActivity(intent.putExtra("details", showAtIndex.get().toString()));
-            getActivity().finish();
+            Objects.requireNonNull(getActivity()).finish();
             return;
         }
 
         showAtIndex.ifPresent(show -> {
-            new TaskExecutor().executeAsync(new Anime4YouDataBaseTask(show.getID(), anime4YouDBSearch), new TaskExecutor.Callback<Show>() {
-                @Override
-                public void onComplete(Show result) {
-                    AnimeAppMain.getInstance().getShowSaver().refreshShow(result, index);
-                    IntentHelper.addObjectForKey(show, "show");
-                    startActivity(intent);//.putExtra("details", result.toString())*/);
-                    Objects.requireNonNull(getActivity()).finish();
-                }
-
-                @Override
-                public void preExecute() {
-                    Logger.log("Fetching anime information", Logger.LogType.INFO);
-                }
+            show.getProvider().refreshShow(show, refreshedShow -> {
+                AnimeAppMain.getInstance().getShowSaver().refreshShow(refreshedShow, index);
+                IntentHelper.addObjectForKey(refreshedShow, "show");
+                startActivity(intent);//.putExtra("details", result.toString())*/);
+                Objects.requireNonNull(getActivity()).finish();
             });
         });
     }

@@ -6,10 +6,8 @@
 
 package net.bplaced.abzzezz.animeapp.util.tasks.anime4you;
 
-import net.bplaced.abzzezz.animeapp.util.provider.Provider;
-import net.bplaced.abzzezz.animeapp.util.provider.ProviderType;
+import net.bplaced.abzzezz.animeapp.util.provider.Providers;
 import net.bplaced.abzzezz.animeapp.util.scripter.Anime4YouDBSearch;
-import net.bplaced.abzzezz.animeapp.util.scripter.StringHandler;
 import net.bplaced.abzzezz.animeapp.util.show.Show;
 import org.json.JSONObject;
 
@@ -28,21 +26,10 @@ public class Anime4YouDataBaseTask implements Callable<Show> {
     @Override
     public Show call() {
         try {
-            return new Show(getDetails(new JSONObject(anime4YouDBSearch.getShowDetails("{\"aid\":\"" + id.concat("\"")))), ProviderType.ANIME4YOU);
+            return Providers.ANIME4YOU.getProvider().getShow(new JSONObject(anime4YouDBSearch.getShowDetails("{\"aid\":\"" + id.concat("\""))));
         } catch (final Exception e) {
             e.printStackTrace();
             return null;
         }
-    }
-
-    private JSONObject getDetails(final JSONObject jsonObject) throws Exception {
-        return new JSONObject()
-                .put(StringHandler.SHOW_ID, id)
-                .put(StringHandler.SHOW_IMAGE_URL, StringHandler.COVER_DATABASE.concat(jsonObject.getString("image_id")))
-                .put(StringHandler.SHOW_EPISODE_COUNT, jsonObject.getString("Letzte"))
-                .put(StringHandler.SHOW_TITLE, jsonObject.getString("titel"))
-                .put(StringHandler.SHOW_LANG, jsonObject.getString("Untertitel"))
-                .put(StringHandler.SHOW_YEAR, jsonObject.getString("Jahr"))
-                .put(StringHandler.SHOW_PROVIDER, StringHandler.SHOW_PROVIDER_ANIME4YOU);
     }
 }

@@ -86,6 +86,36 @@ public class GogoAnimeFetcher {
                 }).toArray(String[]::new);
     }
 
+    public static String[] fetchIDs(final String idIn, final int epiStart, final int epiEnd) throws IOException {
+        final String userAgent = RandomUserAgent.getRandomUserAgent();
+
+        final int id = Integer.parseInt(idIn);
+
+        /*
+         * Grab episodes & fetch ids
+         */
+
+        final String episodesURL = String.format(EPISODE_API_URL, epiStart, epiEnd, id);
+        final Document episodesDocument = Jsoup.connect(episodesURL).userAgent(userAgent).get();
+
+        return episodesDocument.body().getElementById("episode_related").children().stream()
+                .map(element -> BASE_URL + element.selectFirst("a").attr("href").trim())
+                .map(episodeURL -> {
+                    try {
+                        final Document episodeDocument = Jsoup.connect(episodeURL).userAgent(userAgent).get();
+                        final String src = episodeDocument.selectFirst("iframe").attr("src");
+
+                        final Matcher matcher = PATTERN.matcher(src);
+                        if (matcher.find())
+                            return matcher.group().substring(3, matcher.group().length() - 1);
+                        else return "";
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        return "";
+                    }
+                }).toArray(String[]::new);
+    }
+
     /**
      * Fetches the show's image from it's url
      *

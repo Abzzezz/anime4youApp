@@ -7,7 +7,7 @@
 package net.bplaced.abzzezz.animeapp.util.show;
 
 import net.bplaced.abzzezz.animeapp.util.provider.Provider;
-import net.bplaced.abzzezz.animeapp.util.provider.ProviderType;
+import net.bplaced.abzzezz.animeapp.util.provider.Providers;
 import net.bplaced.abzzezz.animeapp.util.scripter.StringHandler;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,34 +15,40 @@ import org.json.JSONObject;
 public class Show {
 
     private String id;
-    private String year = "";
+    private final String year = "";
     private String title;
     private String episodes;
     private String imageURL;
     private String language;
 
     private Provider provider;
-    private JSONObject showJSON;
+    private JSONObject showAdditional;
 
-    public Show(String id, String title, String episodes, String imageURL, String language, Provider provider) {
+    public Show(String id, String title, String episodes, String imageURL, String language, Provider provider, final JSONObject... showAdditional) {
         this.id = id;
         this.title = title;
         this.episodes = episodes;
         this.imageURL = imageURL;
         this.language = language;
         this.provider = provider;
+        for (final JSONObject jsonObject : showAdditional) {
+            this.showAdditional = jsonObject;
+        }
     }
 
     public Show(JSONObject showJSON) throws JSONException {
-        this.id = showJSON.getString(StringHandler.SHOW_ID);
-        this.title = showJSON.getString(StringHandler.SHOW_TITLE);
-        this.episodes = showJSON.getString(StringHandler.SHOW_EPISODE_COUNT);
-        this.imageURL = showJSON.getString(StringHandler.SHOW_IMAGE_URL);
-        this.language = showJSON.getString(StringHandler.SHOW_LANG);
-        this.provider = ProviderType.getProvider(showJSON.getString(StringHandler.SHOW_PROVIDER));
+        this.provider = Providers.getProvider(showJSON.getString(StringHandler.SHOW_PROVIDER));
+        final Show thisShow = provider.decode(showJSON);
+
+        this.id = thisShow.getID();
+        this.title = thisShow.getTitle();
+        this.episodes = thisShow.getEpisodes();
+        this.imageURL = thisShow.getImageURL();
+        this.language = thisShow.getLanguage();
+        this.showAdditional = thisShow.getShowAdditional();
     }
 
-    public Show(JSONObject showJSON, ProviderType provider) throws JSONException {
+    public Show(JSONObject showJSON, Providers provider) throws JSONException {
         this.id = showJSON.getString(StringHandler.SHOW_ID);
         this.title = showJSON.getString(StringHandler.SHOW_TITLE);
         this.episodes = showJSON.getString(StringHandler.SHOW_EPISODE_COUNT);
@@ -61,12 +67,12 @@ public class Show {
         }
     }
 
-    public JSONObject getShowJSON() {
-        return showJSON;
+    public JSONObject getShowAdditional() {
+        return showAdditional;
     }
 
-    public void setShowJSON(JSONObject showJSON) {
-        this.showJSON = showJSON;
+    public void setShowAdditional(JSONObject showAdditional) {
+        this.showAdditional = showAdditional;
     }
 
     public String getYear() {
