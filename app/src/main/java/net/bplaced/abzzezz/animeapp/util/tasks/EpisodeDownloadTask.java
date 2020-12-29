@@ -33,7 +33,7 @@ import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.util.concurrent.Callable;
 
-public class DownloadTask extends TaskExecutor implements Callable<String>, TaskExecutor.Callback<String> {
+public class EpisodeDownloadTask extends TaskExecutor implements Callable<String>, TaskExecutor.Callback<String> {
 
     protected final SelectedActivity application;
     protected final int[] count;
@@ -47,7 +47,7 @@ public class DownloadTask extends TaskExecutor implements Callable<String>, Task
     private NotificationCompat.Builder notification;
     private int notifyID;
 
-    public DownloadTask(SelectedActivity application, URL url, String name, File outDir, int[] count) {
+    public EpisodeDownloadTask(SelectedActivity application, URL url, String name, File outDir, int[] count) {
         this.application = application;
         this.name = name;
         this.url = url;

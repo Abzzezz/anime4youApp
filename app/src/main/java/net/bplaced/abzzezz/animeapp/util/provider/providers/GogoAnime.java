@@ -15,7 +15,7 @@ import net.bplaced.abzzezz.animeapp.util.provider.Providers;
 import net.bplaced.abzzezz.animeapp.util.scripter.StringHandler;
 import net.bplaced.abzzezz.animeapp.util.show.Show;
 import net.bplaced.abzzezz.animeapp.util.tasks.TaskExecutor;
-import net.bplaced.abzzezz.animeapp.util.tasks.gogoanime.GogoAnimeDownloadTask;
+import net.bplaced.abzzezz.animeapp.util.tasks.gogoanime.GogoAnimeEpisodeDownloadTask;
 import net.bplaced.abzzezz.animeapp.util.tasks.gogoanime.GogoAnimeFetchDirectTask;
 import net.bplaced.abzzezz.animeapp.util.tasks.gogoanime.GogoAnimeRefreshTask;
 import net.bplaced.abzzezz.animeapp.util.tasks.gogoanime.GogoAnimeSearchTask;
@@ -137,7 +137,7 @@ public class GogoAnime extends Provider {
 
     @Override
     public void handleDownload(SelectedActivity activity, URL url, Show show, File outDirectory, int... ints) {
-        new GogoAnimeDownloadTask(activity, url, show.getTitle(), outDirectory, ints).executeAsync();
+        new GogoAnimeEpisodeDownloadTask(activity, url, show.getTitle(), outDirectory, ints).executeAsync();
     }
 
 }

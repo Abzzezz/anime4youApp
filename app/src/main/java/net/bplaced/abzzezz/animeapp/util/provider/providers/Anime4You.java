@@ -25,9 +25,9 @@ import net.bplaced.abzzezz.animeapp.util.scripter.Anime4YouDBSearch;
 import net.bplaced.abzzezz.animeapp.util.scripter.StringHandler;
 import net.bplaced.abzzezz.animeapp.util.show.Show;
 import net.bplaced.abzzezz.animeapp.util.tasks.TaskExecutor;
-import net.bplaced.abzzezz.animeapp.util.tasks.VivoDecodeTask;
+import net.bplaced.abzzezz.animeapp.util.tasks.anime4you.VivoDecodeTask;
 import net.bplaced.abzzezz.animeapp.util.tasks.anime4you.Anime4YouDataBaseCallable;
-import net.bplaced.abzzezz.animeapp.util.tasks.anime4you.Anime4YouDownloadTask;
+import net.bplaced.abzzezz.animeapp.util.tasks.anime4you.Anime4YouEpisodeDownloadTask;
 import net.bplaced.abzzezz.animeapp.util.tasks.anime4you.Anime4YouFetchDirectTask;
 import net.bplaced.abzzezz.animeapp.util.tasks.anime4you.Anime4YouSearchTask;
 import org.json.JSONArray;
@@ -221,6 +221,6 @@ public class Anime4You extends Provider implements Anime4YouHolder {
 
     @Override
     public void handleDownload(SelectedActivity activity, URL url, Show show, File outDirectory, int... ints) {
-        new Anime4YouDownloadTask(activity, url, show.getTitle(), outDirectory, new int[]{ints[0], ints[1], ints[2]}).executeAsync();
+        new Anime4YouEpisodeDownloadTask(activity, url, show.getTitle(), outDirectory, new int[]{ints[0], ints[1], ints[2]}).executeAsync();
     }
 }

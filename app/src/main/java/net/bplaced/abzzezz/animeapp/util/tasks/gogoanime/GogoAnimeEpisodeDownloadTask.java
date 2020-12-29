@@ -7,14 +7,14 @@
 package net.bplaced.abzzezz.animeapp.util.tasks.gogoanime;
 
 import net.bplaced.abzzezz.animeapp.activities.main.ui.home.SelectedActivity;
-import net.bplaced.abzzezz.animeapp.util.tasks.DownloadTask;
+import net.bplaced.abzzezz.animeapp.util.tasks.EpisodeDownloadTask;
 
 import java.io.File;
 import java.net.URL;
 
-public class GogoAnimeDownloadTask extends DownloadTask {
+public class GogoAnimeEpisodeDownloadTask extends EpisodeDownloadTask {
 
-    public GogoAnimeDownloadTask(SelectedActivity application, URL url, String name, File outDir, int[] count) {
+    public GogoAnimeEpisodeDownloadTask(SelectedActivity application, URL url, String name, File outDir, int[] count) {
         super(application, url, name, outDir, count);
     }
 

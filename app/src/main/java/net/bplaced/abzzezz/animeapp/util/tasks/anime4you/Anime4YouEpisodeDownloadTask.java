@@ -8,20 +8,20 @@ package net.bplaced.abzzezz.animeapp.util.tasks.anime4you;
 
 import ga.abzzezz.util.logging.Logger;
 import net.bplaced.abzzezz.animeapp.activities.main.ui.home.SelectedActivity;
-import net.bplaced.abzzezz.animeapp.util.tasks.DownloadTask;
+import net.bplaced.abzzezz.animeapp.util.tasks.EpisodeDownloadTask;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.net.URL;
 
-public class Anime4YouDownloadTask extends DownloadTask {
+public class Anime4YouEpisodeDownloadTask extends EpisodeDownloadTask {
 
     private int notifyID;
     private boolean cancel;
     private FileOutputStream fileOutputStream;
     private File outFile;
 
-    public Anime4YouDownloadTask(SelectedActivity application, URL url, String name, File outDir, int[] count) {
+    public Anime4YouEpisodeDownloadTask(SelectedActivity application, URL url, String name, File outDir, int[] count) {
         super(application, url, name, outDir, count);
     }
 

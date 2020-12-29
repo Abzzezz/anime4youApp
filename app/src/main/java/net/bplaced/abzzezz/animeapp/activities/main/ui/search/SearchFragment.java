@@ -61,29 +61,6 @@ public class SearchFragment extends Fragment {
                 return false;
             }
         });
-
-        root.findViewById(R.id.add_aid).setOnClickListener(v -> new InputDialogBuilder(new InputDialogBuilder.InputDialogListener() {
-            @Override
-            public void onDialogInput(java.lang.String text) {
-                new GogoAnimeFetchTask(text).executeAsync(new TaskExecutor.Callback<Show>() {
-                    @Override
-                    public void onComplete(final Show result) throws Exception {
-                        AnimeAppMain.getInstance().getShowSaver().addShow(result);
-                        Toast.makeText(root.getContext(), "Added show!", Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void preExecute() {
-
-                    }
-                });
-            }
-
-            @Override
-            public void onDialogDenied() {
-            }
-        }).showInput("Enter AID", "Enter AID to add anime", getActivity()));
-
         return root;
     }
 

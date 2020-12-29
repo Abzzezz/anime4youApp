@@ -70,7 +70,7 @@ public class ListFragment extends Fragment {
         if (AnimeAppMain.getInstance().isVersionOutdated()) {
             new IonAlert(getActivity(), IonAlert.WARNING_TYPE)
                     .setTitleText("Outdated version")
-                    .setContentText("Your app-version is outdated, please update it now!")
+                    .setContentText("Your app-version is outdated, please update it now! If the auto update does not start automatically, download from the website!")
                     .setCancelText("Close").setCancelClickListener(IonAlert::dismissWithAnimation)
                     .show();
         }

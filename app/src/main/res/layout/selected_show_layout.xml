@@ -114,11 +114,14 @@
             app:layout_constraintEnd_toStartOf="@+id/download_anime_button"
             app:layout_constraintStart_toStartOf="parent" app:layout_constraintHorizontal_bias="0.05"
             app:layout_constraintVertical_bias="0.5"/>
+
     <TextView
-            android:text="Year: "
+            android:text="Hoster: "
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:id="@+id/selected_anime_year"
-            app:layout_constraintStart_toEndOf="@+id/anime_cover_image" app:layout_constraintEnd_toEndOf="parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/selected_anime_hoster"
+            app:layout_constraintStart_toEndOf="@+id/anime_cover_image"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintBottom_toBottomOf="@+id/anime_cover_image"
             app:layout_constraintTop_toBottomOf="@+id/selected_anime_language"

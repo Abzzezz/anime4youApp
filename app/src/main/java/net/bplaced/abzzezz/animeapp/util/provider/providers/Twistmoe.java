@@ -15,7 +15,7 @@ import net.bplaced.abzzezz.animeapp.util.scripter.StringHandler;
 import net.bplaced.abzzezz.animeapp.util.show.Show;
 import net.bplaced.abzzezz.animeapp.util.tasks.TaskExecutor;
 import net.bplaced.abzzezz.animeapp.util.tasks.twistmoe.TwistmoeDecodeSourcesTask;
-import net.bplaced.abzzezz.animeapp.util.tasks.twistmoe.TwistmoeDownloadTask;
+import net.bplaced.abzzezz.animeapp.util.tasks.twistmoe.TwistmoeEpisodeDownloadTask;
 import net.bplaced.abzzezz.animeapp.util.tasks.twistmoe.TwistmoeSearchTask;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -80,7 +80,7 @@ public class Twistmoe extends Provider {
     @Override
     public Show getShow(JSONObject data) throws JSONException {
         final String title = data.getString("title");
-        final String imageURL = String.format(StringHandler.IMAGE_URL, title);
+        final String imageURL = StringHandler.IMAGE_URL + title;
         final JSONObject additional = new JSONObject().put("src", data.getJSONArray("sources"));
         return new Show(data.getString("id"), title, data.getString("episodes"), imageURL, "eng-sub", Providers.TWISTMOE.getProvider(), additional);
     }
@@ -106,7 +106,7 @@ public class Twistmoe extends Provider {
 
     @Override
     public void handleDownload(SelectedActivity activity, URL url, Show show, File outDirectory, int... ints) {
-        new TwistmoeDownloadTask(activity, url, show.getTitle(), outDirectory, ints).executeAsync();
+        new TwistmoeEpisodeDownloadTask(activity, url, show.getTitle(), outDirectory, ints).executeAsync();
     }
 
 }

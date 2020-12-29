@@ -9,7 +9,7 @@ package net.bplaced.abzzezz.animeapp.util.tasks.twistmoe;
 import ga.abzzezz.util.logging.Logger;
 import net.bplaced.abzzezz.animeapp.activities.main.ui.home.SelectedActivity;
 import net.bplaced.abzzezz.animeapp.util.scripter.StringHandler;
-import net.bplaced.abzzezz.animeapp.util.tasks.DownloadTask;
+import net.bplaced.abzzezz.animeapp.util.tasks.EpisodeDownloadTask;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -19,9 +19,9 @@ import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 
-public class TwistmoeDownloadTask extends DownloadTask {
+public class TwistmoeEpisodeDownloadTask extends EpisodeDownloadTask {
 
-    public TwistmoeDownloadTask(SelectedActivity application, URL url, String name, File outDir, int[] count) {
+    public TwistmoeEpisodeDownloadTask(SelectedActivity application, URL url, String name, File outDir, int[] count) {
         super(application, url, name, outDir, count);
     }
 

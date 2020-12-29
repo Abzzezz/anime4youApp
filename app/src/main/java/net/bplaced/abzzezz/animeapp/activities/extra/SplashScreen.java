@@ -22,6 +22,7 @@ import net.bplaced.abzzezz.animeapp.activities.main.DrawerMainMenu;
 import net.bplaced.abzzezz.animeapp.util.file.Downloader;
 import net.bplaced.abzzezz.animeapp.util.scripter.StringHandler;
 import net.bplaced.abzzezz.animeapp.util.tasks.TaskExecutor;
+import net.bplaced.abzzezz.animeapp.util.tasks.UpdateTask;
 
 import java.io.File;
 import java.net.URL;
@@ -42,20 +43,8 @@ public class SplashScreen extends AppCompatActivity {
         /*
         Check version
          */
-        new TaskExecutor().executeAsync(() -> AnimeAppMain.getInstance().getVersion() < Float.parseFloat(URLUtil.getURLContentAsString(new URL(StringHandler.APP_VERSION_TXT))), new TaskExecutor.Callback<Boolean>() {
-            @Override
-            public void preExecute() {
-            }
 
-            @Override
-            public void onComplete(Boolean result) {
-                if (result) {
-                    AnimeAppMain.getInstance().setVersionOutdated(true);
-                    Downloader.download(StringHandler.UPDATE_APK, new File(Environment.DIRECTORY_DOWNLOADS, "Anime4you-Update"), "AutoUpdate.apk", getParent());
-                    Toast.makeText(SplashScreen.this, "New update available. Please install the new version.", Toast.LENGTH_LONG).show();
-                }
-            }
-        });
+        new UpdateTask(getApplication()).executeAsync();
 
         //Set version text
         ((TextView) findViewById(R.id.version_text)).append("v." + BuildConfig.VERSION_NAME);

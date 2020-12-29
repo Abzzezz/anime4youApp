@@ -12,7 +12,7 @@ import android.content.Intent;
 import android.widget.Toast;
 import ga.abzzezz.util.logging.Logger;
 import net.bplaced.abzzezz.animeapp.util.IntentHelper;
-import net.bplaced.abzzezz.animeapp.util.tasks.anime4you.Anime4YouDownloadTask;
+import net.bplaced.abzzezz.animeapp.util.tasks.EpisodeDownloadTask;
 
 public class StopDownloadReceiver extends BroadcastReceiver {
 
@@ -26,7 +26,7 @@ public class StopDownloadReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        final Anime4YouDownloadTask trigger = (Anime4YouDownloadTask) IntentHelper.getObjectForKey(intent.getData().toString());
+        final EpisodeDownloadTask trigger = (EpisodeDownloadTask) IntentHelper.getObjectForKey(intent.getData().toString());
         if (!trigger.isCancelled()) {
             Logger.log("Further downloading cancelled", Logger.LogType.INFO);
             Toast.makeText(context, "Download cancelled", Toast.LENGTH_SHORT).show();

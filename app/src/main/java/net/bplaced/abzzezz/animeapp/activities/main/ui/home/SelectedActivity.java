@@ -68,7 +68,7 @@ public class SelectedActivity extends AppCompatActivity {
         ((TextView) findViewById(R.id.selected_anime_episodes)).append(show.getEpisodes());
         ((TextView) findViewById(R.id.selected_anime_aid)).append(show.getID());
         ((TextView) findViewById(R.id.selected_anime_language)).append(show.getLanguage());
-        ((TextView) findViewById(R.id.selected_anime_year)).append(show.getYear());
+        ((TextView) findViewById(R.id.selected_anime_hoster)).append(show.getProvider().getName());
         ((TextView) findViewById(R.id.anime_directory_size)).append(FileUtil.calculateFileSize(showDirectory));
 
         final ImageView cover = findViewById(R.id.anime_cover_image);

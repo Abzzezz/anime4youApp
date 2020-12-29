@@ -71,11 +71,7 @@ public class Show {
         return showAdditional;
     }
 
-    public void setShowAdditional(JSONObject showAdditional) {
-        this.showAdditional = showAdditional;
-    }
-
-    public String getYear() {
+     public String getYear() {
         return year;
     }
 

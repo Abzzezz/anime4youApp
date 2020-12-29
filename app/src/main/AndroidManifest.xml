@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools"
           package="net.bplaced.abzzezz.animeapp">
 
     <!-- Permissions -->
@@ -14,6 +15,8 @@
     <uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+
     <!-- Permissions -->
 
     <!-- Application tag -->
@@ -24,7 +27,10 @@
             android:roundIcon="@mipmap/appimage"
             android:supportsRtl="true"
             android:theme="@style/DarkTheme"
-            android:usesCleartextTraffic="true">
+            android:usesCleartextTraffic="true"
+            android:requestLegacyExternalStorage="true"
+            tools:targetApi="q">
+
         <!-- Activities -->
         <activity android:name=".activities.extra.PlayerActivity"
                   android:configChanges="keyboardHidden|orientation|screenSize|layoutDirection">

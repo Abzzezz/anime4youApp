@@ -1,12 +1,13 @@
 /*
  * Copyright (c) 2020. Roman P.
  * All code is owned by Roman P. APIs are mentioned.
- * Last modified: 03.11.20, 20:00
+ * Last modified: 19.12.20, 18:42
  */
 
-package net.bplaced.abzzezz.animeapp.util.tasks;
+package net.bplaced.abzzezz.animeapp.util.tasks.anime4you;
 
 import net.bplaced.abzzezz.animeapp.util.scripter.StringHandler;
+import net.bplaced.abzzezz.animeapp.util.tasks.TaskExecutor;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;

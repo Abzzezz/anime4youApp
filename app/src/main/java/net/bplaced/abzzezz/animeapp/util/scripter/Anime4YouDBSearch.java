@@ -39,7 +39,7 @@ public class Anime4YouDBSearch implements Anime4YouHolder {
                 urlConnection.connect();
                 return new BufferedReader(new InputStreamReader(urlConnection.getInputStream())).lines().collect(Collectors.joining());
             } catch (final IOException ioException) {
-                Logger.log("Excception thrown while requesting backup database. Return is null", Logger.LogType.WARNING);
+                Logger.log("Exception thrown while requesting backup database. Return is null", Logger.LogType.WARNING);
                 return "";
             }
         }
