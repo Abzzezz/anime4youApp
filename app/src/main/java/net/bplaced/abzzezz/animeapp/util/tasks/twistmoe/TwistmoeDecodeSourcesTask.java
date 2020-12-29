@@ -9,7 +9,6 @@ package net.bplaced.abzzezz.animeapp.util.tasks.twistmoe;
 
 import net.bplaced.abzzezz.animeapp.util.KeyUtil;
 import net.bplaced.abzzezz.animeapp.util.provider.holders.TwistmoeHolder;
-import net.bplaced.abzzezz.animeapp.util.provider.providers.Twistmoe;
 import net.bplaced.abzzezz.animeapp.util.tasks.TaskExecutor;
 
 import javax.crypto.BadPaddingException;
@@ -27,12 +26,11 @@ import java.util.concurrent.Callable;
 public class TwistmoeDecodeSourcesTask extends TaskExecutor implements Callable<String>, TwistmoeHolder {
 
 
-    private final String item;
+    private final String string;
 
-    public TwistmoeDecodeSourcesTask(final String item) {
-        this.item = item;
+    public TwistmoeDecodeSourcesTask(final String string) {
+        this.string = string;
     }
-
 
     public <R> void executeAsync(final Callback<String> callback) {
         super.executeAsync(this, callback);
@@ -41,7 +39,7 @@ public class TwistmoeDecodeSourcesTask extends TaskExecutor implements Callable<
 
     @Override
     public String call() throws Exception {
-        final byte[] sourceDecoded = Base64.getDecoder().decode(item);
+        final byte[] sourceDecoded = Base64.getDecoder().decode(string);
         final byte[] salt = Arrays.copyOfRange(sourceDecoded, 8, 16);
         final MessageDigest md5 = MessageDigest.getInstance("MD5");
         final byte[][] keyAndIV = KeyUtil.GenerateKeyAndIV(32, 16, 1, salt, KEY.getBytes(StandardCharsets.UTF_8), md5);

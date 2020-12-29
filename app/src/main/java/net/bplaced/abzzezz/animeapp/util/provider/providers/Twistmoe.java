@@ -14,6 +14,8 @@ import net.bplaced.abzzezz.animeapp.util.provider.Providers;
 import net.bplaced.abzzezz.animeapp.util.scripter.StringHandler;
 import net.bplaced.abzzezz.animeapp.util.show.Show;
 import net.bplaced.abzzezz.animeapp.util.tasks.TaskExecutor;
+import net.bplaced.abzzezz.animeapp.util.tasks.twistmoe.TwistmoeDecodeSourcesTask;
+import net.bplaced.abzzezz.animeapp.util.tasks.twistmoe.TwistmoeDownloadTask;
 import net.bplaced.abzzezz.animeapp.util.tasks.twistmoe.TwistmoeSearchTask;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -72,7 +74,7 @@ public class Twistmoe extends Provider {
                 .put(StringHandler.SHOW_EPISODE_COUNT, show.getEpisodes())
                 .put(StringHandler.SHOW_IMAGE_URL, show.getImageURL())
                 .put("src", show.getShowAdditional().getJSONArray("src"))
-                .put(StringHandler.SHOW_PROVIDER, Providers.GOGOANIME.name());
+                .put(StringHandler.SHOW_PROVIDER, Providers.TWISTMOE.name());
     }
 
     @Override
@@ -85,12 +87,26 @@ public class Twistmoe extends Provider {
 
     @Override
     public void handleURLRequest(Show show, Context context, Consumer<Optional<URL>> resultURL, int... ints) {
+        try {
+            new TwistmoeDecodeSourcesTask(show.getShowAdditional().getJSONArray("src").getString(ints[1])).executeAsync(new TaskExecutor.Callback<String>() {
+                @Override
+                public void onComplete(String result) throws Exception {
+                    resultURL.accept(Optional.of(new URL(result)));
+                }
 
+                @Override
+                public void preExecute() {
+
+                }
+            });
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void handleDownload(SelectedActivity activity, URL url, Show show, File outDirectory, int... ints) {
-
+        new TwistmoeDownloadTask(activity, url, show.getTitle(), outDirectory, ints).executeAsync();
     }
 
 }

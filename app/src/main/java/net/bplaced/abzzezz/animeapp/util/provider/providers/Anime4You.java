@@ -27,8 +27,8 @@ import net.bplaced.abzzezz.animeapp.util.show.Show;
 import net.bplaced.abzzezz.animeapp.util.tasks.TaskExecutor;
 import net.bplaced.abzzezz.animeapp.util.tasks.VivoDecodeTask;
 import net.bplaced.abzzezz.animeapp.util.tasks.anime4you.Anime4YouDataBaseCallable;
-import net.bplaced.abzzezz.animeapp.util.tasks.anime4you.Anime4YouFetchDirectTask;
 import net.bplaced.abzzezz.animeapp.util.tasks.anime4you.Anime4YouDownloadTask;
+import net.bplaced.abzzezz.animeapp.util.tasks.anime4you.Anime4YouFetchDirectTask;
 import net.bplaced.abzzezz.animeapp.util.tasks.anime4you.Anime4YouSearchTask;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -68,7 +68,7 @@ public class Anime4You extends Provider implements Anime4YouHolder {
     }
 
     @Override
-    public void handleSearch(java.lang.String searchQuery, Consumer<List<Show>> searchResults) {
+    public void handleSearch(String searchQuery, Consumer<List<Show>> searchResults) {
         new Anime4YouSearchTask(searchQuery).executeAsync(new TaskExecutor.Callback<List<Show>>() {
             @Override
             public void onComplete(final List<Show> result) {
@@ -133,26 +133,26 @@ public class Anime4You extends Provider implements Anime4YouHolder {
 
         AtomicReference<URL> url = new AtomicReference<>();
 
-        new Anime4YouFetchDirectTask(show.getID(), ints[1]).executeAsync(new TaskExecutor.Callback<java.lang.String>() {
+        new Anime4YouFetchDirectTask(show.getID(), ints[1]).executeAsync(new TaskExecutor.Callback<String>() {
             @Override
-            public void onComplete(java.lang.String foundEntry) {
+            public void onComplete(String foundEntry) {
                 webView.setWebViewClient(new WebViewClient() {
                     @Override
-                    public void onPageFinished(final WebView view, final java.lang.String u) {
+                    public void onPageFinished(final WebView view, final String u) {
                         view.evaluateJavascript(foundEntry, resultFromCaptcha -> {
                             try {
                                 final JSONArray resultJSON = new JSONObject(resultFromCaptcha).getJSONArray("hosts");
-                                final java.lang.String vivoURLEncoded = resultJSON.getJSONObject(2).getString("href");
-                                final java.lang.String vidozaHash = resultJSON.getJSONObject(1).getString("crypt");
+                                final String vivoURLEncoded = resultJSON.getJSONObject(2).getString("href");
+                                final String vidozaHash = resultJSON.getJSONObject(1).getString("crypt");
 
-                                final java.lang.String[] urls = new java.lang.String[2];
+                                final String[] urls = new String[2];
 
-                                final Consumer<java.lang.String> onDone = vivoURLDecoded -> {
+                                final Consumer<String> onDone = vivoURLDecoded -> {
                                     urls[0] = vivoURLDecoded;
                                     webView.destroy();
                                     view.destroy();
 
-                                    java.lang.String finalURL = urls[0];
+                                    String finalURL = urls[0];
                                     if (urls[0] == null && urls[1] == null) {
                                         makeText("No link found for requested video", context);
                                         return;
@@ -171,7 +171,7 @@ public class Anime4You extends Provider implements Anime4YouHolder {
                                     }
                                 };
 
-                                view.evaluateJavascript(java.lang.String.format(StringHandler.VIDOZA_SCRIPT, vidozaHash), vidozaURL -> {
+                                view.evaluateJavascript(String.format(StringHandler.VIDOZA_SCRIPT, vidozaHash), vidozaURL -> {
                                     Vidoza.fetch(vidozaURL.replace("\"", ""), new LowCostVideo.OnTaskCompleted() {
                                         @Override
                                         public void onTaskCompleted(final ArrayList<XModel> vidURL, final boolean multiple_quality) {
@@ -202,14 +202,14 @@ public class Anime4You extends Provider implements Anime4YouHolder {
     }
 
 
-    public void makeText(final java.lang.String text, final Context context) {
+    public void makeText(final String text, final Context context) {
         Toast.makeText(context, text, Toast.LENGTH_LONG).show();
     }
 
-    private void decodeVivo(final java.lang.String vivoURL, final Consumer<java.lang.String> url) {
-        new VivoDecodeTask(vivoURL).executeAsync(new TaskExecutor.Callback<java.lang.String>() {
+    private void decodeVivo(final String vivoURL, final Consumer<String> url) {
+        new VivoDecodeTask(vivoURL).executeAsync(new TaskExecutor.Callback<String>() {
             @Override
-            public void onComplete(java.lang.String result) {
+            public void onComplete(String result) {
                 url.accept(result);
             }
 
@@ -221,6 +221,6 @@ public class Anime4You extends Provider implements Anime4YouHolder {
 
     @Override
     public void handleDownload(SelectedActivity activity, URL url, Show show, File outDirectory, int... ints) {
-        new Anime4YouDownloadTask(activity, url.toString(), show.getTitle(), outDirectory, new int[]{ints[0], ints[1], ints[2]}).executeAsync();
+        new Anime4YouDownloadTask(activity, url, show.getTitle(), outDirectory, new int[]{ints[0], ints[1], ints[2]}).executeAsync();
     }
 }

@@ -25,10 +25,10 @@ import ga.abzzezz.util.logging.Logger;
 import id.ionbit.ionalert.IonAlert;
 import net.bplaced.abzzezz.animeapp.AnimeAppMain;
 import net.bplaced.abzzezz.animeapp.R;
+import net.bplaced.abzzezz.animeapp.util.IntentHelper;
 import net.bplaced.abzzezz.animeapp.util.file.OfflineImageLoader;
 import net.bplaced.abzzezz.animeapp.util.scripter.StringHandler;
 import net.bplaced.abzzezz.animeapp.util.show.Show;
-import net.bplaced.abzzezz.animeapp.util.IntentHelper;
 import net.bplaced.abzzezz.animeapp.util.ui.ImageUtil;
 
 import java.io.File;
@@ -77,7 +77,7 @@ public class ListFragment extends Fragment {
 
         final SwipeRefreshLayout swipeRefreshLayout = root.findViewById(R.id.swiperefresh);
         swipeRefreshLayout.setOnRefreshListener(() -> {
-            if(!StringHandler.isOnline(Objects.requireNonNull(getContext()))) return;
+            if (!StringHandler.isOnline(Objects.requireNonNull(getContext()))) return;
 
             for (int i = 0; i < AnimeAppMain.getInstance().getShowSaver().getShowSize(); i++) {
                 int finalI = i;
@@ -153,7 +153,7 @@ public class ListFragment extends Fragment {
         }
 
         public void removeItem(final int index) {
-            if(getActivity().getFilesDir() == null) return;
+            if (getActivity().getFilesDir() == null) return;
 
             final Optional<Show> itemToRemove = (Optional<Show>) getItem(index);
             itemToRemove.ifPresent(show -> {

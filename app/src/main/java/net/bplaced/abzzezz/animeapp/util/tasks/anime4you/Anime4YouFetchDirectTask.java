@@ -11,7 +11,6 @@ import net.bplaced.abzzezz.animeapp.AnimeAppMain;
 import net.bplaced.abzzezz.animeapp.util.connection.URLUtil;
 import net.bplaced.abzzezz.animeapp.util.provider.holders.Anime4YouHolder;
 import net.bplaced.abzzezz.animeapp.util.scripter.ScriptUtil;
-import net.bplaced.abzzezz.animeapp.util.scripter.StringHandler;
 import net.bplaced.abzzezz.animeapp.util.tasks.TaskExecutor;
 
 import java.io.BufferedReader;

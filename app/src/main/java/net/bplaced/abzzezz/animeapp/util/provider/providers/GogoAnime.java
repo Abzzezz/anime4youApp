@@ -55,7 +55,7 @@ public class GogoAnime extends Provider {
     }
 
     @Override
-    public void handleSearch(java.lang.String searchQuery, Consumer<List<Show>> searchResults) {
+    public void handleSearch(String searchQuery, Consumer<List<Show>> searchResults) {
         new GogoAnimeSearchTask(searchQuery).executeAsync(new TaskExecutor.Callback<List<Show>>() {
             @Override
             public void onComplete(List<Show> result) {
@@ -88,7 +88,7 @@ public class GogoAnime extends Provider {
         return new Show(
                 data.getString(StringHandler.SHOW_ID),
                 data.getString(StringHandler.SHOW_TITLE),
-                java.lang.String.valueOf(episodes.length()),
+                String.valueOf(episodes.length()),
                 data.getString(StringHandler.SHOW_IMAGE_URL),
                 data.getString(StringHandler.SHOW_LANG),
                 Providers.GOGOANIME.getProvider(), new JSONObject()
@@ -103,7 +103,7 @@ public class GogoAnime extends Provider {
         return new Show(
                 showJSON.getString(StringHandler.SHOW_ID),
                 showJSON.getString(StringHandler.SHOW_TITLE),
-                java.lang.String.valueOf(episodes.length()),
+                String.valueOf(episodes.length()),
                 showJSON.getString(StringHandler.SHOW_IMAGE_URL),
                 showJSON.getString(StringHandler.SHOW_LANG),
                 Providers.GOGOANIME.getProvider(), new JSONObject()
@@ -116,7 +116,7 @@ public class GogoAnime extends Provider {
     public void handleURLRequest(Show show, Context context, Consumer<Optional<URL>> resultURL, int... ints) {
         try {
             final JSONArray episodes = show.getShowAdditional().getJSONArray("episodes");
-            final String apiURL = java.lang.String.format(GogoAnimeFetcher.API_URL, episodes.getString(episodes.length() - (ints[1] + 1)));
+            final String apiURL = String.format(GogoAnimeFetcher.API_URL, episodes.getString(episodes.length() - (ints[1] + 1)));
             AtomicReference<URL> url = new AtomicReference<>();
 
             new GogoAnimeFetchDirectTask(apiURL).executeAsync(new TaskExecutor.Callback<String>() {

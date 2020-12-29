@@ -43,7 +43,7 @@ public class SearchFragment extends Fragment {
         showSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(java.lang.String query) {
-                if(!StringHandler.isOnline(getContext())) return true;
+                if (!StringHandler.isOnline(getContext())) return true;
                 ((SearchAdapter) listView.getAdapter()).getEntries().clear();
                 for (final Providers value : Providers.values()) {
                     value.getProvider().handleSearch(query, shows -> {

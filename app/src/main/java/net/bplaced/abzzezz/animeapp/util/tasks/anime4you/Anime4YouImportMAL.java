@@ -11,7 +11,6 @@ import ga.abzzezz.util.logging.Logger;
 import ga.abzzezz.util.stringing.StringUtil;
 import net.bplaced.abzzezz.animeapp.AnimeAppMain;
 import net.bplaced.abzzezz.animeapp.util.provider.holders.Anime4YouHolder;
-import net.bplaced.abzzezz.animeapp.util.scripter.StringHandler;
 import net.bplaced.abzzezz.animeapp.util.tasks.TaskExecutor;
 import net.ricecode.similarity.JaroStrategy;
 import net.ricecode.similarity.SimilarityStrategy;
@@ -30,8 +29,8 @@ import java.util.stream.Collectors;
 public class Anime4YouImportMAL extends TaskExecutor implements Callable<String>, Anime4YouHolder {
 
     private final String url;
-    private String dataBase;
     private final SimilarityStrategy stringSimilarity = new JaroStrategy();
+    private String dataBase;
 
     public Anime4YouImportMAL(final String url) {
         this.url = url;

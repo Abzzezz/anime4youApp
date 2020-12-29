@@ -6,8 +6,6 @@
 
 package net.bplaced.abzzezz.animeapp.util.provider.holders;
 
-import net.bplaced.abzzezz.animeapp.util.connection.RandomUserAgent;
-
 public interface Anime4YouHolder {
 
     /*

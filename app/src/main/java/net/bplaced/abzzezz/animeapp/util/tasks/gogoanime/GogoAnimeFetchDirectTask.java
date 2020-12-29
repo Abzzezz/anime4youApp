@@ -11,9 +11,6 @@ import net.bplaced.abzzezz.animeapp.util.tasks.TaskExecutor;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.concurrent.Callable;
 
@@ -46,7 +43,6 @@ public class GogoAnimeFetchDirectTask extends TaskExecutor implements Callable<S
     public String call() throws Exception {
         return getVidURL(URLUtil.collectLines(new URL(formattedIn), ""));
     }
-
 
 
 }

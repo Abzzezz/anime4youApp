@@ -6,11 +6,9 @@
 
 package net.bplaced.abzzezz.animeapp.util.tasks.twistmoe;
 
-import ga.abzzezz.util.logging.Logger;
 import net.bplaced.abzzezz.animeapp.util.connection.URLUtil;
 import net.bplaced.abzzezz.animeapp.util.provider.Providers;
 import net.bplaced.abzzezz.animeapp.util.provider.holders.TwistmoeHolder;
-import net.bplaced.abzzezz.animeapp.util.provider.providers.Anime4You;
 import net.bplaced.abzzezz.animeapp.util.provider.providers.Twistmoe;
 import net.bplaced.abzzezz.animeapp.util.scripter.StringHandler;
 import net.bplaced.abzzezz.animeapp.util.show.Show;
@@ -50,19 +48,9 @@ public class TwistmoeSearchTask extends TaskExecutor implements Callable<List<Sh
 
         for (int i = 0; i < shows.length(); i++) {
             final JSONObject showJSON = shows.getJSONObject(i);
-            if (stringSimilarity.score(showJSON.getString("title"), searchQuery) > 0.8 ||	stringSimilarity.score(showJSON.getString("alt_title"), searchQuery) > 0.8) {
-                final String slug =  showJSON.getJSONObject("slug").getString("slug");
-                new TwistmoeFetchTask(TwistmoeHolder.SHOW_BASE_URL + slug).executeAsync(new TaskExecutor.Callback<JSONObject>() {
-                    @Override
-                    public void onComplete(JSONObject result) throws Exception {
-                        showsOut.add(decoder.getShow(result));
-                    }
-
-                    @Override
-                    public void preExecute() {
-                        Logger.log("Adding show to output", Logger.LogType.INFO);
-                    }
-                });
+            if (stringSimilarity.score(showJSON.getString("title"), searchQuery) > 0.8 || stringSimilarity.score(showJSON.getString("alt_title"), searchQuery) > 0.8) {
+                final String slug = showJSON.getJSONObject("slug").getString("slug");
+                showsOut.add(decoder.getShow(new TwistmoeFetchCallable(slug).call()));
             }
         }
 
