@@ -11,19 +11,14 @@ import android.net.ConnectivityManager;
 import net.bplaced.abzzezz.animeapp.util.connection.RandomUserAgent;
 
 public class StringHandler {
-    /*
-    Just for the purpose of keeping the code clean and organized ;)
-     */
-    public static final String CAPTCHA_ANIME_4_YOU_ONE = "https://captcha.anime4you.one";
+
+    public static final String USER_AGENT = RandomUserAgent.getRandomUserAgent();
+
     public static final String UPDATE_APK = "http://abzzezz.bplaced.net/app/update.apk";
     public static final String APP_VERSION_TXT = "http://abzzezz.bplaced.net/app/app_version_new.txt";
     public static final String APP_CHANGELOG_TXT = "http://abzzezz.bplaced.net/app/changelog.txt";
-    public static final String USER_AGENT = RandomUserAgent.getRandomUserAgent();
-    public static final String REQUEST_URL = "http://abzzezz.bplaced.net/app/request.php";
     public static final String USER_URL = "http://abzzezz.bplaced.net/app/user.php";
-    public static final String DATABASE = "https://www.anime4you.one/speedlist.old.txt";
-    public static final String BACKUP_DATABASE = "http://abzzezz.bplaced.net/list.txt";
-    public static final String COVER_DATABASE = "https://cdn.anime4you.one/covers/";
+
 
     //https://gogoanime.so/search.html?keyword=Darling
     /*

@@ -10,8 +10,11 @@ import ga.abzzezz.util.data.URLUtil;
 import ga.abzzezz.util.logging.Logger;
 import ga.abzzezz.util.stringing.StringUtil;
 import net.bplaced.abzzezz.animeapp.AnimeAppMain;
+import net.bplaced.abzzezz.animeapp.util.provider.holders.Anime4YouHolder;
 import net.bplaced.abzzezz.animeapp.util.scripter.StringHandler;
 import net.bplaced.abzzezz.animeapp.util.tasks.TaskExecutor;
+import net.ricecode.similarity.JaroStrategy;
+import net.ricecode.similarity.SimilarityStrategy;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -24,63 +27,19 @@ import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.stream.Collectors;
 
-public class Anime4YouImportMAL extends TaskExecutor implements Callable<String> {
+public class Anime4YouImportMAL extends TaskExecutor implements Callable<String>, Anime4YouHolder {
 
     private final String url;
     private String dataBase;
+    private final SimilarityStrategy stringSimilarity = new JaroStrategy();
 
     public Anime4YouImportMAL(final String url) {
         this.url = url;
     }
 
-    public static double similarity(String s1, String s2) {
-        String longer = s1, shorter = s2;
-        if (s1.length() < s2.length()) { // longer should always have greater length
-            longer = s2;
-            shorter = s1;
-        }
-        int longerLength = longer.length();
-        if (longerLength == 0) {
-            return 1.0; /* both strings are zero length */
-        }
-    /* // If you have Apache Commons Text, you can use it to calculate the edit distance:
-    LevenshteinDistance levenshteinDistance = new LevenshteinDistance();
-    return (longerLength - levenshteinDistance.apply(longer, shorter)) / (double) longerLength; */
-        return (longerLength - editDistance(longer, shorter)) / (double) longerLength;
-    }
-
-    // Example implementation of the Levenshtein Edit Distance
-    // See http://rosettacode.org/wiki/Levenshtein_distance#Java
-    public static int editDistance(String s1, String s2) {
-        s1 = s1.toLowerCase();
-        s2 = s2.toLowerCase();
-
-        int[] costs = new int[s2.length() + 1];
-        for (int i = 0; i <= s1.length(); i++) {
-            int lastValue = i;
-            for (int j = 0; j <= s2.length(); j++) {
-                if (i == 0)
-                    costs[j] = j;
-                else {
-                    if (j > 0) {
-                        int newValue = costs[j - 1];
-                        if (s1.charAt(i - 1) != s2.charAt(j - 1))
-                            newValue = Math.min(Math.min(newValue, lastValue),
-                                    costs[j]) + 1;
-                        costs[j - 1] = lastValue;
-                        lastValue = newValue;
-                    }
-                }
-            }
-            if (i > 0)
-                costs[s2.length()] = lastValue;
-        }
-        return costs[s2.length()];
-    }
-
     @Override
     public String call() throws Exception {
-        dataBase = URLUtil.getURLContentAsString(new URL(StringHandler.DATABASE));
+        dataBase = URLUtil.getURLContentAsString(new URL(DATABASE));
         for (final String[] strings : getSimilar()) {
             AnimeAppMain.getInstance().getShowSaver().addShow(getPrefDub(strings));
         }
@@ -102,7 +61,7 @@ public class Anime4YouImportMAL extends TaskExecutor implements Callable<String>
                 final JSONObject converted = new JSONObject();
 
                 converted.put("id", listObject.getString("aid"));
-                converted.put("image_url", StringHandler.COVER_DATABASE.concat(listObject.getString("image_id")));
+                converted.put("image_url", COVER_DATABASE.concat(listObject.getString("image_id")));
                 converted.put("episodes", listObject.getString("Letzte"));
                 converted.put("title", listObject.getString("titel"));
                 converted.put("language", listObject.getString("Untertitel"));
@@ -131,7 +90,7 @@ public class Anime4YouImportMAL extends TaskExecutor implements Callable<String>
         final List<String> animeMAL = getMalTitles();
 
         return allAvailable.parallelStream().map(s -> s.split(StringUtil.splitter)).filter(strings -> {
-            final Optional<String[]> contains = animeMAL.stream().map(s -> s.split(StringUtil.splitter)).filter(s -> similarity(strings[0], s[0]) > 0.9F).findFirst();
+            final Optional<String[]> contains = animeMAL.stream().map(s -> s.split(StringUtil.splitter)).filter(s -> stringSimilarity.score(strings[0], s[0]) > 0.9F).findFirst();
             return contains.isPresent() && contains.get()[1].equals(strings[1]);
         }).collect(Collectors.toList());
     }

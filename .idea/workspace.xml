@@ -31,10 +31,33 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="073d73e0-45c8-4f1c-9113-eff2883226e0" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/KeyUtil.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/provider/holders/Anime4YouHolder.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/provider/holders/TwistmoeHolder.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/provider/providers/Twistmoe.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/tasks/twistmoe/TwistmoeDecodeSourcesTask.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/tasks/twistmoe/TwistmoeFetchTask.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/tasks/twistmoe/TwistmoeSearchTask.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/activities/main/ui/home/ListFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/activities/main/ui/home/ListFragment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/activities/main/ui/home/SelectedActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/activities/main/ui/home/SelectedActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/connection/URLUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/connection/URLUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/file/ShowSaver.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/file/ShowSaver.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/provider/Providers.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/provider/Providers.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/provider/providers/Anime4you.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/provider/providers/Anime4You.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/provider/providers/GogoAnime.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/provider/providers/GogoAnime.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/list_fragment_layout.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/list_fragment_layout.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/receiver/StopDownloadReceiver.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/receiver/StopDownloadReceiver.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/scripter/Anime4YouDBSearch.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/scripter/Anime4YouDBSearch.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/scripter/StringHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/scripter/StringHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/tasks/IntentHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/IntentHelper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/tasks/anime4you/Anime4YouDataBaseTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/tasks/anime4you/Anime4YouDataBaseCallable.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/tasks/anime4you/Anime4YouDirectVideoTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/tasks/anime4you/Anime4YouFetchDirectTask.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/tasks/anime4you/Anime4YouDownloadTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/tasks/anime4you/Anime4YouDownloadTask.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/tasks/anime4you/Anime4YouImportMAL.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/tasks/anime4you/Anime4YouImportMAL.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/tasks/anime4you/Anime4YouSearchDBTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/tasks/anime4you/Anime4YouSearchTask.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/tasks/gogoanime/GogoAnimeDownloadTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/tasks/gogoanime/GogoAnimeDownloadTask.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/tasks/gogoanime/GogoAnimeFetchAPITask.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/tasks/gogoanime/GogoAnimeFetchDirectTask.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/tasks/gogoanime/GogoAnimeFetchTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/tasks/gogoanime/GogoAnimeFetchTask.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -73,6 +96,7 @@
         <option value="layoutResourceFile" />
         <option value="Enum" />
         <option value="Class" />
+        <option value="Interface" />
       </list>
     </option>
   </component>
@@ -107,7 +131,7 @@
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.16601562" />
     <property name="project.structure.side.proportion" value="0.5506135" />
-    <property name="settings.editor.selected.configurable" value="preferences.sourceCode.XML" />
+    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
   <component name="PsdUISettings">
     <option name="BUILD_VARIANTS_TAB" value="Build Types" />
@@ -142,6 +166,8 @@
       <recent name="net.bplaced.abzzezz.animeapp.activities.main.ui.home" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="net.bplaced.abzzezz.animeapp.util.tasks.twistmoe" />
+      <recent name="net.bplaced.abzzezz.animeapp.util" />
       <recent name="net.bplaced.abzzezz.animeapp.util.tasks.gogoanime" />
       <recent name="net.bplaced.abzzezz.animeapp.util.gogoanime" />
       <recent name="net.bplaced.abzzezz.animeapp.input" />
@@ -291,7 +317,14 @@
       <option name="project" value="LOCAL" />
       <updated>1608899352793</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Providers done. Cleanup required. Added swipe to refresh">
+      <created>1608900186645</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1608900186645</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -317,7 +350,8 @@
     <MESSAGE value="Basic Provider structure (Quick bug fixes)" />
     <MESSAGE value="Finishing off providers" />
     <MESSAGE value="Providers almost done" />
-    <option name="LAST_COMMIT_MESSAGE" value="Providers almost done" />
+    <MESSAGE value="Providers done. Cleanup required. Added swipe to refresh" />
+    <option name="LAST_COMMIT_MESSAGE" value="Providers done. Cleanup required. Added swipe to refresh" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -327,7 +361,7 @@
           <option name="timeStamp" value="1" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/tasks/IntentHelper.java</url>
+          <url>file://$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/IntentHelper.java</url>
           <option name="timeStamp" value="2" />
         </line-breakpoint>
       </breakpoints>

@@ -16,11 +16,11 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.concurrent.Callable;
 
-public class GogoAnimeFetchAPITask extends TaskExecutor implements Callable<String> {
+public class GogoAnimeFetchDirectTask extends TaskExecutor implements Callable<String> {
 
     private final String formattedIn;
 
-    public GogoAnimeFetchAPITask(final String formattedIn) {
+    public GogoAnimeFetchDirectTask(final String formattedIn) {
         this.formattedIn = formattedIn;
     }
 

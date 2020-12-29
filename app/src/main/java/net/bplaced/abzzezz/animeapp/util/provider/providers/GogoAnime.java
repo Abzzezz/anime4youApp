@@ -16,7 +16,7 @@ import net.bplaced.abzzezz.animeapp.util.scripter.StringHandler;
 import net.bplaced.abzzezz.animeapp.util.show.Show;
 import net.bplaced.abzzezz.animeapp.util.tasks.TaskExecutor;
 import net.bplaced.abzzezz.animeapp.util.tasks.gogoanime.GogoAnimeDownloadTask;
-import net.bplaced.abzzezz.animeapp.util.tasks.gogoanime.GogoAnimeFetchAPITask;
+import net.bplaced.abzzezz.animeapp.util.tasks.gogoanime.GogoAnimeFetchDirectTask;
 import net.bplaced.abzzezz.animeapp.util.tasks.gogoanime.GogoAnimeRefreshTask;
 import net.bplaced.abzzezz.animeapp.util.tasks.gogoanime.GogoAnimeSearchTask;
 import org.json.JSONArray;
@@ -119,7 +119,7 @@ public class GogoAnime extends Provider {
             final String apiURL = java.lang.String.format(GogoAnimeFetcher.API_URL, episodes.getString(episodes.length() - (ints[1] + 1)));
             AtomicReference<URL> url = new AtomicReference<>();
 
-            new GogoAnimeFetchAPITask(apiURL).executeAsync(new TaskExecutor.Callback<String>() {
+            new GogoAnimeFetchDirectTask(apiURL).executeAsync(new TaskExecutor.Callback<String>() {
                 @Override
                 public void onComplete(String result) throws Exception {
                     resultURL.accept(Optional.of(new URL(result)));

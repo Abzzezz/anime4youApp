@@ -9,6 +9,7 @@ package net.bplaced.abzzezz.animeapp.util.tasks.anime4you;
 import ga.abzzezz.util.stringing.StringUtil;
 import net.bplaced.abzzezz.animeapp.AnimeAppMain;
 import net.bplaced.abzzezz.animeapp.util.connection.URLUtil;
+import net.bplaced.abzzezz.animeapp.util.provider.holders.Anime4YouHolder;
 import net.bplaced.abzzezz.animeapp.util.scripter.ScriptUtil;
 import net.bplaced.abzzezz.animeapp.util.scripter.StringHandler;
 import net.bplaced.abzzezz.animeapp.util.tasks.TaskExecutor;
@@ -18,12 +19,12 @@ import java.io.InputStreamReader;
 import java.util.concurrent.Callable;
 import java.util.stream.Collectors;
 
-public class Anime4YouDirectVideoTask extends TaskExecutor implements Callable<String> {
+public class Anime4YouFetchDirectTask extends TaskExecutor implements Callable<String>, Anime4YouHolder {
 
     private final String aid;
     private final int episode;
 
-    public Anime4YouDirectVideoTask(String aid, int episode) {
+    public Anime4YouFetchDirectTask(String aid, int episode) {
         this.aid = aid;
         this.episode = (episode + 1);
     }
@@ -35,7 +36,7 @@ public class Anime4YouDirectVideoTask extends TaskExecutor implements Callable<S
     @Override
     public String call() throws Exception {
         return new BufferedReader(new InputStreamReader(
-                URLUtil.createHTTPURLConnection(StringHandler.REQUEST_URL, "POST",
+                URLUtil.createHTTPURLConnection(REQUEST_URL, "POST",
                         new String[]{"User-Agent", episode + StringUtil.splitter + aid + StringUtil.splitter.concat(ScriptUtil.generateRandomKey())},
                         new String[]{"Referer", AnimeAppMain.getInstance().getAndroidId()}).getInputStream())).lines().collect(Collectors.joining());
     }

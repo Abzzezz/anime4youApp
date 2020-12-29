@@ -6,12 +6,13 @@
 
 package net.bplaced.abzzezz.animeapp.util.provider;
 
-import net.bplaced.abzzezz.animeapp.util.provider.providers.Anime4you;
+import net.bplaced.abzzezz.animeapp.util.provider.providers.Anime4You;
 import net.bplaced.abzzezz.animeapp.util.provider.providers.GogoAnime;
+import net.bplaced.abzzezz.animeapp.util.provider.providers.Twistmoe;
 
 public enum Providers {
 
-    ANIME4YOU(new Anime4you()), GOGOANIME(new GogoAnime());
+    ANIME4YOU(new Anime4You()), GOGOANIME(new GogoAnime()), TWISTMOE(new Twistmoe());
 
     private final Provider provider;
 

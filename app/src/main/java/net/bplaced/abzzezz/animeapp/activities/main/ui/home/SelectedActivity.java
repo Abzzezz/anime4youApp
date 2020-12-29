@@ -30,7 +30,7 @@ import net.bplaced.abzzezz.animeapp.activities.extra.StreamPlayer;
 import net.bplaced.abzzezz.animeapp.activities.main.DrawerMainMenu;
 import net.bplaced.abzzezz.animeapp.util.file.OfflineImageLoader;
 import net.bplaced.abzzezz.animeapp.util.show.Show;
-import net.bplaced.abzzezz.animeapp.util.tasks.IntentHelper;
+import net.bplaced.abzzezz.animeapp.util.IntentHelper;
 import net.bplaced.abzzezz.animeapp.util.ui.ImageUtil;
 import net.bplaced.abzzezz.animeapp.util.ui.InputDialogBuilder;
 import net.bplaced.abzzezz.animeapp.util.ui.InputDialogBuilder.InputDialogListener;

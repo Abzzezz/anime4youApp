@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2020. Roman P.
  * All code is owned by Roman P. APIs are mentioned.
- * Last modified: 11.07.20, 18:35
+ * Last modified: 24.12.20, 15:59
  */
 
-package net.bplaced.abzzezz.animeapp.util.tasks;
+package net.bplaced.abzzezz.animeapp.util;
 
 import java.util.Hashtable;
 

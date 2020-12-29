@@ -20,15 +20,16 @@ import ga.abzzezz.util.logging.Logger;
 import net.bplaced.abzzezz.animeapp.activities.main.ui.home.SelectedActivity;
 import net.bplaced.abzzezz.animeapp.util.provider.Provider;
 import net.bplaced.abzzezz.animeapp.util.provider.Providers;
+import net.bplaced.abzzezz.animeapp.util.provider.holders.Anime4YouHolder;
 import net.bplaced.abzzezz.animeapp.util.scripter.Anime4YouDBSearch;
 import net.bplaced.abzzezz.animeapp.util.scripter.StringHandler;
 import net.bplaced.abzzezz.animeapp.util.show.Show;
 import net.bplaced.abzzezz.animeapp.util.tasks.TaskExecutor;
 import net.bplaced.abzzezz.animeapp.util.tasks.VivoDecodeTask;
-import net.bplaced.abzzezz.animeapp.util.tasks.anime4you.Anime4YouDataBaseTask;
-import net.bplaced.abzzezz.animeapp.util.tasks.anime4you.Anime4YouDirectVideoTask;
+import net.bplaced.abzzezz.animeapp.util.tasks.anime4you.Anime4YouDataBaseCallable;
+import net.bplaced.abzzezz.animeapp.util.tasks.anime4you.Anime4YouFetchDirectTask;
 import net.bplaced.abzzezz.animeapp.util.tasks.anime4you.Anime4YouDownloadTask;
-import net.bplaced.abzzezz.animeapp.util.tasks.anime4you.Anime4YouSearchDBTask;
+import net.bplaced.abzzezz.animeapp.util.tasks.anime4you.Anime4YouSearchTask;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -42,18 +43,18 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
-public class Anime4you extends Provider {
+public class Anime4You extends Provider implements Anime4YouHolder {
 
     public static final Anime4YouDBSearch ANIME_4_YOU_DB_SEARCH = new Anime4YouDBSearch();
 
-    public Anime4you() {
+    public Anime4You() {
         super("ANIME4YOU");
     }
 
 
     @Override
     public void refreshShow(Show show, Consumer<Show> updatedShow) {
-        new TaskExecutor().executeAsync(new Anime4YouDataBaseTask(show.getID(), ANIME_4_YOU_DB_SEARCH), new TaskExecutor.Callback<Show>() {
+        new TaskExecutor().executeAsync(new Anime4YouDataBaseCallable(show.getID(), ANIME_4_YOU_DB_SEARCH), new TaskExecutor.Callback<Show>() {
             @Override
             public void onComplete(Show result) {
                 updatedShow.accept(result);
@@ -68,7 +69,7 @@ public class Anime4you extends Provider {
 
     @Override
     public void handleSearch(java.lang.String searchQuery, Consumer<List<Show>> searchResults) {
-        new Anime4YouSearchDBTask(searchQuery).executeAsync(new TaskExecutor.Callback<List<Show>>() {
+        new Anime4YouSearchTask(searchQuery).executeAsync(new TaskExecutor.Callback<List<Show>>() {
             @Override
             public void onComplete(final List<Show> result) {
                 searchResults.accept(result);
@@ -99,7 +100,7 @@ public class Anime4you extends Provider {
                 data.getString("aid"),
                 data.getString("titel"),
                 data.getString("Letzte"),
-                StringHandler.COVER_DATABASE.concat(data.getString("image_id")),
+                COVER_DATABASE.concat(data.getString("image_id")),
                 data.getString("Untertitel"),
                 Providers.ANIME4YOU.getProvider());
     }
@@ -120,7 +121,7 @@ public class Anime4you extends Provider {
     public void handleURLRequest(Show show, Context context, Consumer<Optional<URL>> resultURL, int... ints) {
         final WebView webView = new WebView(context);
         webView.getSettings().setJavaScriptEnabled(true);
-        webView.loadUrl(StringHandler.CAPTCHA_ANIME_4_YOU_ONE);
+        webView.loadUrl(CAPTCHA_ANIME_4_YOU_ONE);
 
         WebStorage.getInstance().deleteAllData();
         CookieManager.getInstance().removeAllCookies(null);
@@ -132,7 +133,7 @@ public class Anime4you extends Provider {
 
         AtomicReference<URL> url = new AtomicReference<>();
 
-        new Anime4YouDirectVideoTask(show.getID(), ints[1]).executeAsync(new TaskExecutor.Callback<java.lang.String>() {
+        new Anime4YouFetchDirectTask(show.getID(), ints[1]).executeAsync(new TaskExecutor.Callback<java.lang.String>() {
             @Override
             public void onComplete(java.lang.String foundEntry) {
                 webView.setWebViewClient(new WebViewClient() {

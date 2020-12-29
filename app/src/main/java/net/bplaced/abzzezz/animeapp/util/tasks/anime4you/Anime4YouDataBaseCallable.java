@@ -13,12 +13,12 @@ import org.json.JSONObject;
 
 import java.util.concurrent.Callable;
 
-public class Anime4YouDataBaseTask implements Callable<Show> {
+public class Anime4YouDataBaseCallable implements Callable<Show> {
 
     private final Anime4YouDBSearch anime4YouDBSearch;
-    private final java.lang.String id;
+    private final String id;
 
-    public Anime4YouDataBaseTask(java.lang.String id, Anime4YouDBSearch anime4YouDBSearch) {
+    public Anime4YouDataBaseCallable(String id, Anime4YouDBSearch anime4YouDBSearch) {
         this.anime4YouDBSearch = anime4YouDBSearch;
         this.id = id;
     }

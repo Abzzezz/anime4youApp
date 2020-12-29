@@ -28,7 +28,7 @@ import net.bplaced.abzzezz.animeapp.R;
 import net.bplaced.abzzezz.animeapp.util.file.OfflineImageLoader;
 import net.bplaced.abzzezz.animeapp.util.scripter.StringHandler;
 import net.bplaced.abzzezz.animeapp.util.show.Show;
-import net.bplaced.abzzezz.animeapp.util.tasks.IntentHelper;
+import net.bplaced.abzzezz.animeapp.util.IntentHelper;
 import net.bplaced.abzzezz.animeapp.util.ui.ImageUtil;
 
 import java.io.File;
@@ -77,6 +77,8 @@ public class ListFragment extends Fragment {
 
         final SwipeRefreshLayout swipeRefreshLayout = root.findViewById(R.id.swiperefresh);
         swipeRefreshLayout.setOnRefreshListener(() -> {
+            if(!StringHandler.isOnline(Objects.requireNonNull(getContext()))) return;
+
             for (int i = 0; i < AnimeAppMain.getInstance().getShowSaver().getShowSize(); i++) {
                 int finalI = i;
                 AnimeAppMain.getInstance().getShowSaver().getShow(i).ifPresent(show -> {
@@ -99,12 +101,6 @@ public class ListFragment extends Fragment {
      */
     private void getInformation(final int index, final Intent intent) {
         final Optional<Show> showAtIndex = AnimeAppMain.getInstance().getShowSaver().getShow(index);
-
-        if (!StringHandler.isOnline(Objects.requireNonNull(getActivity()).getApplicationContext()) && showAtIndex.isPresent()) {
-            startActivity(intent.putExtra("details", showAtIndex.get().toString()));
-            Objects.requireNonNull(getActivity()).finish();
-            return;
-        }
 
         showAtIndex.ifPresent(show -> {
             IntentHelper.addObjectForKey(show, "show");
@@ -157,11 +153,13 @@ public class ListFragment extends Fragment {
         }
 
         public void removeItem(final int index) {
+            if(getActivity().getFilesDir() == null) return;
+
             final Optional<Show> itemToRemove = (Optional<Show>) getItem(index);
             itemToRemove.ifPresent(show -> {
                 this.size--;
                 final File dir = new File(getActivity().getFilesDir(), show.getTitle());
-                if (dir.listFiles() != null && dir.listFiles().length > 0) {
+                if (dir.listFiles().length > 0) {
                     new IonAlert(getActivity(), IonAlert.WARNING_TYPE)
                             .setTitleText("Delete all remaining episodes?")
                             .setContentText("Won't be able to recover the files!")
@@ -179,27 +177,6 @@ public class ListFragment extends Fragment {
                 notifyDataSetChanged();
             });
         }
-/*
-        public void addItem(final String item) {
-            if (!StringHandler.isOnline(getActivity())) {
-                Toast.makeText(context, "You are currently not connected to the internet", Toast.LENGTH_LONG).show();
-                return;
-            }
-            //Create new database request. get episodes, imageURL, name
-            new TaskExecutor().executeAsync(new DataBaseTask(item, aniDBSearch), new TaskExecutor.Callback<JSONObject>() {
-                @Override
-                public void onComplete(final JSONObject result) throws Exception {
-                    size++;
-                    AnimeAppMain.getInstance().getShowSaver().addShow(result);
-                    notifyDataSetChanged();
-                }
-
-                @Override
-                public void preExecute() {
-                }
-            });
-        }
- */
     }
 
 }

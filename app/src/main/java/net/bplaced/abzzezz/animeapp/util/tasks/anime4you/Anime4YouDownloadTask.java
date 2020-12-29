@@ -21,7 +21,7 @@ import net.bplaced.abzzezz.animeapp.R;
 import net.bplaced.abzzezz.animeapp.activities.main.ui.home.SelectedActivity;
 import net.bplaced.abzzezz.animeapp.util.receiver.StopDownloadReceiver;
 import net.bplaced.abzzezz.animeapp.util.scripter.StringHandler;
-import net.bplaced.abzzezz.animeapp.util.tasks.IntentHelper;
+import net.bplaced.abzzezz.animeapp.util.IntentHelper;
 import net.bplaced.abzzezz.animeapp.util.tasks.TaskExecutor;
 
 import java.io.File;

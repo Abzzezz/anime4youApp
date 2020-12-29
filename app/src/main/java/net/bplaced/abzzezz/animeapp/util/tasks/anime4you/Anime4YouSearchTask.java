@@ -7,7 +7,7 @@
 package net.bplaced.abzzezz.animeapp.util.tasks.anime4you;
 
 import net.bplaced.abzzezz.animeapp.util.provider.Providers;
-import net.bplaced.abzzezz.animeapp.util.provider.providers.Anime4you;
+import net.bplaced.abzzezz.animeapp.util.provider.providers.Anime4You;
 import net.bplaced.abzzezz.animeapp.util.show.Show;
 import net.bplaced.abzzezz.animeapp.util.tasks.TaskExecutor;
 import net.ricecode.similarity.JaroStrategy;
@@ -18,12 +18,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-public class Anime4YouSearchDBTask extends TaskExecutor implements Callable<List<Show>> {
+public class Anime4YouSearchTask extends TaskExecutor implements Callable<List<Show>> {
 
-    private final java.lang.String input;
+    private final String input;
     private final SimilarityStrategy stringSimilarity = new JaroStrategy();
 
-    public Anime4YouSearchDBTask(final java.lang.String input) {
+    public Anime4YouSearchTask(final String input) {
         this.input = input;
     }
 
@@ -34,8 +34,8 @@ public class Anime4YouSearchDBTask extends TaskExecutor implements Callable<List
     @Override
     public List<Show> call() throws Exception {
         final List<Show> showsOut = new ArrayList<>();
-        final JSONArray showsIn = new JSONArray(Anime4you.ANIME_4_YOU_DB_SEARCH.getDataBase());
-        final Anime4you decoder = (Anime4you) Providers.ANIME4YOU.getProvider();
+        final JSONArray showsIn = new JSONArray(Anime4You.ANIME_4_YOU_DB_SEARCH.getDataBase());
+        final Anime4You decoder = (Anime4You) Providers.ANIME4YOU.getProvider();
 
         for (int i = 0; i < showsIn.length(); i++) {
             final Show show = decoder.getShow(showsIn.getJSONObject(i));

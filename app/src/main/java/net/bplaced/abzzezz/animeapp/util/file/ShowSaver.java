@@ -31,10 +31,6 @@ public class ShowSaver {
 
     private final List<Show> shows = new ArrayList<>();
 
-    /**
-     * Aids used as keys. The other values stay the same
-     */
-
     @SuppressLint("CommitPrefEdits")
     public ShowSaver(final Context context) {
         this.preferences = context.getSharedPreferences("List", Context.MODE_PRIVATE);
