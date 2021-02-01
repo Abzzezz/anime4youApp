@@ -6,7 +6,6 @@
 
 package net.bplaced.abzzezz.animeapp.util.tasks.gogoanime;
 
-import net.bplaced.abzzezz.animeapp.util.gogoanime.GogoAnimeFetcher;
 import net.bplaced.abzzezz.animeapp.util.provider.Providers;
 import net.bplaced.abzzezz.animeapp.util.scripter.StringHandler;
 import net.bplaced.abzzezz.animeapp.util.show.Show;

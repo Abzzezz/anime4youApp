@@ -17,9 +17,6 @@ import java.net.URL;
 public class Anime4YouEpisodeDownloadTask extends EpisodeDownloadTask {
 
     private int notifyID;
-    private boolean cancel;
-    private FileOutputStream fileOutputStream;
-    private File outFile;
 
     public Anime4YouEpisodeDownloadTask(SelectedActivity application, URL url, String name, File outDir, int[] count) {
         super(application, url, name, outDir, count);

@@ -20,9 +20,6 @@ import net.bplaced.abzzezz.animeapp.R;
 import net.bplaced.abzzezz.animeapp.util.provider.Providers;
 import net.bplaced.abzzezz.animeapp.util.scripter.StringHandler;
 import net.bplaced.abzzezz.animeapp.util.show.Show;
-import net.bplaced.abzzezz.animeapp.util.tasks.TaskExecutor;
-import net.bplaced.abzzezz.animeapp.util.tasks.gogoanime.GogoAnimeFetchTask;
-import net.bplaced.abzzezz.animeapp.util.ui.InputDialogBuilder;
 import org.json.JSONException;
 
 import java.util.ArrayList;
@@ -35,21 +32,22 @@ public class SearchFragment extends Fragment {
         final View root = inflater.inflate(R.layout.search_layout, container, false);
         final ListView listView = root.findViewById(R.id.simple_list_view);
         final SearchView showSearch = root.findViewById(R.id.show_search_view);
-        /*
-        Set adapter
-         */
+        //Set adapter
         listView.setAdapter(new SearchAdapter(new ArrayList<>(), root.getContext()));
 
         showSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public boolean onQueryTextSubmit(java.lang.String query) {
-                if (!StringHandler.isOnline(getContext())) return true;
-                ((SearchAdapter) listView.getAdapter()).getEntries().clear();
-                for (final Providers value : Providers.values()) {
-                    value.getProvider().handleSearch(query, shows -> {
-                        ((SearchAdapter) listView.getAdapter()).getEntries().addAll(shows);
-                        ((SearchAdapter) listView.getAdapter()).notifyDataSetChanged();
+            public boolean onQueryTextSubmit(String query) {
+                if (StringHandler.isOffline(getContext())) return true;
+                final SearchAdapter searchAdapter = (SearchAdapter) listView.getAdapter();
+                searchAdapter.getEntries().clear();
 
+                for (final Providers value : Providers.values()) {
+                    if(value == Providers.NULL) continue;
+
+                    value.getProvider().handleSearch(query, shows -> {
+                        searchAdapter.getEntries().addAll(shows);
+                        searchAdapter.notifyDataSetChanged();
                     });
                 }
                 showSearch.clearFocus();
@@ -57,7 +55,7 @@ public class SearchFragment extends Fragment {
             }
 
             @Override
-            public boolean onQueryTextChange(java.lang.String newText) {
+            public boolean onQueryTextChange(String newText) {
                 return false;
             }
         });

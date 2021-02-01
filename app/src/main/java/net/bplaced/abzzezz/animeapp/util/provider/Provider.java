@@ -28,7 +28,7 @@ public abstract class Provider {
 
     public abstract void refreshShow(final Show show, final Consumer<Show> updatedShow);
 
-    public abstract void handleSearch(final java.lang.String searchQuery, final Consumer<List<Show>> searchResults);
+    public abstract void handleSearch(final String searchQuery, final Consumer<List<Show>> searchResults);
 
     public abstract JSONObject format(final Show show) throws JSONException;
 

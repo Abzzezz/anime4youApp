@@ -8,10 +8,10 @@
       <root url="file://$PROJECT_DIR$/../../Runtime/gradle/caches/transforms-3/f552542fc9911be8b92f20b813153a49/transformed/jetified-exoplayer-dash-2.11.6/res" />
     </CLASSES>
     <JAVADOC>
-      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.android.exoplayer/exoplayer-dash/2.11.6/af805ddc36b742ead07158675dfebd24731ad60/exoplayer-dash-2.11.6-javadoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../Runtime/gradle/caches/modules-2/files-2.1/com.google.android.exoplayer/exoplayer-dash/2.11.6/af805ddc36b742ead07158675dfebd24731ad60/exoplayer-dash-2.11.6-javadoc.jar!/" />
     </JAVADOC>
     <SOURCES>
-      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.android.exoplayer/exoplayer-dash/2.11.6/30807e90aa617f78f669da4a4f06e3caf6f8ec47/exoplayer-dash-2.11.6-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../Runtime/gradle/caches/modules-2/files-2.1/com.google.android.exoplayer/exoplayer-dash/2.11.6/30807e90aa617f78f669da4a4f06e3caf6f8ec47/exoplayer-dash-2.11.6-sources.jar!/" />
     </SOURCES>
   </library>
 </component>

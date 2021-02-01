@@ -36,12 +36,14 @@ public class Anime4YouSearchTask extends TaskExecutor implements Callable<List<S
     public List<Show> call() throws Exception {
         final List<Show> showsOut = new ArrayList<>();
         final JSONArray showsIn = new JSONArray(Anime4You.ANIME_4_YOU_DB_SEARCH.getDataBase());
-        final Anime4You decoder = (Anime4You) Providers.ANIME4YOU.getProvider();
+        final Anime4You decoder = (Anime4You) Providers.NULL.getProvider();
 
         for (int i = 0; i < showsIn.length(); i++) {
-            final JSONObject show = showsIn.getJSONObject(i);
-            if (stringSimilarity.score(show.getString("titel"), input) > 0.8) {
-                showsOut.add(decoder.getShow(show));
+            final JSONObject showJSON = showsIn.getJSONObject(i);
+            if (stringSimilarity.score(showJSON.getString("titel"), input) > 0.8) {
+                final Show show = decoder.getShow(showJSON);
+                if(!showsOut.contains(show))
+                showsOut.add(show);
             }
         }
         return showsOut;

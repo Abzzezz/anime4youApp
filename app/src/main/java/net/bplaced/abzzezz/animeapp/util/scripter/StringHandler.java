@@ -35,9 +35,9 @@ public class StringHandler {
 
     public static final String VIDOZA_SCRIPT = "call(); function call() { vidoza = $.ajax({type: 'POST',url: '/check_video.php',async: false,success: function(data){},data: {vidhash:\"%s\"}}).responseJSON[\"url\"];return vidoza;}";
 
-    public static boolean isOnline(Context context) {
+    public static boolean isOffline(Context context) {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnectedOrConnecting();
+        return cm.getActiveNetworkInfo() == null || !cm.getActiveNetworkInfo().isConnectedOrConnecting();
     }
 }
 

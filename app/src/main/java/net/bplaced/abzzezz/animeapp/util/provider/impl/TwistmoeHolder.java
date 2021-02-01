@@ -24,7 +24,7 @@ public interface TwistmoeHolder {
 
 
     default String getRequestToken() {
-        final String[] tokens = {"1rj2vRtegS8Y60B3w3qNZm5T2Q0TN2NR"};
+        final String[] tokens = {"0df14814b9e590a1f26d3071a4ed7974"};
         return tokens[new Random().nextInt(tokens.length)];
     }
 }

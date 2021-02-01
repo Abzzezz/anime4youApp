@@ -26,7 +26,7 @@ public class Anime4YouDataBaseCallable implements Callable<Show> {
     @Override
     public Show call() {
         try {
-            return Providers.ANIME4YOU.getProvider().getShow(new JSONObject(anime4YouDBSearch.getShowDetails("{\"aid\":\"" + id.concat("\""))));
+            return Providers.NULL.getProvider().getShow(new JSONObject(anime4YouDBSearch.getShowDetails("{\"aid\":\"" + id.concat("\""))));
         } catch (final Exception e) {
             e.printStackTrace();
             return null;

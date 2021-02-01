@@ -1655,7 +1655,6 @@ public class RandomUserAgent {
     }
 
     public static String getRandomUserAgent() {
-
         final double rand = Math.random() * 100;
         String browser = null;
         double count = 0.0;

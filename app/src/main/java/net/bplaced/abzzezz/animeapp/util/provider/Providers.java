@@ -6,13 +6,15 @@
 
 package net.bplaced.abzzezz.animeapp.util.provider;
 
-import net.bplaced.abzzezz.animeapp.util.provider.providers.Anime4You;
 import net.bplaced.abzzezz.animeapp.util.provider.providers.GogoAnime;
 import net.bplaced.abzzezz.animeapp.util.provider.providers.Twistmoe;
 
 public enum Providers {
 
-    ANIME4YOU(new Anime4You()), GOGOANIME(new GogoAnime()), TWISTMOE(new Twistmoe());
+    GOGOANIME(new GogoAnime()),
+    TWISTMOE(new Twistmoe()),
+    //Null provider, for old providers; Skipped when iterating
+    NULL(null);
 
     private final Provider provider;
 
@@ -20,7 +22,7 @@ public enum Providers {
         this.provider = provider;
     }
 
-    public static Provider getProvider(final java.lang.String enumValue) {
+    public static Provider getProvider(final String enumValue) {
         return valueOf(enumValue).getProvider();
     }
 

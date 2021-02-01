@@ -41,7 +41,6 @@ public class SettingsFragment extends Fragment {
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             setPreferencesFromResource(R.xml.root_preferences, rootKey);
             final Preference clearOfflineImages = findPreference("clear_offline_images_button");
-            final Preference clearTacker = findPreference("clear_tracker");
             final Preference copySdCard = findPreference("copy_sd_card");
             final Preference importMal = findPreference("import_mal");
 

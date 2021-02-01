@@ -77,7 +77,7 @@ public class ListFragment extends Fragment {
 
         final SwipeRefreshLayout swipeRefreshLayout = root.findViewById(R.id.swiperefresh);
         swipeRefreshLayout.setOnRefreshListener(() -> {
-            if (!StringHandler.isOnline(Objects.requireNonNull(getContext()))) return;
+            if (StringHandler.isOffline(Objects.requireNonNull(getContext()))) return;
 
             for (int i = 0; i < AnimeAppMain.getInstance().getShowSaver().getShowSize(); i++) {
                 int finalI = i;

@@ -91,7 +91,7 @@ public class Anime4You extends Provider implements Anime4YouHolder {
                 .put(StringHandler.SHOW_TITLE, show.getTitle())
                 .put(StringHandler.SHOW_LANG, show.getLanguage())
                 .put(StringHandler.SHOW_YEAR, show.getYear())
-                .put(StringHandler.SHOW_PROVIDER, Providers.ANIME4YOU.name());
+                .put(StringHandler.SHOW_PROVIDER, Providers.NULL.name());
     }
 
     @Override
@@ -102,7 +102,7 @@ public class Anime4You extends Provider implements Anime4YouHolder {
                 data.getString("Letzte"),
                 COVER_DATABASE.concat(data.getString("image_id")),
                 data.getString("Untertitel"),
-                Providers.ANIME4YOU.getProvider());
+                Providers.NULL.getProvider());
     }
 
 
@@ -114,7 +114,7 @@ public class Anime4You extends Provider implements Anime4YouHolder {
                 showJSON.getString(StringHandler.SHOW_EPISODE_COUNT),
                 showJSON.getString(StringHandler.SHOW_IMAGE_URL),
                 showJSON.getString(StringHandler.SHOW_LANG),
-                Providers.ANIME4YOU.getProvider());
+                Providers.NULL.getProvider());
     }
 
     @Override
@@ -130,8 +130,6 @@ public class Anime4You extends Provider implements Anime4YouHolder {
         webView.clearFormData();
         webView.clearHistory();
         webView.clearSslPreferences();
-
-        AtomicReference<URL> url = new AtomicReference<>();
 
         new Anime4YouFetchDirectTask(show.getID(), ints[1]).executeAsync(new TaskExecutor.Callback<String>() {
             @Override
@@ -200,7 +198,6 @@ public class Anime4You extends Provider implements Anime4YouHolder {
             }
         });
     }
-
 
     public void makeText(final String text, final Context context) {
         Toast.makeText(context, text, Toast.LENGTH_LONG).show();

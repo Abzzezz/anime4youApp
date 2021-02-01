@@ -20,6 +20,7 @@ import net.bplaced.abzzezz.animeapp.AnimeAppMain;
 import net.bplaced.abzzezz.animeapp.R;
 import net.bplaced.abzzezz.animeapp.activities.main.ui.home.SelectedActivity;
 import net.bplaced.abzzezz.animeapp.util.IntentHelper;
+import net.bplaced.abzzezz.animeapp.util.connection.URLUtil;
 import net.bplaced.abzzezz.animeapp.util.receiver.StopDownloadReceiver;
 import net.bplaced.abzzezz.animeapp.util.scripter.StringHandler;
 
@@ -69,12 +70,9 @@ public class EpisodeDownloadTask extends TaskExecutor implements Callable<String
             final URLConnection urlConnection = url.openConnection();
             urlConnection.setRequestProperty("User-Agent", StringHandler.USER_AGENT);
             urlConnection.connect();
-            //Open Stream
-            this.fileOutputStream = new FileOutputStream(outFile);
-            final ReadableByteChannel readableByteChannel = Channels.newChannel(urlConnection.getInputStream());
-            //Copy from channel to channel
-            fileOutputStream.getChannel().transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
-            //Close stream
+
+            URLUtil.copyFileFromURL(urlConnection, outFile);
+
             Logger.log("Done copying streams, closing stream", Logger.LogType.INFO);
             fileOutputStream.close();
             return name.concat(": ") + count[1];

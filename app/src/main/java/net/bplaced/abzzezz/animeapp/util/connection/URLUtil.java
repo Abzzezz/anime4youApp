@@ -7,12 +7,11 @@
 package net.bplaced.abzzezz.animeapp.util.connection;
 
 import javax.net.ssl.HttpsURLConnection;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.channels.Channels;
 
 public class URLUtil {
 
@@ -86,6 +85,32 @@ public class URLUtil {
         }
         bufferedReader.close();
         return builder.toString();
+    }
+
+    /**
+     * Copies file from url
+     *
+     * @param src  to copy from
+     * @param dest destination to copy to
+     * @throws IOException @
+     */
+    public static void copyFileFromURL(final URL src, final File dest) throws IOException {
+        final FileOutputStream fileOutputStream = new FileOutputStream(dest);
+        fileOutputStream.getChannel().transferFrom(Channels.newChannel(src.openStream()), 0, Long.MAX_VALUE);
+        fileOutputStream.close();
+    }
+
+    /**
+     * Copies file from url
+     *
+     * @param src  to copy from
+     * @param dest destination to copy to
+     * @throws IOException @
+     */
+    public static void copyFileFromURL(final URLConnection src, final File dest) throws IOException {
+        final FileOutputStream fileOutputStream = new FileOutputStream(dest);
+        fileOutputStream.getChannel().transferFrom(Channels.newChannel(src.getInputStream()), 0, Long.MAX_VALUE);
+        fileOutputStream.close();
     }
 
 }

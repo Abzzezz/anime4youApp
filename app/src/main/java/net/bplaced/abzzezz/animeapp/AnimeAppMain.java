@@ -15,7 +15,6 @@ import android.app.NotificationManager;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.provider.Settings;
@@ -49,7 +48,7 @@ public class AnimeAppMain {
     private boolean isVersionOutdated;
 
     public AnimeAppMain() {
-        this.version = Float.parseFloat(BuildConfig.VERSION_NAME.replaceAll("\\.", ""));
+        this.version = Float.parseFloat(BuildConfig.VERSION_NAME.replace(".", ""));
         this.debugVersion = false;
         this.notificationChannelName = "AnimeChannel";
     }
@@ -91,9 +90,7 @@ public class AnimeAppMain {
             }
 
             @Override
-            public void preExecute() {
-
-            }
+            public void preExecute() {}
         });
     }
 
@@ -109,7 +106,7 @@ public class AnimeAppMain {
                 Manifest.permission.FOREGROUND_SERVICE};
 
         activity.requestPermissions(permissions, 101);
-        if (!StringHandler.isOnline(activity))
+        if (StringHandler.isOffline(activity))
             Toast.makeText(activity, "You are not connected to the internet. If Images are not cached they will not show.", Toast.LENGTH_LONG).show();
     }
 

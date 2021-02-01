@@ -1,16 +1,21 @@
-package net.bplaced.abzzezz.animeapp.util.gogoanime;
+/*
+ * Copyright (c) 2021. Roman P.
+ * All code is owned by Roman P. APIs are mentioned.
+ * Last modified: 01.02.21, 10:32
+ */
+
+package net.bplaced.abzzezz.animeapp.util.tasks.gogoanime;
 
 import net.bplaced.abzzezz.animeapp.util.connection.RandomUserAgent;
 import net.bplaced.abzzezz.animeapp.util.scripter.StringHandler;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 import java.io.*;
-import java.net.URL;
-import java.nio.channels.Channels;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -36,57 +41,15 @@ public class GogoAnimeFetcher {
     private final String showTitle;
     private final String[] fetchedDirectURLs;
     private final Document showDocument;
-    private final String urlIn;
 
     public GogoAnimeFetcher(final String urlIn) throws IOException {
         if (!CACHE_DIRECTORY.exists()) CACHE_DIRECTORY.mkdir();
         if (!DOWNLOAD_DIRECTORY.exists()) DOWNLOAD_DIRECTORY.mkdir();
 
-        this.urlIn = urlIn;
-        this.showDocument = Jsoup.connect(urlIn).userAgent(RandomUserAgent.getRandomUserAgent()).get();
+        this.showDocument = createGogoConnection(urlIn, RandomUserAgent.getRandomUserAgent()).get();
         this.showTitle = this.sanitizeString(showDocument.title());
 
         this.fetchedDirectURLs = this.fetchIDs();
-    }
-
-    /**
-     * Fetches all ids from the given url
-     *
-     * @param urlIn url to first get id from
-     * @return String array containing all ids for the direct url
-     * @throws IOException some connection goes wrong
-     */
-    public static String[] fetchIDs(final String urlIn) throws IOException {
-        final String userAgent = RandomUserAgent.getRandomUserAgent();
-
-        final Document showDocument = Jsoup.connect(urlIn).userAgent(userAgent).get();
-        final int id = Integer.parseInt(showDocument.body().selectFirst("input#movie_id").val());
-        final int epiStart = Integer.parseInt(showDocument.body().selectFirst("#episode_page a.active").attr("ep_start"));
-        final int epiEnd = Integer.parseInt(showDocument.body().selectFirst("#episode_page a.active").attr("ep_end"));
-
-        /*
-         * Grab episodes & fetch ids
-         */
-
-        final String episodesURL = String.format(EPISODE_API_URL, epiStart, epiEnd, id);
-        final Document episodesDocument = Jsoup.connect(episodesURL).userAgent(userAgent).get();
-
-        return episodesDocument.body().getElementById("episode_related").children().stream()
-                .map(element -> BASE_URL + element.selectFirst("a").attr("href").trim())
-                .map(episodeURL -> {
-                    try {
-                        final Document episodeDocument = Jsoup.connect(episodeURL).userAgent(userAgent).get();
-                        final String src = episodeDocument.selectFirst("iframe").attr("src");
-
-                        final Matcher matcher = PATTERN.matcher(src);
-                        if (matcher.find())
-                            return matcher.group().substring(3, matcher.group().length() - 1);
-                        else return "";
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        return "";
-                    }
-                }).toArray(String[]::new);
     }
 
     public static String[] fetchIDs(final String idIn, final int epiStart, final int epiEnd) throws IOException {
@@ -99,13 +62,13 @@ public class GogoAnimeFetcher {
          */
 
         final String episodesURL = String.format(EPISODE_API_URL, epiStart, epiEnd, id);
-        final Document episodesDocument = Jsoup.connect(episodesURL).userAgent(userAgent).get();
+        final Document episodesDocument = createGogoCdn(episodesURL, userAgent).get();
 
         return episodesDocument.body().getElementById("episode_related").children().stream()
                 .map(element -> BASE_URL + element.selectFirst("a").attr("href").trim())
                 .map(episodeURL -> {
                     try {
-                        final Document episodeDocument = Jsoup.connect(episodeURL).userAgent(userAgent).get();
+                        final Document episodeDocument = createGogoCdn(episodesURL, userAgent).get();
                         final String src = episodeDocument.selectFirst("iframe").attr("src");
 
                         final Matcher matcher = PATTERN.matcher(src);
@@ -119,11 +82,23 @@ public class GogoAnimeFetcher {
                 }).toArray(String[]::new);
     }
 
+    /**
+     * Calls gogoanime's search api
+     * @param searchQuery query to search for
+     * @return String array with all url results
+     * @throws IOException url error
+     */
     public static String[] getURLsFromSearch(final String searchQuery) throws IOException {
         final Document document = Jsoup.connect(String.format(SEARCH_URL, searchQuery)).userAgent(StringHandler.USER_AGENT).get();
         return document.getElementsByClass("name").stream().map(element -> BASE_URL + element.select("a").attr("href")).toArray(String[]::new);
     }
 
+    /**
+     *
+     * @param urlIn url to extract from
+     * @return extracted direct url
+     * @throws JSONException when bad json is parsed
+     */
     public static String getDirectVideoURL(final String urlIn) throws JSONException {
         return getVidURL(String.format(API_URL, urlIn));
     }
@@ -141,19 +116,6 @@ public class GogoAnimeFetcher {
     /**
      * Fetches the show's image from it's url
      *
-     * @return the file's location
-     * @throws IOException if copy process goes wrong
-     */
-    public File fetchImage() throws IOException {
-        final URL imageURL = new URL(fetchImage0());
-        final File cacheFile = new File(CACHE_DIRECTORY, sanitizeString(imageURL.getFile()));
-        this.copyFileFromURL(imageURL, cacheFile);
-        return cacheFile;
-    }
-
-    /**
-     * Fetches the show's image from it's url
-     *
      * @return the image's url
      */
     public String fetchImage0() {
@@ -163,16 +125,24 @@ public class GogoAnimeFetcher {
     /**
      * Returns the show's id
      *
-     * @return
+     * @return the shod id
      */
     public String getID() {
         return showDocument.body().selectFirst("input#movie_id").val();
     }
 
+    /**
+     *
+     * @return episode start from local document
+     */
     public String getEpisodeStart() {
         return showDocument.body().selectFirst("#episode_page a.active").attr("ep_start");
     }
 
+    /**
+     *
+     * @return episode end from local document
+     */
     public String getEpisodeEnd() {
         return showDocument.body().selectFirst("#episode_page a.active").attr("ep_end");
     }
@@ -197,13 +167,13 @@ public class GogoAnimeFetcher {
          */
 
         final String episodesURL = String.format(EPISODE_API_URL, epiStart, epiEnd, id);
-        final Document episodesDocument = Jsoup.connect(episodesURL).userAgent(userAgent).get();
+        final Document episodesDocument = createGogoCdn(episodesURL, userAgent).get();
 
         return episodesDocument.body().getElementById("episode_related").children().stream()
                 .map(element -> BASE_URL + element.selectFirst("a").attr("href").trim())
                 .map(episodeURL -> {
                     try {
-                        final Document episodeDocument = Jsoup.connect(episodeURL).userAgent(userAgent).get();
+                        final Document episodeDocument = createGogoCdn(episodeURL, userAgent).get();
                         final String src = episodeDocument.selectFirst("iframe").attr("src");
 
                         final Matcher matcher = PATTERN.matcher(src);
@@ -218,16 +188,23 @@ public class GogoAnimeFetcher {
     }
 
     /**
-     * Copies file from url
-     *
-     * @param src  to copy from
-     * @param dest destination to copy to
-     * @throws IOException @
+     * Create jsoup connection
+     * @param url url in
+     * @param userAgent user agent to use
+     * @return pre constructed connection
      */
-    private void copyFileFromURL(final URL src, final File dest) throws IOException {
-        final FileOutputStream fileOutputStream = new FileOutputStream(dest);
-        fileOutputStream.getChannel().transferFrom(Channels.newChannel(src.openStream()), 0, Long.MAX_VALUE);
-        fileOutputStream.close();
+    private static Connection createGogoConnection(final String url, final String userAgent) {
+        return Jsoup.connect(url).userAgent(userAgent).header("authority", "gogoanime.so").referrer("https://gogoanime.so/search.html");
+    }
+
+    /**
+     * Create jsoup connection
+     * @param url url in
+     * @param userAgent user agent to use
+     * @return pre constructed connection
+     */
+    private static Connection createGogoCdn(final String url, final String userAgent) {
+        return Jsoup.connect(url).userAgent(userAgent).header("authority", "ajax.gogocdn.net");
     }
 
     /**

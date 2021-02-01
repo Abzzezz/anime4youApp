@@ -61,7 +61,7 @@ public class Show {
     public String toString() {
         try {
             return provider.format(this).toString();
-        } catch (JSONException e) {
+        } catch (final JSONException e) {
             e.printStackTrace();
             return "";
         }

@@ -9,7 +9,7 @@ package net.bplaced.abzzezz.animeapp.util.provider.providers;
 import android.content.Context;
 import ga.abzzezz.util.logging.Logger;
 import net.bplaced.abzzezz.animeapp.activities.main.ui.home.SelectedActivity;
-import net.bplaced.abzzezz.animeapp.util.gogoanime.GogoAnimeFetcher;
+import net.bplaced.abzzezz.animeapp.util.tasks.gogoanime.GogoAnimeFetcher;
 import net.bplaced.abzzezz.animeapp.util.provider.Provider;
 import net.bplaced.abzzezz.animeapp.util.provider.Providers;
 import net.bplaced.abzzezz.animeapp.util.scripter.StringHandler;
@@ -27,7 +27,6 @@ import java.io.File;
 import java.net.URL;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
 /*
@@ -125,9 +124,7 @@ public class GogoAnime extends Provider {
                 }
 
                 @Override
-                public void preExecute() {
-
-                }
+                public void preExecute() {}
             });
         } catch (JSONException e) {
             e.printStackTrace();

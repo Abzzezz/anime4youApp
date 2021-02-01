@@ -40,7 +40,7 @@ public class TwistmoeSearchTask extends TaskExecutor implements Callable<List<Sh
     public List<Show> call() throws Exception {
         final List<Show> showsOut = new ArrayList<>();
 
-        final HttpsURLConnection connection = URLUtil.createHTTPSURLConnection(SHOW_API, new String[]{"x-access-token", getRequestToken()}, new String[]{"User-Agent", StringHandler.USER_AGENT});
+        final HttpsURLConnection connection = URLUtil.createHTTPSURLConnection(SHOW_API, new String[]{"x-access-token", getRequestToken()}, new String[]{"User-Agent", StringHandler.USER_AGENT}, new String[]{"Referer", "https://twist.moe/"});
         connection.connect();
         final JSONArray shows = new JSONArray(URLUtil.collectLines(connection, ""));
 
