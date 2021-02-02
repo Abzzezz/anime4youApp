@@ -31,7 +31,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="073d73e0-45c8-4f1c-9113-eff2883226e0" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/tasks/animepahe/AnimePaheEpisodeDownloadTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/net/bplaced/abzzezz/animeapp/util/tasks/animepahe/AnimePaheEpisodeDownloadTask.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -231,19 +231,6 @@
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="CLASS" />
-      <properties />
-      <listeners />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="anime4youApp [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -291,7 +278,8 @@
       <workItem from="1612168186922" duration="7581000" />
       <workItem from="1612177994793" duration="7631000" />
       <workItem from="1612265129530" duration="15184000" />
-      <workItem from="1612287889295" duration="10844000" />
+      <workItem from="1612287889295" duration="11301000" />
+      <workItem from="1612302429690" duration="6000" />
     </task>
     <task id="LOCAL-00001" summary="Vidoza download">
       <created>1608413239013</created>
@@ -440,7 +428,14 @@
       <option name="project" value="LOCAL" />
       <updated>1612301761455</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="ffmpeg fix">
+      <created>1612302161454</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1612302161454</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -479,7 +474,8 @@
     <MESSAGE value="Anime4you is no longer available :((( Site closed. Removing provider" />
     <MESSAGE value="Fixed twist.moe &amp; gogoanime.so" />
     <MESSAGE value="Animepahe implementation as a new provider. TODO: Animepahe refreshing" />
-    <option name="LAST_COMMIT_MESSAGE" value="Animepahe implementation as a new provider. TODO: Animepahe refreshing" />
+    <MESSAGE value="ffmpeg fix" />
+    <option name="LAST_COMMIT_MESSAGE" value="ffmpeg fix" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
