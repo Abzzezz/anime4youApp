@@ -14,7 +14,6 @@ import net.bplaced.abzzezz.animeapp.util.tasks.download.EpisodeDownloadTask;
 
 import java.io.File;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.nio.channels.Channels;
 
 public class TwistmoeEpisodeDownloadTask extends EpisodeDownloadTask {
@@ -47,9 +46,9 @@ public class TwistmoeEpisodeDownloadTask extends EpisodeDownloadTask {
 
             progressHandler.onDownloadCompleted(name.concat(": ") + count[1]);
             return null;
-        } catch (final MalformedURLException e) {
+        } catch (final Exception e) {
             progressHandler.onErrorThrown(getError(e));
-            this.cancel();
+            this.cancelExecution();
             return null;
         }
     }

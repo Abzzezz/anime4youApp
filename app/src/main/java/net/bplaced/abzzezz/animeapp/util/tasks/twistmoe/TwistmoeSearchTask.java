@@ -47,6 +47,7 @@ public class TwistmoeSearchTask extends TaskExecutor implements Callable<List<JS
         for (int i = 0; i < shows.length(); i++) {
             final JSONObject showJSON = shows.getJSONObject(i);
             //TODO: Maybe sort array with the string similarity?? Only ofc if it's size is more than one
+            System.out.println(showJSON);
 
             if (showJSON.isNull("mal_id")) {
                 if (stringSimilarity.score(showJSON.getString("title"), showTitle) > 0.8 || stringSimilarity.score(showJSON.getString("alt_title"), showTitle) > 0.8) {

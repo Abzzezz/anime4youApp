@@ -59,9 +59,9 @@ public class GogoAnimeEpisodeDownloadTask extends EpisodeDownloadTask {
     }
 
     @Override
-    public void cancel() {
+    public void cancelExecution() {
         FFmpeg.cancel(ffmpegTask);
-        super.cancel();
+        super.cancelExecution();
     }
 
 }

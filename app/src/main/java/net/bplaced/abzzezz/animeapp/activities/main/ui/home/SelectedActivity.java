@@ -100,6 +100,7 @@ public class SelectedActivity extends AppCompatActivity {
                                 show.getEpisodeCount()),
                         Toast.LENGTH_SHORT
                 ).show();
+                refreshAdapter();
             } else {
                 Toast.makeText(
                         this,

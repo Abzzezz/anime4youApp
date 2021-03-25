@@ -28,7 +28,7 @@ public class StopDownloadReceiver extends BroadcastReceiver {
         if (!trigger.isCancelled()) {
             Logger.log("Further downloading cancelled", Logger.LogType.INFO);
             Toast.makeText(context, "Download cancelled", Toast.LENGTH_SHORT).show();
-            trigger.cancel();
+            trigger.cancelExecution();
         }
     }
 }

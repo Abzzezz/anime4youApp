@@ -36,6 +36,11 @@ public class AnimePaheEpisodeDownloadTask extends EpisodeDownloadTask implements
         if (!outDir.exists()) outDir.mkdir();
         this.outFile = new File(outDir, count[1] + ".mp4");
         //Fetch document
+        if (url.isEmpty()) {
+            this.progressHandler.onErrorThrown(getError("Video resolution"));
+            return null;
+        }
+
         final Document document = Jsoup.connect(url).userAgent(RandomUserAgent.getRandomUserAgent()).referrer(ANIME_PAHE_REFERER).get();
         final Elements javascriptElements = document.getElementsByTag("script");
 
@@ -43,7 +48,6 @@ public class AnimePaheEpisodeDownloadTask extends EpisodeDownloadTask implements
 
         final JsUnpacker jsUnpacker = new JsUnpacker(javascriptElements.get(javascriptElements.size() - 2).toString());
         if (!jsUnpacker.detect()) {
-            this.cancel();
             this.progressHandler.onErrorThrown(getError("Finding P.A.C.K.E.R"));
             return null;
         }
@@ -57,7 +61,6 @@ public class AnimePaheEpisodeDownloadTask extends EpisodeDownloadTask implements
         }
 
         if (m3u8Src.isEmpty()) {
-            this.cancel();
             this.progressHandler.onErrorThrown(getError("Extracting source"));
             return null;
         }
@@ -84,8 +87,8 @@ public class AnimePaheEpisodeDownloadTask extends EpisodeDownloadTask implements
     }
 
     @Override
-    public void cancel() {
+    public void cancelExecution() {
         FFmpeg.cancel(ffmpegTask);
-        super.cancel();
+        super.cancelExecution();
     }
 }

@@ -106,11 +106,12 @@ public class EpisodeDownloadTask extends EpisodeDownloadTaskExecutor implements 
 
             @Override
             public void onErrorThrown(String message) {
-                cancel();
+                cancelExecution();
                 sendErrorNotification(message);
+                Logger.log(message, Logger.LogType.ERROR);
                 try {
                     onComplete(message);
-                } catch (Exception e) {
+                } catch (final Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -144,7 +145,7 @@ public class EpisodeDownloadTask extends EpisodeDownloadTaskExecutor implements 
             return null;
         } catch (final MalformedURLException e) {
             progressHandler.onErrorThrown(getError(e));
-            this.cancel();
+            this.cancelExecution();
             return null;
         }
     }
@@ -172,7 +173,7 @@ public class EpisodeDownloadTask extends EpisodeDownloadTaskExecutor implements 
                     },
                     Long.parseLong(PreferenceManager.getDefaultSharedPreferences(application).getString("download_delay", "0")) * 1000);
         }
-        application.refreshAdapter();
+        this.refreshAdapter();
         //Set cancelled to false
         if (this.isCancelled()) {
             Logger.log("Threading was stopped. Cancelled stop, after further downloading was stopped", Logger.LogType.INFO);
@@ -203,7 +204,7 @@ public class EpisodeDownloadTask extends EpisodeDownloadTaskExecutor implements 
     /**
      * Cancel task
      */
-    public void cancel() {
+    public void cancelExecution() {
         if (this.fileOutputStream != null) {
             try {
                 this.fileOutputStream.flush();
@@ -212,10 +213,12 @@ public class EpisodeDownloadTask extends EpisodeDownloadTaskExecutor implements 
                 sendErrorNotification(e.getLocalizedMessage());
             }
         }
-        application.refreshAdapter();
+        this.refreshAdapter();
         //Set cancelled true
         this.cancel = true;
         Logger.log("Task cancelled, Streams flushed; File deleted: " + outFile.delete(), Logger.LogType.INFO);
+
+
     }
 
     protected long startFFDefaultTask(final List<String> ffmpegArguments, final String url, final String[]... requestHeaders) throws IOException {
@@ -239,12 +242,17 @@ public class EpisodeDownloadTask extends EpisodeDownloadTaskExecutor implements 
                     e.printStackTrace();
                 }
             } else {
-                cancel();
+                cancelExecution();
                 progressHandler.onErrorThrown(getError(Config.getLastCommandOutput()));
                 Log.i(Config.TAG, String.format("Async command execution failed with returnCode=%d.", returnCode));
             }
         });
     }
+
+    private void refreshAdapter() {
+        new Handler(Looper.getMainLooper()).post(application::refreshAdapter);
+    }
+
 
     protected void sendErrorNotification(final String errorMessage) {
         this.notification = new NotificationCompat.Builder(application, AnimeAppMain.NOTIFICATION_CHANNEL_ID)
