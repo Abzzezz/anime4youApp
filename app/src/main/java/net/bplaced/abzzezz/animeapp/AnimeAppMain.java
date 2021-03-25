@@ -21,8 +21,8 @@ import android.widget.Toast;
 import androidx.annotation.RequiresApi;
 import androidx.preference.PreferenceManager;
 import ga.abzzezz.util.logging.Logger;
-import net.bplaced.abzzezz.animeapp.util.scripter.StringHandler;
 import net.bplaced.abzzezz.animeapp.util.show.ShowSaver;
+import net.bplaced.abzzezz.animeapp.util.string.StringHandler;
 import net.bplaced.abzzezz.animeapp.util.tasks.PermissionTask;
 import net.bplaced.abzzezz.animeapp.util.tasks.TaskExecutor;
 
@@ -77,6 +77,7 @@ public class AnimeAppMain {
 
     /**
      * Check if user has access to the app
+     *
      * @param context context to make toast on
      */
     public void checkPermission(final Context context) {
@@ -94,6 +95,7 @@ public class AnimeAppMain {
                     Toast.makeText(context, "You are not registered. Please contact the developer and give him your clipboard id", Toast.LENGTH_SHORT).show();
                 }
             }
+
             @Override
             public void preExecute() {
             }
@@ -102,6 +104,7 @@ public class AnimeAppMain {
 
     /**
      * Checks permissions and internet connection
+     *
      * @param activity Activity to make toast on & request permissions
      */
     @RequiresApi(api = Build.VERSION_CODES.P)
@@ -119,6 +122,7 @@ public class AnimeAppMain {
 
     /**
      * Creates notification channel
+     *
      * @param context context to register service to
      */
     public void createNotificationChannel(final Context context) {
@@ -132,6 +136,7 @@ public class AnimeAppMain {
 
     /**
      * Generates a pseudo random id to the device's id
+     *
      * @return the generated pseudo id
      */
     private String generateID() {

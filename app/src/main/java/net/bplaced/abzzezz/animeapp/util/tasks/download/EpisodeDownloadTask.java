@@ -27,7 +27,7 @@ import net.bplaced.abzzezz.animeapp.util.M3U8Util;
 import net.bplaced.abzzezz.animeapp.util.connection.RBCWrapper;
 import net.bplaced.abzzezz.animeapp.util.connection.URLUtil;
 import net.bplaced.abzzezz.animeapp.util.receiver.StopDownloadReceiver;
-import net.bplaced.abzzezz.animeapp.util.scripter.StringHandler;
+import net.bplaced.abzzezz.animeapp.util.string.StringHandler;
 import net.bplaced.abzzezz.animeapp.util.tasks.TaskExecutor;
 
 import java.io.File;
@@ -52,7 +52,7 @@ public class EpisodeDownloadTask extends EpisodeDownloadTaskExecutor implements 
     protected final String name;
     protected final File outDir;
     protected final EpisodeDownloadProgressHandler progressHandler;
-    protected boolean cancel;
+    private boolean cancel;
     protected File outFile;
     protected FileOutputStream fileOutputStream; //Fileoutputstream, can be closed if canceled
     private NotificationManagerCompat notificationManagerCompat;

@@ -8,7 +8,7 @@ package net.bplaced.abzzezz.animeapp.util.tasks;
 
 import net.bplaced.abzzezz.animeapp.AnimeAppMain;
 import net.bplaced.abzzezz.animeapp.util.connection.URLUtil;
-import net.bplaced.abzzezz.animeapp.util.scripter.StringHandler;
+import net.bplaced.abzzezz.animeapp.util.string.StringHandler;
 
 import java.util.concurrent.Callable;
 

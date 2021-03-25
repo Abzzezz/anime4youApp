@@ -12,43 +12,74 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".activities.main.ui.home.SelectedActivity"
->
+        >
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/selected_show_swipe_refresh_layout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/show_provider_spinner"
+            app:layout_constraintBottom_toTopOf="@+id/download_show_button">
+
+        <ListView
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:id="@+id/show_episode_item_grid"
+                android:outlineProvider="paddedBounds"
+                />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <androidx.appcompat.widget.Toolbar
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:elevation="6dp"
-            android:id="@+id/selected_anime_toolbar"
-            app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
+            android:id="@+id/selected_show_toolbar"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginBottom="675dp" app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintVertical_bias="0.0"/>
+
     <ImageView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" tools:src="@tools:sample/avatars" android:id="@+id/anime_cover_image"
-            app:layout_constraintTop_toBottomOf="@+id/selected_anime_toolbar"
-            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintVertical_bias="0.0"
-            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent"
+            android:layout_height="wrap_content"
+            tools:src="@tools:sample/avatars"
+            android:id="@+id/show_cover_image_view"
+            app:layout_constraintTop_toBottomOf="@+id/selected_show_toolbar"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintVertical_bias="0.0"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintHorizontal_bias="0.0"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:src="@drawable/download"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:clickable="true" android:id="@+id/download_anime_button"
-            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintHorizontal_bias="0.955" app:layout_constraintVertical_bias="0.976"
-    />
+            android:clickable="true"
+            android:id="@+id/download_show_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintHorizontal_bias="0.955"
+            app:layout_constraintVertical_bias="0.976"
+            />
+
     <TextView
             android:text="Title:"
             android:layout_width="0dp"
-            android:layout_height="wrap_content" android:id="@+id/selected_show_name"
-            app:layout_constraintStart_toEndOf="@+id/anime_cover_image" app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/selected_anime_toolbar"
-            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintVertical_bias="0.0" android:alpha="0.87"
+            android:layout_height="wrap_content"
+            android:id="@+id/selected_show_title_text_view"
+            app:layout_constraintStart_toEndOf="@+id/show_cover_image_view"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/selected_show_toolbar"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintVertical_bias="0.0"
+            android:alpha="0.87"
             app:autoSizeTextType="uniform"
             app:autoSizeMinTextSize="12dp"
             app:autoSizeMaxTextSize="18dp"
@@ -57,52 +88,49 @@
     <TextView
             android:text="Episodes:"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:id="@+id/selected_anime_episodes"
-            app:layout_constraintStart_toEndOf="@+id/anime_cover_image" app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0" android:alpha="0.87"
-            app:layout_constraintTop_toBottomOf="@+id/selected_anime_aid"
-            app:layout_constraintBottom_toBottomOf="@+id/anime_cover_image" app:layout_constraintVertical_bias="0.0"/>
-
-    <ListView
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@+id/download_anime_button"
+            android:layout_height="wrap_content"
+            android:id="@+id/selected_show_episode_count_text_view"
+            app:layout_constraintStart_toEndOf="@+id/show_cover_image_view"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:id="@+id/anime_episodes_grid"
             app:layout_constraintHorizontal_bias="0.0"
-            android:elevation="4px"
-            android:outlineProvider="bounds"
-            app:layout_constraintTop_toBottomOf="@+id/provider_spinner"
+            android:alpha="0.87"
+            app:layout_constraintTop_toBottomOf="@+id/selected_show_id_text_view"
+            app:layout_constraintBottom_toBottomOf="@+id/show_cover_image_view"
             app:layout_constraintVertical_bias="0.0"/>
 
     <TextView
             android:text="ID:"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:id="@+id/selected_anime_aid"
+            android:layout_height="wrap_content"
+            android:id="@+id/selected_show_id_text_view"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/anime_cover_image"
+            app:layout_constraintStart_toEndOf="@+id/show_cover_image_view"
             app:layout_constraintHorizontal_bias="0.0"
-            android:alpha="0.87" app:layout_constraintBottom_toBottomOf="@+id/anime_cover_image"
-            app:layout_constraintTop_toBottomOf="@+id/selected_show_name" app:layout_constraintVertical_bias="0.3"/>
+            android:alpha="0.87"
+            app:layout_constraintBottom_toBottomOf="@+id/show_cover_image_view"
+            app:layout_constraintTop_toBottomOf="@+id/selected_show_title_text_view"
+            app:layout_constraintVertical_bias="0.3"/>
+
     <TextView
             android:text="Language:"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:id="@+id/selected_anime_language"
+            android:layout_height="wrap_content"
+            android:id="@+id/selected_show_language_text_view"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/anime_cover_image" app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintBottom_toBottomOf="@+id/anime_cover_image"
-            app:layout_constraintTop_toBottomOf="@+id/selected_anime_episodes"
+            app:layout_constraintStart_toEndOf="@+id/show_cover_image_view"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintBottom_toBottomOf="@+id/show_cover_image_view"
+            app:layout_constraintTop_toBottomOf="@+id/selected_show_episode_count_text_view"
             app:layout_constraintVertical_bias="0.0"/>
 
     <TextView
             android:text="Total size: "
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/anime_directory_size"
-            app:layout_constraintTop_toBottomOf="@+id/anime_episodes_grid"
+            android:id="@+id/show_directory_total_size_text_view"
+            app:layout_constraintTop_toBottomOf="@+id/selected_show_swipe_refresh_layout"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/download_anime_button"
+            app:layout_constraintEnd_toStartOf="@+id/download_show_button"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintHorizontal_bias="0.05"
             app:layout_constraintVertical_bias="0.5"/>
@@ -111,21 +139,21 @@
             android:text="Hoster: "
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/selected_anime_hoster"
-            app:layout_constraintStart_toEndOf="@+id/anime_cover_image"
+            android:id="@+id/selected_show_hoster_text_view"
+            app:layout_constraintStart_toEndOf="@+id/show_cover_image_view"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintBottom_toBottomOf="@+id/anime_cover_image"
-            app:layout_constraintTop_toBottomOf="@+id/selected_anime_language"
+            app:layout_constraintBottom_toBottomOf="@+id/show_cover_image_view"
+            app:layout_constraintTop_toBottomOf="@+id/selected_show_language_text_view"
             app:layout_constraintVertical_bias="0.0"/>
 
     <Spinner
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:id="@+id/provider_spinner"
+            android:id="@+id/show_provider_spinner"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/anime_episodes_grid"
-            app:layout_constraintTop_toBottomOf="@+id/anime_cover_image"
+            app:layout_constraintBottom_toTopOf="@+id/selected_show_swipe_refresh_layout"
+            app:layout_constraintTop_toBottomOf="@+id/show_cover_image_view"
             android:spinnerMode="dialog"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

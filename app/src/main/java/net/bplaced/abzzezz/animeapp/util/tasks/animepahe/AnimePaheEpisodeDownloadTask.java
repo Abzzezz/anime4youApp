@@ -10,8 +10,8 @@ import com.arthenica.mobileffmpeg.FFmpeg;
 import net.bplaced.abzzezz.animeapp.activities.main.ui.home.SelectedActivity;
 import net.bplaced.abzzezz.animeapp.util.connection.RandomUserAgent;
 import net.bplaced.abzzezz.animeapp.util.provider.holders.AnimePaheHolder;
-import net.bplaced.abzzezz.animeapp.util.scripter.JsUnpacker;
-import net.bplaced.abzzezz.animeapp.util.scripter.StringHandler;
+import net.bplaced.abzzezz.animeapp.util.string.JsUnpacker;
+import net.bplaced.abzzezz.animeapp.util.string.StringHandler;
 import net.bplaced.abzzezz.animeapp.util.tasks.download.EpisodeDownloadTask;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -40,9 +40,15 @@ public class AnimePaheEpisodeDownloadTask extends EpisodeDownloadTask implements
         final Elements javascriptElements = document.getElementsByTag("script");
 
         //Get second to last javascript
-        final String unpackedJS = new JsUnpacker(javascriptElements.get(javascriptElements.size() - 2).toString()).unpack();
 
-        final Matcher videoSrcMatcher = videoSrcPattern.matcher(unpackedJS);
+        final JsUnpacker jsUnpacker = new JsUnpacker(javascriptElements.get(javascriptElements.size() - 2).toString());
+        if (!jsUnpacker.detect()) {
+            this.cancel();
+            this.progressHandler.onErrorThrown(getError("Finding P.A.C.K.E.R"));
+            return null;
+        }
+
+        final Matcher videoSrcMatcher = videoSrcPattern.matcher(jsUnpacker.unpack()); //Prepare matcher with unpacked javascript
 
         String m3u8Src = "";
         while (videoSrcMatcher.find()) {

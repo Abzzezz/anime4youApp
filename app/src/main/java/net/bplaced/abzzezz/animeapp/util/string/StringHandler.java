@@ -4,7 +4,7 @@
  * Last modified: 14.06.20, 20:08
  */
 
-package net.bplaced.abzzezz.animeapp.util.scripter;
+package net.bplaced.abzzezz.animeapp.util.string;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

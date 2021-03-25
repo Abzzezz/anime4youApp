@@ -37,13 +37,22 @@ public class OfflineImageLoader {
             //Create new task
             new TaskExecutor().executeAsync(() -> {
                 //Load image bitmap into new file, compress etc.
-                Picasso.with(context).load(url).get().compress(Bitmap.CompressFormat.JPEG, PreferenceManager.getDefaultSharedPreferences(context).getInt("image_compression", 50), new FileOutputStream(imageBitmap));
+                Picasso.with(context)
+                        .load(url)
+                        .get()
+                        .compress(
+                                Bitmap.CompressFormat.JPEG,
+                                PreferenceManager.getDefaultSharedPreferences(context).getInt("image_compression", 50),
+                                new FileOutputStream(imageBitmap));
                 return null;
             }, new TaskExecutor.Callback<Object>() {
                 @Override
                 public void onComplete(Object result) {
                     //Load image in
-                    Picasso.with(context).load(imageBitmap).resize(ImageUtil.IMAGE_COVER_DIMENSIONS[0], ImageUtil.IMAGE_COVER_DIMENSIONS[1]).into(imageView);
+                    Picasso.with(context)
+                            .load(imageBitmap)
+                            .resize(ImageUtil.IMAGE_COVER_DIMENSIONS[0], ImageUtil.IMAGE_COVER_DIMENSIONS[1])
+                            .into(imageView);
                 }
 
                 @Override
@@ -52,8 +61,11 @@ public class OfflineImageLoader {
                 }
             });
         } else {
-            //Load image from saved
-            Picasso.with(context).load(imageBitmap).resize(ImageUtil.IMAGE_COVER_DIMENSIONS[0], ImageUtil.IMAGE_COVER_DIMENSIONS[1]).into(imageView);
+            //Load image from storage
+            Picasso.with(context)
+                    .load(imageBitmap)
+                    .resize(ImageUtil.IMAGE_COVER_DIMENSIONS[0], ImageUtil.IMAGE_COVER_DIMENSIONS[1])
+                    .into(imageView);
         }
     }
 }

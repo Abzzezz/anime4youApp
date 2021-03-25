@@ -9,7 +9,7 @@ package net.bplaced.abzzezz.animeapp.util.show;
 import ga.abzzezz.util.logging.Logger;
 import net.bplaced.abzzezz.animeapp.AnimeAppMain;
 import net.bplaced.abzzezz.animeapp.util.provider.Provider;
-import net.bplaced.abzzezz.animeapp.util.scripter.StringHandler;
+import net.bplaced.abzzezz.animeapp.util.string.StringHandler;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;

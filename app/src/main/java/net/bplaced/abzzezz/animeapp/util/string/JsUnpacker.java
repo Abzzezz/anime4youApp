@@ -1,4 +1,4 @@
-package net.bplaced.abzzezz.animeapp.util.scripter;
+package net.bplaced.abzzezz.animeapp.util.string;
 
 
 import java.util.HashMap;

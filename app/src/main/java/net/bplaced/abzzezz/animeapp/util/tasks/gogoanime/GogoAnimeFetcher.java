@@ -7,7 +7,7 @@
 package net.bplaced.abzzezz.animeapp.util.tasks.gogoanime;
 
 import net.bplaced.abzzezz.animeapp.util.connection.RandomUserAgent;
-import net.bplaced.abzzezz.animeapp.util.scripter.StringHandler;
+import net.bplaced.abzzezz.animeapp.util.string.StringHandler;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.jsoup.Connection;

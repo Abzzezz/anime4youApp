@@ -19,7 +19,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.squareup.picasso.Picasso;
 import ga.abzzezz.util.logging.Logger;
 import id.ionbit.ionalert.IonAlert;
@@ -27,12 +26,10 @@ import net.bplaced.abzzezz.animeapp.AnimeAppMain;
 import net.bplaced.abzzezz.animeapp.R;
 import net.bplaced.abzzezz.animeapp.util.IntentHelper;
 import net.bplaced.abzzezz.animeapp.util.file.OfflineImageLoader;
-import net.bplaced.abzzezz.animeapp.util.scripter.StringHandler;
 import net.bplaced.abzzezz.animeapp.util.show.Show;
 import net.bplaced.abzzezz.animeapp.util.ui.ImageUtil;
 
 import java.io.File;
-import java.util.Objects;
 import java.util.Optional;
 
 public class ListFragment extends Fragment {
@@ -75,25 +72,7 @@ public class ListFragment extends Fragment {
                     .show();
         }
 
-        final SwipeRefreshLayout swipeRefreshLayout = root.findViewById(R.id.swiperefresh);
-        swipeRefreshLayout.setOnRefreshListener(() -> {
-            if (StringHandler.isOffline(Objects.requireNonNull(getContext()))) return;
 
-            for (int i = 0; i < AnimeAppMain.getInstance().getShowSaver().getShowSize(); i++) {
-                int finalI = i;
-                AnimeAppMain.getInstance().getShowSaver().getShow(i).ifPresent(show -> {
-                    //TODO: Reimplement
-/*
-                    show.getProvider().refreshShow(show, refreshedShow -> {
-                        AnimeAppMain.getInstance().getShowSaver().refreshShow(refreshedShow, finalI);
-                        Toast.makeText(getContext(), "Refreshed show:" + refreshedShow.getShowTitle(), Toast.LENGTH_SHORT).show();
-                    })
-
- */
-                });
-            }
-            swipeRefreshLayout.setRefreshing(false);
-        });
         return root;
     }
 
@@ -107,7 +86,7 @@ public class ListFragment extends Fragment {
         AnimeAppMain.getInstance().getShowSaver().getShow(index).ifPresent(show -> {
             IntentHelper.addObjectForKey(show, "show");
             this.startActivity(intent);
-            Objects.requireNonNull(getActivity()).finish();
+            requireActivity().finish();
         });
     }
 

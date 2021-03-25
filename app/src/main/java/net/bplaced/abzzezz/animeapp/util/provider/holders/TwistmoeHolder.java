@@ -6,7 +6,7 @@
 
 package net.bplaced.abzzezz.animeapp.util.provider.holders;
 
-import net.bplaced.abzzezz.animeapp.util.scripter.StringHandler;
+import net.bplaced.abzzezz.animeapp.util.string.StringHandler;
 
 import java.util.Random;
 
