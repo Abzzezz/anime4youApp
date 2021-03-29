@@ -33,13 +33,13 @@ public class Twistmoe extends Provider {
 
     @Override
     public void refreshShow(final Show show, final Consumer<Show> updatedShow) {
-        new TaskExecutor().executeAsync(() ->
-                new TwistmoeFetchCallable(show.getProviderJSON(this).getString("slug")).call(), new TaskExecutor.Callback<JSONObject>() {
+        show.getProviderJSON(this).ifPresent(jsonObject -> new TaskExecutor().executeAsync(() ->
+                new TwistmoeFetchCallable(jsonObject.getString("slug")).call(), new TaskExecutor.Callback<JSONObject>() {
             @Override
-            public void onComplete(JSONObject result) {
+            public void onComplete(final JSONObject result) {
                 try {
-                    show.addEpisodesForProvider(result.getJSONArray("src"), Twistmoe.this);
-                    updatedShow.accept(show);
+                    show.addEpisodesForProvider(result.getJSONArray("src"), Twistmoe.this); //Add the new episode urls
+                    updatedShow.accept(show); //"Return" the show object
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -49,7 +49,7 @@ public class Twistmoe extends Provider {
             public void preExecute() {
                 Logger.log("Refreshing twist.moe", Logger.LogType.INFO);
             }
-        });
+        }));
     }
 
     @Override
@@ -59,15 +59,16 @@ public class Twistmoe extends Provider {
             public void onComplete(List<JSONObject> result) {
                 if (result.size() >= 1) {
                     //This is bad..... I haven't thought this through.... I have to gamble i guess
-                    try {
-                        final JSONObject providerJSON = show.getProviderJSON(Twistmoe.this);
-                        providerJSON.put("slug", result.get(0).getString("url"));
-                        show.updateProviderJSON(Twistmoe.this, providerJSON);
+                    show.getProviderJSON(Twistmoe.this).ifPresent(providerJSON -> {
+                        try {
+                            providerJSON.put("slug", result.get(0).getString("url")); //Update provider json object
+                            show.updateProviderJSON(Twistmoe.this, providerJSON); //Update provider json
 
-                        showReferrals.accept(result.get(0).getJSONArray("src"));
-                    } catch (final JSONException e) {
-                        e.printStackTrace();
-                    }
+                            showReferrals.accept(result.get(0).getJSONArray("src")); //"Return" the
+                        } catch (final JSONException e) {
+                            e.printStackTrace();
+                        }
+                    });
                 }
             }
 

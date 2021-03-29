@@ -8,8 +8,6 @@ package net.bplaced.abzzezz.animeapp.util.tasks.gogoanime;
 
 import net.bplaced.abzzezz.animeapp.util.connection.RandomUserAgent;
 import net.bplaced.abzzezz.animeapp.util.string.StringHandler;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -73,8 +71,6 @@ public class GogoAnimeFetcher {
                         final Document episodeDocument = createGogoCdn(episodesURL, userAgent).get();
                         final String src = episodeDocument.selectFirst("iframe").attr("src");
 
-                        System.out.println(src);
-
                         final Matcher matcher = PATTERN.matcher(src);
                         if (matcher.find()) {
                             System.out.println(matcher.group());
@@ -100,25 +96,6 @@ public class GogoAnimeFetcher {
     }
 
     /**
-     * @param urlIn url to extract from
-     * @return extracted direct url
-     * @throws JSONException when bad json is parsed
-     */
-    public static String getDirectVideoURL(final String urlIn) throws JSONException {
-        return getVidURL(String.format(API_URL, urlIn));
-    }
-
-    /**
-     * Gets the direct video url from the formatted api link
-     *
-     * @param in read in lines
-     * @return url to mp4
-     */
-    private static String getVidURL(final String in) throws JSONException {
-        return new JSONObject(in).getJSONArray("source").getJSONObject(0).getString("file");
-    }
-
-    /**
      * Create jsoup connection
      *
      * @param url       url in
@@ -138,15 +115,6 @@ public class GogoAnimeFetcher {
      */
     private static Connection createGogoCdn(final String url, final String userAgent) {
         return Jsoup.connect(url).userAgent(userAgent).header("authority", "ajax.gogocdn.net");
-    }
-
-    /**
-     * Fetches the show's image from it's url
-     *
-     * @return the image's url
-     */
-    public String fetchImage0() {
-        return showDocument.selectFirst("meta[property=og:image]").attr("content");
     }
 
     /**
@@ -191,7 +159,7 @@ public class GogoAnimeFetcher {
          * Grab episodes & fetch ids
          */
 
-        final String episodesURL = String.format(EPISODE_API_URL, epiStart, epiEnd, id);
+        final String episodesURL = String.format(Locale.ENGLISH, EPISODE_API_URL, epiStart, epiEnd, id);
         final Document episodesDocument = createGogoCdn(episodesURL, userAgent).get();
 
         return episodesDocument.body().getElementById("episode_related").children().stream()
@@ -221,10 +189,6 @@ public class GogoAnimeFetcher {
     private String sanitizeString(String string) {
         if (string == null) return "";
         return string.replaceAll("[\u0000-\u001f<>:\"/\\\\|?*\u007f]+", "").trim();
-    }
-
-    public String getShowTitle() {
-        return showTitle;
     }
 
     public String[] getFetchedDirectURLs() {

@@ -37,15 +37,16 @@ public class AnimePahe extends Provider {
             @Override
             public void onComplete(JSONObject result) {
                 //This is bad..... I haven't thought this through.... I have to gamble i guess
-                try {
-                    final JSONObject providerJSON = show.getProviderJSON(AnimePahe.this);
-                    providerJSON.put("session", result.getString("session"));
-                    show.updateProviderJSON(AnimePahe.this, providerJSON);
+                show.getProviderJSON(AnimePahe.this).ifPresent(providerJSON -> {
+                    try {
+                        providerJSON.put("session", result.getString("session")); //Update session
+                        show.updateProviderJSON(AnimePahe.this, providerJSON); //Update provider json
 
-                    updatedShow.accept(show);
-                } catch (final JSONException e) {
-                    e.printStackTrace();
-                }
+                        updatedShow.accept(show); //"Return" the updated show object
+                    } catch (final JSONException e) {
+                        e.printStackTrace();
+                    }
+                });
             }
 
             @Override
@@ -62,15 +63,15 @@ public class AnimePahe extends Provider {
             public void onComplete(List<JSONObject> result) {
                 if (result.size() >= 1) {
                     //This is bad..... I haven't thought this through.... I have to gamble i guess
-                    try {
-                        final JSONObject providerJSON = show.getProviderJSON(AnimePahe.this);
-                        providerJSON.put("session", result.get(0).getString("session"));
-                        show.updateProviderJSON(AnimePahe.this, providerJSON);
-
-                        showReferrals.accept(result.get(0).getJSONArray("src"));
-                    } catch (final JSONException e) {
-                        e.printStackTrace();
-                    }
+                    show.getProviderJSON(AnimePahe.this).ifPresent(providerJSON -> {
+                        try {
+                            providerJSON.put("session", result.get(0).getString("session"));
+                            show.updateProviderJSON(AnimePahe.this, providerJSON);
+                            showReferrals.accept(result.get(0).getJSONArray("src"));
+                        } catch (final JSONException e) {
+                            e.printStackTrace();
+                        }
+                    });
                 }
             }
 

@@ -14,11 +14,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Optional;
+
 public class Show {
 
     private final String malID;
     private final String showTitle;
-    private final String showReleaseYear;
+    private final double showScore;
     private final String imageURL;
     private final int episodeCount;
 
@@ -27,18 +29,18 @@ public class Show {
     /**
      * Basic Show object constructed from MAL data
      *
-     * @param id              MAL ID
-     * @param title           Title fetched from MAL
-     * @param episodeCount    episode count
-     * @param imageURL        image url from MAL
-     * @param showReleaseYear the year the show was released
+     * @param id           MAL ID
+     * @param title        Title fetched from MAL
+     * @param episodeCount episode count
+     * @param imageURL     image url from MAL
+     * @param showScore    the year the show was released
      */
-    public Show(String id, String title, int episodeCount, String imageURL, final String showReleaseYear) {
+    public Show(String id, String title, int episodeCount, String imageURL, final double showScore) {
         this.malID = id;
         this.showTitle = title;
         this.episodeCount = episodeCount;
         this.imageURL = imageURL;
-        this.showReleaseYear = showReleaseYear;
+        this.showScore = showScore;
         this.providers = new JSONObject();
     }
 
@@ -48,18 +50,20 @@ public class Show {
      * @param showJSON showJSON to restore the show from
      * @throws JSONException json
      */
-    public Show(JSONObject showJSON) throws JSONException {
+    public Show(final JSONObject showJSON) throws JSONException {
         this.malID = showJSON.getString(StringHandler.SHOW_ID);
         this.showTitle = showJSON.getString(StringHandler.SHOW_TITLE);
         this.episodeCount = showJSON.getInt(StringHandler.SHOW_EPISODE_COUNT);
         this.imageURL = showJSON.getString(StringHandler.SHOW_IMAGE_URL);
-        this.showReleaseYear = showJSON.getString(StringHandler.SHOW_YEAR);
+        this.showScore = showJSON.getDouble(StringHandler.SHOW_SCORE);
         this.providers = showJSON.getJSONObject("provider_info");
     }
 
     /**
-     * @param provider
-     * @return
+     * Gets all episodes from a certain provider
+     *
+     * @param provider provider to get the episodes from
+     * @return JSONArray with all episode referrals
      */
     public JSONArray getShowEpisodes(final Provider provider) {
         try {
@@ -77,37 +81,47 @@ public class Show {
         }
     }
 
+    /**
+     * Calculates the difference between the timestamp of the provider & the current system time
+     * Used to calculate the age of the episode referrals
+     *
+     * @param provider provider to get the timestamp of
+     * @return Difference between the current time and the timestamp
+     */
     public long getTimestampDifference(final Provider provider) {
-        try {
-            final JSONObject providerJSON = getProviderJSON(provider);
-            if (providerJSON.has("time")) {
-                return System.currentTimeMillis() - providerJSON.getLong("time");
-            } else return System.currentTimeMillis();
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return System.currentTimeMillis();
-        }
+        return this.getProviderJSON(provider)
+                .map(jsonObject -> System.currentTimeMillis() - jsonObject.optLong("time"))
+                .orElse(System.currentTimeMillis());
     }
 
     public void addEpisodesForProvider(final JSONArray episodes, final Provider provider) {
-        try {
-            final JSONObject providerJSON = providers.getJSONObject(provider.getName()); //Retrieve information
-            providerJSON.put("episodes", episodes); //Update
-            providerJSON.put("time", System.currentTimeMillis());
+        this.getProviderJSON(provider).ifPresent(providerJSON -> {
+            try {
+                providerJSON.put("episodes", episodes); //Update
+                providerJSON.put("time", System.currentTimeMillis());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
             this.updateProviderJSON(provider, providerJSON);
-        } catch (final JSONException e) {
-            e.printStackTrace();
-        }
+        });
     }
 
-    public JSONObject getProviderJSON(final Provider provider) throws JSONException {
-        if (providers.has(provider.getName())) {
-            return providers.getJSONObject(provider.getName());
-        } else {
-            return new JSONObject();
-        }
+    /**
+     * Gets the providers JSON
+     *
+     * @param provider Provider to get the JSONObject of
+     * @return the provider's json object, wrapped in an optional. Returns Optional.empty() if no key was found
+     */
+    public Optional<JSONObject> getProviderJSON(final Provider provider) {
+        return Optional.ofNullable(providers.optJSONObject(provider.getName()));
     }
 
+    /**
+     * Updates the provider's JSON
+     *
+     * @param provider     provider to update the JSON of
+     * @param providerJSON provider Json to write
+     */
     public void updateProviderJSON(final Provider provider, final JSONObject providerJSON) {
         try {
             this.providers.put(provider.getName(), providerJSON);
@@ -117,6 +131,9 @@ public class Show {
         }
     }
 
+    /**
+     * Updates this show at it's given index
+     */
     public void updateShow() {
         final int index = AnimeAppMain.getInstance().getShowSaver().getIndex(this);
         if (index == -1) {
@@ -125,6 +142,9 @@ public class Show {
             AnimeAppMain.getInstance().getShowSaver().refreshShow(this, index);
     }
 
+    /**
+     * @return JSONObject with all needed information
+     */
     @Override
     public String toString() {
         try {
@@ -132,7 +152,7 @@ public class Show {
             jsonObject
                     .put(StringHandler.SHOW_ID, getID())
                     .put(StringHandler.SHOW_TITLE, getShowTitle())
-                    .put(StringHandler.SHOW_YEAR, getShowReleaseYear())
+                    .put(StringHandler.SHOW_SCORE, getShowScore())
                     .put(StringHandler.SHOW_IMAGE_URL, getImageURL())
                     .put(StringHandler.SHOW_EPISODE_COUNT, getEpisodeCount())
                     .put("provider_info", providers);
@@ -143,8 +163,8 @@ public class Show {
         }
     }
 
-    public String getShowReleaseYear() {
-        return showReleaseYear;
+    public double getShowScore() {
+        return showScore;
     }
 
     public String getID() {

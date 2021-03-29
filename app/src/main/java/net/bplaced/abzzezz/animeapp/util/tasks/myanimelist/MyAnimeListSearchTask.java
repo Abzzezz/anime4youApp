@@ -42,7 +42,7 @@ public class MyAnimeListSearchTask extends TaskExecutor implements Callable<List
                                 anime.title,
                                 anime.episodes,
                                 anime.imageUrl,
-                                "N/A")
+                                anime.score)
                 ).collect(Collectors.toList());
     }
 }

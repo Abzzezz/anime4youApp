@@ -6,7 +6,7 @@
 
 package net.bplaced.abzzezz.animeapp.util.provider.holders;
 
-public class AniFlixHolder {
+public interface AniFlixHolder {
 
     //Accepts post requests, with the keyword
     //post: search

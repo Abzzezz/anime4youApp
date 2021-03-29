@@ -8,7 +8,7 @@ package net.bplaced.abzzezz.animeapp.util.provider.holders;
 
 import net.bplaced.abzzezz.animeapp.util.string.StringHandler;
 
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 public interface TwistmoeHolder {
 
@@ -19,6 +19,6 @@ public interface TwistmoeHolder {
 
     default String getRequestToken() {
         final String[] tokens = {"0df14814b9e590a1f26d3071a4ed7974"};
-        return tokens[new Random().nextInt(tokens.length)];
+        return tokens[ThreadLocalRandom.current().nextInt(tokens.length)];
     }
 }

@@ -100,7 +100,6 @@ public class SelectedActivity extends AppCompatActivity {
                                 show.getEpisodeCount()),
                         Toast.LENGTH_SHORT
                 ).show();
-                refreshAdapter();
             } else {
                 Toast.makeText(
                         this,
@@ -109,6 +108,12 @@ public class SelectedActivity extends AppCompatActivity {
                         Toast.LENGTH_SHORT
                 ).show();
             }
+
+            final int providerEpisodeLength = show.getShowEpisodes(currentProvider).length();
+            //TODO: Remove "hack"
+            ((TextView) findViewById(R.id.selected_show_episode_count_text_view)).setText("Episodes:" + providerEpisodeLength); //Update count
+            episodeAdapter.setEpisodes(providerEpisodeLength);
+
             swipeRefreshLayout.setRefreshing(false);
         });
 

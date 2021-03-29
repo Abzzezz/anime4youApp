@@ -7,6 +7,8 @@
 package net.bplaced.abzzezz.animeapp.util.tasks.gogoanime;
 
 import net.bplaced.abzzezz.animeapp.util.tasks.TaskExecutor;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -30,7 +32,7 @@ public class GogoAnimeSearchTask extends TaskExecutor implements Callable<List<J
     @Override
     public List<JSONObject> call() throws IOException {
 
-      /*  final List<JSONObject> showsOut = new ArrayList<>();
+        final List<JSONObject> showsOut = new ArrayList<>();
 
         final String[] urls = GogoAnimeFetcher.getURLsFromSearch(searchQuery);
 
@@ -38,8 +40,6 @@ public class GogoAnimeSearchTask extends TaskExecutor implements Callable<List<J
             try {
                 final GogoAnimeFetcher fetcher = new GogoAnimeFetcher(url);
                 final String id = fetcher.getID();
-                final String title = fetcher.getShowTitle();
-                final String imageURL = fetcher.fetchImage0();
                 final String episodeStart = fetcher.getEpisodeStart();
                 final String episodeEnd = fetcher.getEpisodeEnd();
 
@@ -48,22 +48,17 @@ public class GogoAnimeSearchTask extends TaskExecutor implements Callable<List<J
                 for (final String fetchedDirectURL : fetcher.getFetchedDirectURLs())
                     episodes.put(fetchedDirectURL);
 
-                showsOut.add(Providers.GOGOANIME.getProvider().getShowFromProvider(new JSONObject()
-                        .put(StringHandler.SHOW_ID, id)
-                        .put(StringHandler.SHOW_TITLE, title)
-                        .put(StringHandler.SHOW_LANG, "eng")
-                        .put("ep_start", episodeStart)
-                        .put("ep_end", episodeEnd)
-                        .put(StringHandler.SHOW_IMAGE_URL, imageURL)
-                        .put("episodes", episodes)));
-
+                showsOut.add(
+                        new JSONObject()
+                                .put("id", id)
+                                .put("ep_start", episodeStart)
+                                .put("ep_end", episodeEnd)
+                                .put("episodes", fetcher.getFetchedDirectURLs())
+                );
             } catch (final IOException | JSONException e) {
                 e.printStackTrace();
             }
         }
         return showsOut;
-
-       */
-        return new ArrayList<>();
     }
 }

@@ -48,21 +48,23 @@ public class GogoAnime extends Provider {
     public void getShowEpisodeReferrals(Show show, Consumer<JSONArray> showReferrals) {
         new GogoAnimeSearchTask(show.getShowTitle()).executeAsync(new TaskExecutor.Callback<List<JSONObject>>() {
             @Override
-            public void onComplete(List<JSONObject> result) {
+            public void onComplete(final List<JSONObject> result) {
                 if (result.size() > 1) {
                     //This is bad..... I haven't thought this through.... I have to gamble i guess
-                    try {
-                        final JSONObject resultJSON = result.get(0);
-                        final JSONObject providerJSON = show.getProviderJSON(GogoAnime.this);
+                    show.getProviderJSON(GogoAnime.this).ifPresent(providerJSON -> {
+                        try {
+                            final JSONObject resultJSON = result.get(0);
 
-                        providerJSON.put("ep_start", resultJSON.getInt("ep_start"))
-                                .put("ep_end", resultJSON.getInt("ep_end"));
+                            providerJSON.put("ep_start", resultJSON.getInt("ep_start"))
+                                    .put("ep_end", resultJSON.getInt("ep_end"));
 
+                            show.updateProviderJSON(GogoAnime.this, providerJSON);
 
-                        showReferrals.accept(resultJSON.getJSONArray("src"));
-                    } catch (final JSONException e) {
-                        e.printStackTrace();
-                    }
+                            showReferrals.accept(resultJSON.getJSONArray("src"));
+                        } catch (final JSONException e) {
+                            e.printStackTrace();
+                        }
+                    });
                 }
             }
 
