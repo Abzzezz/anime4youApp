@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2021. Roman P.
  * All code is owned by Roman P. APIs are mentioned.
- * Last modified: 26.02.21, 20:47
+ * Last modified: 03.04.21, 18:15
  */
 
-package net.bplaced.abzzezz.animeapp.util;
+package net.bplaced.abzzezz.animeapp.util.crypto;
 
 import net.bplaced.abzzezz.animeapp.util.connection.URLUtil;
 
@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
+import java.util.stream.Stream;
 
 public class M3U8Util {
 
@@ -28,15 +29,9 @@ public class M3U8Util {
 
         final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), StandardCharsets.UTF_8));
 
-        int segments = 0;
-        String line;
-
-        while ((line = bufferedReader.readLine()) != null) {
-            if (line.startsWith("#EXTINF:")) {
-                segments++;
-            }
+        try (final Stream<String> lines = bufferedReader.lines()) {
+            return (int) lines.filter(s -> s.startsWith("#EXTINF:")).count();
         }
-        return segments;
     }
 
 }

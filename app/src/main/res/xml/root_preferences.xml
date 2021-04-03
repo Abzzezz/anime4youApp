@@ -7,7 +7,7 @@
 <PreferenceScreen
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:background="@color/primaryColorDark">
+        android:background="@color/colorPrimary">
 
     <PreferenceCategory
             app:title="@string/global_settings">
@@ -35,9 +35,6 @@
                 app:title="@string/image_compression_strength"
                 app:defaultValue="50"/>
 
-        <Preference
-                android:title="Import from MAL"
-                android:key="import_mal"/>
     </PreferenceCategory>
     <PreferenceCategory
             android:title="@string/global_video">
@@ -75,12 +72,6 @@
                 android:key="copy_sd_card"/>
 
 
-        <PreferenceCategory
-                android:title="@string/show_search">
-            <Preference
-                    android:title="Clear tracker"
-                    android:key="clear_tracker"/>
-        </PreferenceCategory>
     </PreferenceCategory>
 
 </PreferenceScreen>

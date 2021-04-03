@@ -7,9 +7,8 @@
 
 <resources>
 
-    <color name="toolbarDark">#30475e</color>
-    <color name="primaryColorDark">#222831</color>
-    <color name="textDark">#ececec</color>
-    <color name="accentColor">#f2a365</color>
+    <color name="colorPrimaryDark">#4b5d67</color>
+    <color name="colorPrimary">#322f3d</color>
+    <color name="colorAccent">#87556f</color>
 
 </resources>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright (c) 2020. Roman P.
+  ~ Copyright (c) 2021. Roman P.
   ~ All code is owned by Roman P. APIs are mentioned.
-  ~ Last modified: 10.06.20, 13:34
+  ~ Last modified: 03.04.21, 18:43
   -->
 
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -13,18 +13,18 @@
                                                    android:id="@+id/anime_list_layout">
 
     <GridView
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:numColumns="3"
-            android:columnWidth="@android:dimen/thumbnail_width"
-            android:stretchMode="columnWidth"
+            android:horizontalSpacing="6dp"
+            android:numColumns="2"
+            android:verticalSpacing="6dp"
             tools:context="net.bplaced.abzzezz.animeapp.activities.main.AnimeListActivity"
-            android:id="@+id/anime_grid"
+            android:id="@+id/show_item_grid"
+
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintVertical_bias="0.0"
             app:layout_constraintTop_toTopOf="parent">
 
     </GridView>

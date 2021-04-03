@@ -57,19 +57,6 @@ public class SearchFragment extends Fragment {
                     }
                 });
                 showSearch.clearFocus();
-
-                /*
-                for (final Providers value : Providers.values()) {
-                    if (value == Providers.NULL) continue;
-
-                    value.getProvider().handleSearch(query, shows -> {
-                        searchAdapter.getEntries().addAll(shows);
-                        searchAdapter.notifyDataSetChanged();
-                    });
-                }
-                showSearch.clearFocus();
-
-                 */
                 return true;
             }
 
@@ -108,7 +95,7 @@ public class SearchFragment extends Fragment {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             if (convertView == null) {
-                convertView = LayoutInflater.from(context).inflate(R.layout.show_item_layout, parent, false);
+                convertView = LayoutInflater.from(context).inflate(R.layout.show_search_item_layout, parent, false);
 
                 final Show showAtIndex = (Show) getItem(position);
 
@@ -121,10 +108,10 @@ public class SearchFragment extends Fragment {
                     }
                 });
 
-                final TextView showTitle = convertView.findViewById(R.id.show_title);
-                final TextView showEpisodes = convertView.findViewById(R.id.show_episodes);
-                final TextView showYear = convertView.findViewById(R.id.show_provider);
-                final ImageView imageView = convertView.findViewById(R.id.show_image);
+                final TextView showTitle = convertView.findViewById(R.id.show_title_text_view_search);
+                final TextView showEpisodes = convertView.findViewById(R.id.show_episodes_text_view_search);
+                final TextView showYear = convertView.findViewById(R.id.show_provider_text_view_search);
+                final ImageView imageView = convertView.findViewById(R.id.show_cover_image_view_search);
 
                 Picasso.with(context).load(showAtIndex.getImageURL()).into(imageView);
 

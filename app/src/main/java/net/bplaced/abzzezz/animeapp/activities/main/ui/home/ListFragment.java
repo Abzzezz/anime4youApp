@@ -12,10 +12,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.GridView;
-import android.widget.ImageView;
-import android.widget.Toast;
+import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
@@ -34,15 +31,14 @@ import java.util.Optional;
 
 public class ListFragment extends Fragment {
 
-    private AnimeAdapter animeAdapter;
-
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View root = inflater.inflate(R.layout.list_fragment_layout, container, false);
+        final View root = inflater.inflate(R.layout.show_list_item_layout, container, false);
 
-        final GridView gridView = root.findViewById(R.id.anime_grid);
-        this.animeAdapter = new AnimeAdapter(AnimeAppMain.getInstance().getShowSaver().getShowSize(), getActivity());
+        final GridView gridView = root.findViewById(R.id.show_item_grid);
 
-        gridView.setAdapter(animeAdapter);
+        final ShowAdapter showAdapter = new ShowAdapter(AnimeAppMain.getInstance().getShowSaver().getShowSize(), getActivity());
+
+        gridView.setAdapter(showAdapter);
         /*
          * Set onclick listener, if clicked pass information through to selected anime.
          */
@@ -56,7 +52,7 @@ public class ListFragment extends Fragment {
                     .setContentText("Won't be able to recover this file!")
                     .setConfirmText("Yes,delete it!")
                     .setConfirmClickListener(ionAlert -> {
-                        animeAdapter.removeItem(position);
+                        showAdapter.removeItem(position);
                         ionAlert.dismissWithAnimation();
                     }).setCancelText("Abort").setCancelClickListener(IonAlert::dismissWithAnimation)
                     .show();
@@ -89,12 +85,12 @@ public class ListFragment extends Fragment {
         });
     }
 
-    class AnimeAdapter extends BaseAdapter {
+    class ShowAdapter extends BaseAdapter {
 
         private final Context context;
         private int size;
 
-        public AnimeAdapter(int size, final Context context) {
+        public ShowAdapter(int size, final Context context) {
             this.size = size;
             this.context = context;
         }
@@ -116,7 +112,13 @@ public class ListFragment extends Fragment {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            final ImageView coverImage = new ImageView(context);
+            if (convertView == null)
+                convertView = LayoutInflater.from(context).inflate(R.layout.show_item_layout, parent, false);
+
+            final ImageView coverImage = convertView.findViewById(R.id.show_cover_image_view_item);
+            final TextView showTitle = convertView.findViewById(R.id.show_title_text_view_item);
+
+            AnimeAppMain.getInstance().getShowSaver().getShow(position).ifPresent(show -> showTitle.setText(show.getShowTitle()));
 
             AnimeAppMain.getInstance().getShowSaver().getShow(position).ifPresent(show -> {
                 final String imageURL = show.getImageURL();
@@ -127,7 +129,7 @@ public class ListFragment extends Fragment {
                     Picasso.with(context).load(imageURL).resize(ImageUtil.IMAGE_COVER_DIMENSIONS[0], ImageUtil.IMAGE_COVER_DIMENSIONS[1]).into(coverImage);
             });
             coverImage.setAdjustViewBounds(true);
-            return coverImage;
+            return convertView;
         }
 
         public void removeItem(final int index) {

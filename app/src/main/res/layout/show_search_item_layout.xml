@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2021. Roman P.
+  ~ All code is owned by Roman P. APIs are mentioned.
+  ~ Last modified: 03.04.21, 18:33
+  -->
+
+
+<androidx.cardview.widget.CardView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="5dp"
+        style="@style/MyCardStyle">
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:textSize="16sp"
+                android:layout_height="wrap_content"
+                android:id="@+id/show_title_text_view_search"
+                android:text="Title: "
+                />
+
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:maxLength="30"
+                android:textSize="16sp"
+                android:layout_height="wrap_content"
+                android:id="@+id/show_episodes_text_view_search"
+                android:text="Episodes:"
+                android:layout_marginTop="0dp"
+                android:layout_below="@+id/show_title_text_view_search"
+                />
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:maxLength="30"
+                android:textSize="16sp"
+                android:layout_height="wrap_content"
+                android:id="@+id/show_provider_text_view_search"
+                android:text="Provider:"
+                android:layout_marginTop="0dp"
+                android:layout_below="@+id/show_language_text_view_search"
+                />
+
+        <TextView
+                android:text="Language:"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/show_language_text_view_search"
+                android:layout_marginTop="0dp"
+                android:layout_below="@+id/show_episodes_text_view_search"
+                />
+
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:srcCompat="@tools:sample/avatars"
+                android:id="@+id/show_cover_image_view_search"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="0dp"
+                android:layout_marginTop="0dp"
+                android:layout_alignParentTop="true"
+                />
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>

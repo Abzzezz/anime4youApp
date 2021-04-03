@@ -17,7 +17,6 @@ import android.graphics.Color;
 import android.os.Build;
 import android.widget.Toast;
 import androidx.annotation.RequiresApi;
-import androidx.preference.PreferenceManager;
 import ga.abzzezz.util.logging.Logger;
 import net.bplaced.abzzezz.animeapp.util.connection.URLUtil;
 import net.bplaced.abzzezz.animeapp.util.show.ShowSaver;
@@ -64,11 +63,6 @@ public class AnimeAppMain {
 
         this.imageStorage = new File(application.getDataDir(), "StoredImagesOffline");
         if (!imageStorage.exists()) Logger.log("Image file created: " + imageStorage.mkdir(), Logger.LogType.INFO);
-
-        if (PreferenceManager.getDefaultSharedPreferences(application).getBoolean("dark_mode", true))
-            this.themeId = R.style.DarkTheme;
-        else
-            this.themeId = R.style.LightTheme;
     }
 
     /**

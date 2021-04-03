@@ -42,6 +42,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Stream;
 
 public class SelectedActivity extends AppCompatActivity {
 
@@ -124,7 +125,9 @@ public class SelectedActivity extends AppCompatActivity {
 
         final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1); //Create a new array adapter
         //Add all providers from the provider enum, excluding the NULL provider
-        arrayAdapter.addAll(Arrays.stream(Providers.values()).filter(providers -> providers != Providers.NULL).map(Enum::name).toArray(String[]::new));
+        try (final Stream<Providers> providerStream = Arrays.stream(Providers.values())) {
+            arrayAdapter.addAll(providerStream.filter(provider -> provider != Providers.NULL).map(Enum::name).toArray(String[]::new));
+        }
         providerSpinner.setAdapter(arrayAdapter);
 
         //TODO: Provider switching
@@ -306,13 +309,15 @@ public class SelectedActivity extends AppCompatActivity {
      */
     public int getLatestEpisode() {
         if (showDirectory.listFiles() != null) {
-            final OptionalInt highest = Arrays.stream(showDirectory.listFiles())
-                    .filter(File::isFile)
-                    .map(s -> StringUtil.extractNumberI(s.getName().substring(0, s.getName().lastIndexOf("."))))
-                    .mapToInt(integer -> integer)
-                    .max();
-            if (highest.isPresent()) return highest.getAsInt() + 1;
-            else return 0;
+            try (final Stream<File> files = Arrays.stream(showDirectory.listFiles())) {
+                final OptionalInt highest = files
+                        .filter(File::isFile)
+                        .map(s -> StringUtil.extractNumberI(s.getName().substring(0, s.getName().lastIndexOf("."))))
+                        .mapToInt(integer -> integer)
+                        .max();
+                if (highest.isPresent()) return highest.getAsInt() + 1;
+                else return 0;
+            }
         }
         return 0;
     }
@@ -386,7 +391,7 @@ public class SelectedActivity extends AppCompatActivity {
             textView.setText("Episode: " + position);
 
             if (isEpisodeDownloaded(position)) {
-                textView.setTextColor(0xFF30475e);
+                textView.setTextColor(getColor(R.color.colorPrimaryDark));
                 actionButton.setImageResource(R.drawable.delete);
                 actionButton.setOnClickListener(view ->
                         new IonAlert(SelectedActivity.this, IonAlert.WARNING_TYPE)
@@ -399,7 +404,7 @@ public class SelectedActivity extends AppCompatActivity {
                                 }).setCancelText("Abort").setCancelClickListener(IonAlert::dismissWithAnimation)
                                 .show());
             } else {
-                textView.setTextColor(0xFFFFFFF);
+                textView.setTextColor(getColor(R.color.text_color));
                 actionButton.setImageResource(R.drawable.download);
                 actionButton.setOnClickListener(view -> getEpisode(position, 1, 0, false));
             }

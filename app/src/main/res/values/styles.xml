@@ -6,22 +6,47 @@
 
 <resources>
 
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.DayNight">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
+        <item name="android:windowBackground">@color/colorPrimary</item>
+
+        <item name="windowActionBar">true</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.DayNight.ActionBar"
+
+            />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.DayNight"/>
+
+    <style name="MyCardStyle" parent="CardView">
+        <item name="cardBackgroundColor">@color/colorPrimary</item>
+        <item name="cardElevation">2dp</item>
+        <item name="cardCornerRadius">2dp</item>
+    </style>
+
+
+    <!-- Base Light theme.
     <style name="DarkTheme" parent="Theme.AppCompat.NoActionBar">
-        <!-- Background and item colors-->
-        <item name="colorPrimary">@color/primaryColorDark</item>
+
+        <item name="colorPrimary">@color/colorPrimary</item>
         <item name="android:colorAccent">@color/accentColor</item>
-        <item name="android:itemBackground">@color/primaryColorDark</item>
+        <item name="android:itemBackground">@color/colorPrimary</item>
         <item name="android:actionBarItemBackground">@color/toolbarDark</item>
-        <item name="android:windowBackground">@color/primaryColorDark</item>
+        <item name="android:windowBackground">@color/colorPrimary</item>
 
         <item name="colorAccent">@color/accentColor</item>
 
-        <!-- Text etc. -->
         <item name="android:textColor">@color/textDark</item>
         <item name="android:textColorPrimary">@color/textDark</item>
 
-        <!-- Gridview etc. -->
-        <item name="android:gridViewStyle">@color/primaryColorDark</item>
+        <item name="android:gridViewStyle">@color/colorPrimary</item>
         <item name="toolbarStyle">@style/AppTheme.ActionBarDark</item>
         <item name="floatingActionButtonStyle">@style/AppTheme.ActionButtonDark</item>
 
@@ -38,11 +63,6 @@
         <item name="android:backgroundTint">@color/accentColor</item>
         <item name="borderWidth">0dp</item>
     </style>
+        -->
 
-
-    <!-- Base Light theme. -->
-    <style name="LightTheme" parent="Theme.AppCompat.DayNight">
-        <item name="windowNoTitle">true</item>
-        <item name="windowActionBar">false</item>
-    </style>
 </resources>

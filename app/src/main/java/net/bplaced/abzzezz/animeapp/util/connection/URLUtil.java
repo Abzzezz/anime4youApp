@@ -17,6 +17,8 @@ import java.net.URLConnection;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class URLUtil {
 
@@ -185,14 +187,63 @@ public class URLUtil {
      * @throws IOException if reader / url fails, etc.
      */
     public static String collectLines(final URL src, final String joiner) throws IOException {
+        return collectLines(src.openConnection(), joiner);
+    }
+
+    /**
+     * Joins all the lines read from a url together
+     *
+     * @param src url to read from
+     * @return all joined lines
+     * @throws IOException if reader / url fails, etc.
+     */
+    public static String collectLines(final URLConnection src) throws IOException {
         final StringBuilder builder = new StringBuilder();
-        final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(src.openStream()));
+        final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(src.getInputStream()));
         String line;
         while ((line = bufferedReader.readLine()) != null) {
-            builder.append(line).append(joiner);
+            builder.append(line);
         }
         bufferedReader.close();
         return builder.toString();
+    }
+
+    /**
+     * Joins all the lines read from a url together
+     *
+     * @param src url to read from
+     * @return all joined lines
+     * @throws IOException if reader / url fails, etc.
+     */
+    public static String collectLines(final URL src) throws IOException {
+        return collectLines(src);
+    }
+
+    /**
+     * Joins all the lines read from a url together using a stream
+     *
+     * @param src    url to read from
+     * @param joiner String to join all read lines together
+     * @return all joined lines
+     * @throws IOException if reader / url fails, etc.
+     */
+    public static String collectLinesStream(final URLConnection src, final String joiner) throws IOException {
+        final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(src.getInputStream()));
+        try (final Stream<String> lines = bufferedReader.lines()) {
+            return lines.collect(Collectors.joining(joiner));
+        }
+    }
+
+    /**
+     * Joins all the lines read from a url together using a stream
+     *
+     * @param src    url to read from
+     * @param joiner String to join all read lines together
+     * @return all joined lines
+     * @throws IOException if reader / url fails, etc.
+     */
+    public static String collectLinesStream(final URL src, final String joiner) throws IOException {
+        return collectLinesStream(src.openConnection(), joiner);
     }
 
     /**
@@ -203,9 +254,7 @@ public class URLUtil {
      * @throws IOException @
      */
     public static void copyFileFromURL(final URL src, final File dest) throws IOException {
-        final FileOutputStream fileOutputStream = new FileOutputStream(dest);
-        fileOutputStream.getChannel().transferFrom(Channels.newChannel(src.openStream()), 0, Long.MAX_VALUE);
-        fileOutputStream.close();
+        copyFileFromURL(src.openConnection(), dest);
     }
 
     /**

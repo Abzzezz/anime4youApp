@@ -12,10 +12,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import javax.net.ssl.HttpsURLConnection;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.util.concurrent.Callable;
-import java.util.stream.Collectors;
 
 public class TwistmoeFetchCallable implements Callable<JSONObject>, TwistmoeHolder {
 
@@ -29,12 +26,14 @@ public class TwistmoeFetchCallable implements Callable<JSONObject>, TwistmoeHold
     public JSONObject call() throws Exception {
         HttpsURLConnection connection = URLUtil.createHTTPSURLConnection(SHOW_API + slug, requestHeaders);
         connection.connect();
-        final JSONObject fetchedDetails = new JSONObject(new BufferedReader(new InputStreamReader(connection.getInputStream())).lines().collect(Collectors.joining()));
+
+
+        final JSONObject fetchedDetails = new JSONObject(URLUtil.collectLines(connection, ""));
 
         connection = URLUtil.createHTTPSURLConnection(SHOW_API + slug + "/sources/", requestHeaders);
         connection.connect();
 
-        final JSONArray fetchedSources = new JSONArray(new BufferedReader(new InputStreamReader(connection.getInputStream())).lines().collect(Collectors.joining()));
+        final JSONArray fetchedSources = new JSONArray(URLUtil.collectLines(connection, ""));
         final JSONArray sources = new JSONArray();
 
         for (int i = 0; i < fetchedSources.length(); i++) {

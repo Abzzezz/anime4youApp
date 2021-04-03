@@ -24,9 +24,9 @@ import net.bplaced.abzzezz.animeapp.R;
 import net.bplaced.abzzezz.animeapp.activities.main.ui.home.SelectedActivity;
 import net.bplaced.abzzezz.animeapp.util.Constant;
 import net.bplaced.abzzezz.animeapp.util.IntentHelper;
-import net.bplaced.abzzezz.animeapp.util.M3U8Util;
 import net.bplaced.abzzezz.animeapp.util.connection.RBCWrapper;
 import net.bplaced.abzzezz.animeapp.util.connection.URLUtil;
+import net.bplaced.abzzezz.animeapp.util.crypto.M3U8Util;
 import net.bplaced.abzzezz.animeapp.util.receiver.StopDownloadReceiver;
 import net.bplaced.abzzezz.animeapp.util.tasks.TaskExecutor;
 

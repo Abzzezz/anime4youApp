@@ -52,16 +52,16 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.3.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-    implementation 'com.squareup.picasso:picasso:2.5.2'
-    implementation 'com.github.oktavianto:ionalert:1.0.4'
+    implementation 'com.squareup.picasso:picasso:2.5.2' // Picasso
+    implementation 'com.github.oktavianto:ionalert:1.0.4' //Alerts
     implementation 'androidx.preference:preference:1.1.1'
-    implementation 'com.google.android.exoplayer:exoplayer:2.11.6'
-    implementation 'org.json:json:20201115'
-    implementation 'org.jsoup:jsoup:1.13.1'
-    implementation 'net.ricecode:string-similarity:1.0.0'
-    //Android app install
-    implementation 'com.blankj:utilcodex:1.30.1'
-    implementation 'com.arthenica:mobile-ffmpeg-full:4.4'
-    implementation 'net.sandrohc:reactive-jikan:1.0.0'
+    implementation 'com.google.android.exoplayer:exoplayer:2.11.6' //Exo -player
+    implementation 'org.json:json:20201115' //JSON
+    implementation 'org.jsoup:jsoup:1.13.1' //JSOUP
+    implementation 'net.ricecode:string-similarity:1.0.0' //String comparisons
+    implementation 'com.blankj:utilcodex:1.30.1' //Android app install
+    implementation 'com.arthenica:mobile-ffmpeg-full:4.4' //FFMPEG
+    implementation 'net.sandrohc:reactive-jikan:1.0.0' //Mal api
+
 
 }
