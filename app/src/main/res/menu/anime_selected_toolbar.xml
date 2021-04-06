@@ -4,12 +4,8 @@
   ~ All code is owned by Roman P. APIs are mentioned.
   ~ Last modified: 06.06.20, 13:53
   -->
-
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item
-            android:title="Toggle notifications for new episodes"
-            android:id="@+id/toogle_notifications_show"/>
     <item
             android:title="Download Bound"
             android:id="@+id/download_bound"/>

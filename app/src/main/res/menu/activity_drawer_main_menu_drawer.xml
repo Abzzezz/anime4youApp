@@ -28,11 +28,5 @@
                 android:id="@+id/show_search"
                 android:icon="@drawable/search"
                 android:title="@string/show_search"/>
-
-        <item
-                android:id="@+id/anime_notification"
-                android:icon="@drawable/information"
-                android:title="@string/anime_notifications"/>
-
     </group>
 </menu>

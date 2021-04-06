@@ -37,6 +37,7 @@ import java.net.MalformedURLException;
 import java.net.URLConnection;
 import java.nio.channels.Channels;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ThreadLocalRandom;
@@ -66,7 +67,7 @@ public class EpisodeDownloadTask extends EpisodeDownloadTaskExecutor implements 
         this.url = url;
         this.count = count;
         this.outDir = outDir;
-
+        //
         this.progressHandler = new EpisodeDownloadProgressHandler() {
             @Override
             public void onDownloadCompleted(String s) {
@@ -77,26 +78,29 @@ public class EpisodeDownloadTask extends EpisodeDownloadTaskExecutor implements 
                 }
             }
 
+            //Callback for the download progress, in order to display it
             @Override
-            public void onDownloadProgress(int newReadBytes) {
+            public void onDownloadProgress(final int newReadBytes) {
                 progress += newReadBytes;
-                notification.setProgress(totalBytes, progress, false);
-                notificationManagerCompat.notify(notifyID, notification.build());
+                notification.setProgress(totalBytes, progress, false); //Crush down the number of progress to percent, in order to eliminate huge numbers
+                notificationManagerCompat.notify(notifyID, notification.build()); //Refresh the notification
             }
 
+            //Receive the initial size & build the notification
             @Override
-            public void receiveTotalSize(int totalByteSize) {
+            public void receiveTotalSize(final int totalByteSize) {
                 totalBytes = totalByteSize;
 
                 final Intent notificationActionIntent = new Intent(application, StopDownloadReceiver.class);
                 notificationActionIntent.setData(Uri.parse("" + notifyID));
                 final PendingIntent stopDownloadingPendingIntent = PendingIntent.getBroadcast(application, 1, notificationActionIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
                 notification = new NotificationCompat.Builder(application, AnimeAppMain.NOTIFICATION_CHANNEL_ID)
                         .setSmallIcon(R.drawable.download)
-                        .setContentText("Currently downloading episode: " + count[1] + " from show: " + name)
+                        .setContentText(String.format(Locale.ENGLISH, "%s episode %d", name, count[1]))
                         .setContentTitle("Episode Download")
                         .setPriority(NotificationCompat.PRIORITY_HIGH)
-                        .addAction(R.drawable.cancel, "Stop downloading", stopDownloadingPendingIntent)
+                        .addAction(R.drawable.cancel, "Stop download", stopDownloadingPendingIntent)
                         .setProgress(totalByteSize, 0, true)
                         .setOnlyAlertOnce(true)
                         .setOngoing(true);
@@ -104,13 +108,14 @@ public class EpisodeDownloadTask extends EpisodeDownloadTaskExecutor implements 
                 notificationManagerCompat.notify(notifyID, notification.build());
             }
 
+            //Error callback
             @Override
-            public void onErrorThrown(String message) {
-                cancelExecution();
-                sendErrorNotification(message);
-                Logger.log(message, Logger.LogType.ERROR);
+            public void onErrorThrown(final String message) {
+                cancelExecution(); //Cancel the execution first
+                sendErrorNotification(message); //Send notification with the error message
+                Logger.log(message, Logger.LogType.ERROR); //Log the errormessage
                 try {
-                    onComplete(message);
+                    onComplete(message); //Call oncomplete
                 } catch (final Exception e) {
                     e.printStackTrace();
                 }
@@ -187,11 +192,9 @@ public class EpisodeDownloadTask extends EpisodeDownloadTaskExecutor implements 
         this.notifyID = (int) System.currentTimeMillis() % 10000;
         this.notificationManagerCompat = NotificationManagerCompat.from(application);
 
-
         Logger.log("Assigned thread id: " + notifyID, Logger.LogType.INFO);
         //Put object key
         IntentHelper.addObjectForKey(this, String.valueOf(notifyID));
-
     }
 
     /**
@@ -205,6 +208,7 @@ public class EpisodeDownloadTask extends EpisodeDownloadTaskExecutor implements 
      * Cancel task
      */
     public void cancelExecution() {
+        //Flush and close the stream if needed
         if (this.fileOutputStream != null) {
             try {
                 this.fileOutputStream.flush();
@@ -213,21 +217,26 @@ public class EpisodeDownloadTask extends EpisodeDownloadTaskExecutor implements 
                 sendErrorNotification(e.getLocalizedMessage());
             }
         }
-        this.refreshAdapter();
-        //Set cancelled true
-        this.cancel = true;
+        this.refreshAdapter(); //Refresh the adapter
+        this.cancel = true; //Set the cancel, so the
         Logger.log("Task cancelled, Streams flushed; File deleted: " + outFile.delete(), Logger.LogType.INFO);
-
-
     }
 
+    /**
+     * Starts a new ffmpeg task
+     *
+     * @param ffmpegArguments arguments to supply for ffmpeg
+     * @param url             url to get the m3u8-segment count from
+     * @param requestHeaders  Request headers for the m3u8 operation
+     * @return the ffmpeg task-id
+     * @throws IOException url / connection exceptions from the m3u8-util
+     */
     protected long startFFDefaultTask(final List<String> ffmpegArguments, final String url, final String[]... requestHeaders) throws IOException {
-        final int totalSegments = M3U8Util.getSegments(url, requestHeaders);
-        progressHandler.receiveTotalSize(totalSegments);
+        progressHandler.receiveTotalSize(M3U8Util.getSegments(url, requestHeaders)); //Receive total segment size & set the total to receive size
 
         Config.enableLogCallback(message -> {
             if (message.getText().contains("Opening")) {
-                progressHandler.onDownloadProgress(1);
+                progressHandler.onDownloadProgress(1); //Increment the progress with one (new segment is being opened)
             }
         });
 
@@ -237,13 +246,13 @@ public class EpisodeDownloadTask extends EpisodeDownloadTaskExecutor implements 
                 Log.i(Config.TAG, "Async command execution completed successfully.");
             } else if (returnCode == RETURN_CODE_CANCEL) {
                 try {
-                    onComplete("Canceled");
+                    this.onComplete("Canceled");
                 } catch (final Exception e) {
                     e.printStackTrace();
                 }
             } else {
-                cancelExecution();
-                progressHandler.onErrorThrown(getError(Config.getLastCommandOutput()));
+                this.cancelExecution();
+                progressHandler.onErrorThrown(getError(Config.getLastCommandOutput())); //error handling
                 Log.i(Config.TAG, String.format("Async command execution failed with returnCode=%d.", returnCode));
             }
         });
@@ -253,12 +262,16 @@ public class EpisodeDownloadTask extends EpisodeDownloadTaskExecutor implements 
         new Handler(Looper.getMainLooper()).post(application::refreshAdapter);
     }
 
-
+    /**
+     * Send a notification with an error message
+     *
+     * @param errorMessage error message
+     */
     protected void sendErrorNotification(final String errorMessage) {
         this.notification = new NotificationCompat.Builder(application, AnimeAppMain.NOTIFICATION_CHANNEL_ID)
                 .setSmallIcon(R.drawable.information).setColor(Color.GREEN)
                 .setContentText("Episode download error")
-                .setContentTitle(this.getError(errorMessage))
+                .setContentTitle(errorMessage)
                 .setPriority(NotificationCompat.PRIORITY_HIGH);
 
         notificationManagerCompat.notify(ThreadLocalRandom.current().nextInt(), notification.build());
@@ -266,6 +279,10 @@ public class EpisodeDownloadTask extends EpisodeDownloadTaskExecutor implements 
 
     /* Get error message */
 
+    /**
+     * @param e exception to get the localized message from
+     * @return the localized message warped with geterror
+     */
     protected String getError(final Exception e) {
         return getError(Objects.requireNonNull(e.getLocalizedMessage()));
     }

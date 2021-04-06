@@ -48,7 +48,7 @@ public class OfflineImageLoader {
             }, new TaskExecutor.Callback<Object>() {
                 @Override
                 public void onComplete(Object result) {
-                    //Load image in
+                    //Load image into the image view
                     Picasso.with(context)
                             .load(imageBitmap)
                             .resize(ImageUtil.IMAGE_COVER_DIMENSIONS[0], ImageUtil.IMAGE_COVER_DIMENSIONS[1])

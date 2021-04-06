@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import com.squareup.picasso.Picasso;
 import net.bplaced.abzzezz.animeapp.AnimeAppMain;
@@ -22,6 +23,7 @@ import net.bplaced.abzzezz.animeapp.util.connection.URLUtil;
 import net.bplaced.abzzezz.animeapp.util.show.Show;
 import net.bplaced.abzzezz.animeapp.util.tasks.TaskExecutor;
 import net.bplaced.abzzezz.animeapp.util.tasks.myanimelist.MyAnimeListSearchTask;
+import net.bplaced.abzzezz.animeapp.util.ui.ImageUtil;
 import org.json.JSONException;
 
 import java.util.ArrayList;
@@ -31,7 +33,7 @@ public class SearchFragment extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View root = inflater.inflate(R.layout.search_layout, container, false);
+        final View root = inflater.inflate(R.layout.fragment_search, container, false);
         final ListView listView = root.findViewById(R.id.simple_list_view);
         final SearchView showSearch = root.findViewById(R.id.show_search_view);
         //Set adapter
@@ -41,6 +43,7 @@ public class SearchFragment extends Fragment {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 if (URLUtil.isOffline(getContext())) return true;
+
                 final SearchAdapter searchAdapter = (SearchAdapter) listView.getAdapter();
                 searchAdapter.getEntries().clear();
 
@@ -95,7 +98,7 @@ public class SearchFragment extends Fragment {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             if (convertView == null) {
-                convertView = LayoutInflater.from(context).inflate(R.layout.show_search_item_layout, parent, false);
+                convertView = LayoutInflater.from(context).inflate(R.layout.item_search, parent, false);
 
                 final Show showAtIndex = (Show) getItem(position);
 
@@ -103,27 +106,26 @@ public class SearchFragment extends Fragment {
                     try {
                         AnimeAppMain.getInstance().getShowSaver().addShow(showAtIndex);
                         Toast.makeText(context, "Added show!", Toast.LENGTH_SHORT).show();
-                    } catch (JSONException e) {
+                    } catch (final JSONException e) {
                         e.printStackTrace();
                     }
                 });
 
                 final TextView showTitle = convertView.findViewById(R.id.show_title_text_view_search);
                 final TextView showEpisodes = convertView.findViewById(R.id.show_episodes_text_view_search);
-                final TextView showYear = convertView.findViewById(R.id.show_provider_text_view_search);
+                final TextView showProvider = convertView.findViewById(R.id.show_provider_text_view_search);
                 final ImageView imageView = convertView.findViewById(R.id.show_cover_image_view_search);
+                //Load image from url into the image view
+                Picasso.with(context)
+                        .load(showAtIndex.getImageURL())
+                        .resize(ImageUtil.IMAGE_COVER_DIMENSIONS[0], ImageUtil.IMAGE_COVER_DIMENSIONS[1])
+                        .into(imageView);
 
-                Picasso.with(context).load(showAtIndex.getImageURL()).into(imageView);
-
-                imageView.setAdjustViewBounds(true);
-
-                showTitle.append(showAtIndex.getShowTitle());
-                showEpisodes.append(String.valueOf(showAtIndex.getEpisodeCount()));
-                showYear.append("MAL");
+                showTitle.append(showAtIndex.getShowTitle()); //append the show's title
+                showEpisodes.append(String.valueOf(showAtIndex.getEpisodeCount())); //Append the episode count
+                showProvider.append("MAL"); //Append the provider
 
             }
-
-
             return convertView;
         }
 

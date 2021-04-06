@@ -9,15 +9,14 @@ package net.bplaced.abzzezz.animeapp.activities.main;
 import android.os.Bundle;
 import android.view.ViewParent;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
-import net.bplaced.abzzezz.animeapp.AnimeAppMain;
 import net.bplaced.abzzezz.animeapp.R;
 
 public class DrawerMainMenu extends AppCompatActivity {
@@ -25,12 +24,11 @@ public class DrawerMainMenu extends AppCompatActivity {
     private AppBarConfiguration mAppBarConfiguration;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTheme(AnimeAppMain.getInstance().getThemeId());
 
-        setContentView(R.layout.drawer_layout);
-        final Toolbar toolbar = findViewById(R.id.fragmenthost_toolbar);
+        setContentView(R.layout.layout_drawer);
+        final MaterialToolbar toolbar = findViewById(R.id.fragmenthost_toolbar);
         setSupportActionBar(toolbar);
         final DrawerLayout drawer = findViewById(R.id.drawer_layout);
         final NavigationView navigationView = findViewById(R.id.nav_view);

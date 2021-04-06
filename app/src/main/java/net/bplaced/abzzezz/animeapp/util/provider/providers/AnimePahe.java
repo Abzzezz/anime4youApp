@@ -32,10 +32,10 @@ public class AnimePahe extends Provider {
     }
 
     @Override
-    public void refreshShow(Show show, Consumer<Show> updatedShow) {
+    public void refreshShow(final Show show, final Consumer<Show> updatedShow) {
         new AnimePaheRefreshTask(show).executeAsync(new TaskExecutor.Callback<JSONObject>() {
             @Override
-            public void onComplete(JSONObject result) {
+            public void onComplete(final JSONObject result) {
                 //This is bad..... I haven't thought this through.... I have to gamble i guess
                 show.getProviderJSON(AnimePahe.this).ifPresent(providerJSON -> {
                     try {
@@ -60,7 +60,7 @@ public class AnimePahe extends Provider {
     public void getShowEpisodeReferrals(final Show show, final Consumer<JSONArray> showReferrals) {
         new AnimePaheSearchTask(show.getShowTitle()).executeAsync(new TaskExecutor.Callback<List<JSONObject>>() {
             @Override
-            public void onComplete(List<JSONObject> result) {
+            public void onComplete(final List<JSONObject> result) {
                 if (result.size() >= 1) {
                     //This is bad..... I haven't thought this through.... I have to gamble i guess
                     show.getProviderJSON(AnimePahe.this).ifPresent(providerJSON -> {
@@ -83,7 +83,7 @@ public class AnimePahe extends Provider {
     }
 
     @Override
-    public void handleURLRequest(Show show, Context context, Consumer<Optional<String>> resultURL, int... ints) {
+    public void handleURLRequest(final Show show, final Context context, final Consumer<Optional<String>> resultURL, final int... ints) {
         try {
             new AnimePaheFetchDirectTask(show.getShowEpisodes(this).getString(ints[1])).executeAsync(new TaskExecutor.Callback<String>() {
                 @Override
@@ -102,7 +102,7 @@ public class AnimePahe extends Provider {
     }
 
     @Override
-    public void handleDownload(SelectedActivity activity, String url, Show show, File outDirectory, int... ints) {
+    public void handleDownload(final SelectedActivity activity, final String url, final Show show, final File outDirectory, final int... ints) {
         new AnimePaheEpisodeDownloadTask(activity, url, show.getShowTitle(), outDirectory, ints).executeAsync();
     }
 }

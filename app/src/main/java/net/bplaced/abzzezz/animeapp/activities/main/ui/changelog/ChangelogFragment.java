@@ -28,7 +28,7 @@ public class ChangelogFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View root = inflater.inflate(R.layout.simple_list_layout, container, false);
+        final View root = inflater.inflate(R.layout.layout_simple_list, container, false);
         new TaskExecutor().executeAsync(() -> URLUtil.getURLContentAsArray(new URL(Constant.APP_CHANGELOG_TXT)), new TaskExecutor.Callback<ArrayList<String>>() {
             @Override
             public void onComplete(ArrayList<String> result) {

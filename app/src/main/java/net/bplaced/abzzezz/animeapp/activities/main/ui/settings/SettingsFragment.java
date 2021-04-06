@@ -28,7 +28,7 @@ public class SettingsFragment extends Fragment {
 
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View root = inflater.inflate(R.layout.settings_layout, container, false);
+        final View root = inflater.inflate(R.layout.fragment_settings, container, false);
         getParentFragmentManager().beginTransaction().replace(R.id.settings, new SettingsFragmentInner()).commit();
         return root;
     }

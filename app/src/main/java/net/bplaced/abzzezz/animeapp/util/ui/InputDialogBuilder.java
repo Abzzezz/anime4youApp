@@ -24,7 +24,8 @@ public class InputDialogBuilder {
         new AlertDialog.Builder(context)
                 .setTitle(title)
                 .setMessage(text)
-                .setPositiveButton("Enter", (dialogInterface, i) -> dialogListener.onDialogInput(editText.getText().toString())).setNegativeButton("Cancel", (dialogInterface, i) -> dialogListener.onDialogDenied()).setView(editText).show();
+                .setPositiveButton("Enter", (dialogInterface, i) -> dialogListener.onDialogInput(editText.getText().toString()))
+                .setNegativeButton("Cancel", (dialogInterface, i) -> dialogListener.onDialogDenied()).setView(editText).show();
     }
 
     public interface InputDialogListener {

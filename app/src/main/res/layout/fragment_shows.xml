@@ -13,20 +13,18 @@
                                                    android:id="@+id/anime_list_layout">
 
     <GridView
-            android:horizontalSpacing="6dp"
+            android:horizontalSpacing="20dp"
+            android:verticalSpacing="10dp"
             android:numColumns="2"
-            android:verticalSpacing="6dp"
             tools:context="net.bplaced.abzzezz.animeapp.activities.main.AnimeListActivity"
             android:id="@+id/show_item_grid"
-
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="16dp">
     </GridView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

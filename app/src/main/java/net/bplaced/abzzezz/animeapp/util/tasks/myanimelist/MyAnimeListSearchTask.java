@@ -18,7 +18,7 @@ public class MyAnimeListSearchTask extends TaskExecutor implements Callable<List
 
     private final String searchQuery;
 
-    public MyAnimeListSearchTask(String searchQuery) {
+    public MyAnimeListSearchTask(final String searchQuery) {
         this.searchQuery = searchQuery;
     }
 

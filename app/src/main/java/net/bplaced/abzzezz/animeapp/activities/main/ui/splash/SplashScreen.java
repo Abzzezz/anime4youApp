@@ -23,9 +23,8 @@ public class SplashScreen extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setTheme(AnimeAppMain.getInstance().getThemeId());
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.splash_screen_layout);
+        setContentView(R.layout.activity_splash_screen);
         AnimeAppMain.getInstance().createNotificationChannel(getApplication());
         AnimeAppMain.getInstance().checkAndroidPermissions(this);
         //Configure handlers

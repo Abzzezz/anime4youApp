@@ -22,16 +22,20 @@
             android:id="@+id/nav_changelog"
             android:name="net.bplaced.abzzezz.animeapp.activities.main.ui.changelog.ChangelogFragment"
             android:label="@string/menu_changelog"
-            tools:layout="@layout/simple_list_layout">
-        <action android:id="@+id/action_nav_changelog_to_nav_anime_list" app:destination="@id/nav_anime_list"/>
+            tools:layout="@layout/layout_simple_list">
+        <action
+                android:id="@+id/action_nav_changelog_to_nav_anime_list"
+                app:destination="@id/nav_anime_list"/>
     </fragment>
 
     <fragment
             android:id="@+id/nav_settings"
             android:name="net.bplaced.abzzezz.animeapp.activities.main.ui.settings.SettingsFragment"
             android:label="@string/action_settings"
-            tools:layout="@layout/settings_layout">
-        <action android:id="@+id/action_nav_changelog_to_nav_anime_list" app:destination="@id/nav_anime_list"/>
+            tools:layout="@layout/fragment_settings">
+        <action
+                android:id="@+id/action_nav_changelog_to_nav_anime_list"
+                app:destination="@id/nav_anime_list"/>
     </fragment>
 
 
@@ -39,7 +43,7 @@
             android:id="@+id/show_search"
             android:name="net.bplaced.abzzezz.animeapp.activities.main.ui.search.SearchFragment"
             android:label="Search"
-            tools:layout="@layout/simple_list_layout">
+            tools:layout="@layout/layout_simple_list">
         <action
                 android:id="@+id/action_download_tracker_to_nav_changelog"
                 app:destination="@id/nav_changelog"/>
@@ -49,9 +53,13 @@
             android:id="@+id/anime_notification"
             android:name="net.bplaced.abzzezz.animeapp.activities.main.ui.settings.NotificationsFragment"
             android:label="@string/anime_notifications_manage"
-            tools:layout="@layout/simple_list_layout">
-        <action android:id="@+id/action_download_tracker_to_nav_changelog" app:destination="@id/nav_changelog"/>
-        <action android:id="@+id/action_anime_notification_self" app:destination="@id/anime_notification"/>
+            tools:layout="@layout/layout_simple_list">
+        <action
+                android:id="@+id/action_download_tracker_to_nav_changelog"
+                app:destination="@id/nav_changelog"/>
+        <action
+                android:id="@+id/action_anime_notification_self"
+                app:destination="@id/anime_notification"/>
     </fragment>
 
 </navigation>

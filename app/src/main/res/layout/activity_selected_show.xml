@@ -16,25 +16,31 @@
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/selected_show_swipe_refresh_layout"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/show_provider_spinner"
-            app:layout_constraintBottom_toTopOf="@+id/download_show_button">
+            app:layout_constraintBottom_toTopOf="@+id/download_show_button"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp">
 
-        <ListView
+        <GridView
+                android:horizontalSpacing="20dp"
+                android:verticalSpacing="10dp"
+                android:numColumns="3"
                 android:layout_width="wrap_content"
-                android:layout_height="0dp"
+                android:layout_height="match_parent"
                 android:id="@+id/show_episode_item_grid"
                 android:outlineProvider="paddedBounds"
                 />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-    <androidx.appcompat.widget.Toolbar
-            android:layout_width="match_parent"
+    <com.google.android.material.appbar.MaterialToolbar
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:elevation="6dp"
             android:id="@+id/selected_show_toolbar"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -78,12 +84,7 @@
             app:layout_constraintTop_toBottomOf="@+id/selected_show_toolbar"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintVertical_bias="0.0"
-
-            app:autoSizeTextType="uniform"
-            app:autoSizeMinTextSize="12dp"
-            app:autoSizeMaxTextSize="18dp"
-            app:autoSizeStepGranularity="2sp"/>
+            app:layout_constraintVertical_bias="0.0"/>
 
     <TextView
             android:text="Episodes:"
@@ -155,5 +156,5 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/selected_show_swipe_refresh_layout"
             app:layout_constraintTop_toBottomOf="@+id/show_cover_image_view"
-            android:spinnerMode="dialog"/>
+            android:spinnerMode="dropdown"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

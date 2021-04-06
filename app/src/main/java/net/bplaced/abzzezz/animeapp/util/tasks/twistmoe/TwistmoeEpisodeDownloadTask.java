@@ -37,10 +37,12 @@ public class TwistmoeEpisodeDownloadTask extends EpisodeDownloadTask {
 
             progressHandler.receiveTotalSize(connection.getContentLength());
 
-            URLUtil.copyFileFromRBC(new RBCWrapper(
-                            Channels.newChannel(connection.getInputStream()),
-                            connection.getContentLength(),
-                            progressHandler::onDownloadProgress),
+            URLUtil.copyFileFromRBC(new RBCWrapper
+                            (
+                                    Channels.newChannel(connection.getInputStream()),
+                                    connection.getContentLength(),
+                                    progressHandler::onDownloadProgress
+                            ),
                     outFile,
                     fileOutputStream -> this.fileOutputStream = fileOutputStream);
 

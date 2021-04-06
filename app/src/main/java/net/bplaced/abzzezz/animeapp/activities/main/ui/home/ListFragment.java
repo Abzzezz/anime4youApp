@@ -32,7 +32,7 @@ import java.util.Optional;
 public class ListFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View root = inflater.inflate(R.layout.show_list_item_layout, container, false);
+        final View root = inflater.inflate(R.layout.fragment_shows, container, false);
 
         final GridView gridView = root.findViewById(R.id.show_item_grid);
 
@@ -50,7 +50,7 @@ public class ListFragment extends Fragment {
             new IonAlert(getActivity(), IonAlert.WARNING_TYPE)
                     .setTitleText("Remove file?")
                     .setContentText("Won't be able to recover this file!")
-                    .setConfirmText("Yes,delete it!")
+                    .setConfirmText("Yes, delete")
                     .setConfirmClickListener(ionAlert -> {
                         showAdapter.removeItem(position);
                         ionAlert.dismissWithAnimation();
@@ -66,8 +66,6 @@ public class ListFragment extends Fragment {
                     .setCancelText("Close").setCancelClickListener(IonAlert::dismissWithAnimation)
                     .show();
         }
-
-
         return root;
     }
 
@@ -112,23 +110,25 @@ public class ListFragment extends Fragment {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            if (convertView == null)
-                convertView = LayoutInflater.from(context).inflate(R.layout.show_item_layout, parent, false);
-
+            if (convertView == null) {
+                convertView = LayoutInflater.from(context).inflate(R.layout.item_show, parent, false);
+            }
             final ImageView coverImage = convertView.findViewById(R.id.show_cover_image_view_item);
             final TextView showTitle = convertView.findViewById(R.id.show_title_text_view_item);
-
-            AnimeAppMain.getInstance().getShowSaver().getShow(position).ifPresent(show -> showTitle.setText(show.getShowTitle()));
-
+            //Grab show
             AnimeAppMain.getInstance().getShowSaver().getShow(position).ifPresent(show -> {
+                showTitle.setText(show.getShowTitle()); //Set title text view
+                //Load image
                 final String imageURL = show.getImageURL();
 
                 if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean("offline_mode", false))
                     OfflineImageLoader.loadImage(imageURL, show, coverImage, getContext());
                 else
-                    Picasso.with(context).load(imageURL).resize(ImageUtil.IMAGE_COVER_DIMENSIONS[0], ImageUtil.IMAGE_COVER_DIMENSIONS[1]).into(coverImage);
+                    Picasso.with(context)
+                            .load(imageURL)
+                            .resize(ImageUtil.IMAGE_COVER_DIMENSIONS[0], ImageUtil.IMAGE_COVER_DIMENSIONS[1])
+                            .into(coverImage);
             });
-            coverImage.setAdjustViewBounds(true);
             return convertView;
         }
 

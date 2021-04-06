@@ -12,16 +12,16 @@ import android.os.Bundle;
 import android.view.*;
 import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
+import androidx.appcompat.widget.AppCompatSpinner;
 import androidx.core.content.FileProvider;
 import androidx.preference.PreferenceManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.squareup.picasso.Picasso;
 import ga.abzzezz.util.data.FileUtil;
 import ga.abzzezz.util.logging.Logger;
 import ga.abzzezz.util.stringing.StringUtil;
 import id.ionbit.ionalert.IonAlert;
-import net.bplaced.abzzezz.animeapp.AnimeAppMain;
 import net.bplaced.abzzezz.animeapp.R;
 import net.bplaced.abzzezz.animeapp.activities.main.DrawerMainMenu;
 import net.bplaced.abzzezz.animeapp.activities.main.ui.player.PlayerActivity;
@@ -55,9 +55,8 @@ public class SelectedActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setTheme(AnimeAppMain.getInstance().getThemeId());
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.selected_show_layout);
+        setContentView(R.layout.activity_selected_show);
 
         this.show = (Show) IntentHelper.getObjectForKey("show"); //Receive show object from intent helper
         this.showDirectory = new File(getFilesDir(), show.getID()); //Set the show's directory
@@ -72,7 +71,7 @@ public class SelectedActivity extends AppCompatActivity {
 
 
         final ImageView showCover = this.findViewById(R.id.show_cover_image_view); //Set cover
-        final Toolbar applicationToolbar = this.findViewById(R.id.selected_show_toolbar); //Set toolbar
+        final MaterialToolbar applicationToolbar = this.findViewById(R.id.selected_show_toolbar); //Set toolbar
         setSupportActionBar(applicationToolbar); //Enable action bar
 
         Objects.requireNonNull(getSupportActionBar()).setTitle(show.getShowTitle()); //Set the toolbar'S title
@@ -99,7 +98,7 @@ public class SelectedActivity extends AppCompatActivity {
                     show.addEpisodesForProvider(jsonArray, currentProvider);
                     Toast.makeText(this,
                             String.format("Refreshed episodes for %s, new episode count for provider %d", show.getShowTitle(),
-                                    (jsonArray.length() + 1)),
+                                    jsonArray.length()),
                             Toast.LENGTH_SHORT
                     ).show();
                 }); //Update episodes
@@ -115,13 +114,13 @@ public class SelectedActivity extends AppCompatActivity {
             final int providerEpisodeLength = show.getShowEpisodes(currentProvider).length();
             //TODO: Remove "hack"
             ((TextView) findViewById(R.id.selected_show_episode_count_text_view)).setText("Episodes:" + providerEpisodeLength); //Update count
-            episodeAdapter.setEpisodes(providerEpisodeLength);
+            episodeAdapter.setSize(providerEpisodeLength);
 
             swipeRefreshLayout.setRefreshing(false);
         });
 
         //Configure the show's provider spinner
-        final Spinner providerSpinner = findViewById(R.id.show_provider_spinner);
+        final AppCompatSpinner providerSpinner = findViewById(R.id.show_provider_spinner);
 
         final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1); //Create a new array adapter
         //Add all providers from the provider enum, excluding the NULL provider
@@ -134,14 +133,14 @@ public class SelectedActivity extends AppCompatActivity {
 
         providerSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemSelected(final AdapterView<?> parent, final View view, final int position, final long id) {
                 //Load episodes from selected provider
                 currentProvider = Providers.valueOf(arrayAdapter.getItem(position)).getProvider();
 
                 final int providerEpisodeLength = show.getShowEpisodes(currentProvider).length();
                 //TODO: Remove "hack"
                 ((TextView) findViewById(R.id.selected_show_episode_count_text_view)).setText("Episodes:" + providerEpisodeLength); //Update count
-                episodeAdapter.setEpisodes(providerEpisodeLength);
+                episodeAdapter.setSize(providerEpisodeLength);
                 refreshAdapter();
             }
 
@@ -151,18 +150,33 @@ public class SelectedActivity extends AppCompatActivity {
         });
 
         //Set adapter
-        this.episodeAdapter = new EpisodeAdapter(show.getEpisodeCount(), getApplicationContext());
+        this.episodeAdapter = new EpisodeAdapter(show.getEpisodeCount(), this);
 
         //Episode list view
-        final ListView listView = findViewById(R.id.show_episode_item_grid);
-        listView.setAdapter(episodeAdapter);
-        listView.setOnItemClickListener((adapterView, view, i, l) -> {
+        final GridView gridView = findViewById(R.id.show_episode_item_grid);
+        gridView.setAdapter(episodeAdapter);
+
+        gridView.setOnItemLongClickListener((parent, view, position, id) -> {
+            if (isEpisodeDownloaded(position)) {
+                new IonAlert(SelectedActivity.this, IonAlert.WARNING_TYPE)
+                        .setTitleText("Delete file?")
+                        .setContentText("Won't be able to recover this file!")
+                        .setConfirmText("Yes, delete!")
+                        .setConfirmClickListener(ionAlert -> {
+                            episodeAdapter.deleteItem(position);
+                            ionAlert.dismissWithAnimation();
+                        }).setCancelText("Abort").setCancelClickListener(IonAlert::dismissWithAnimation)
+                        .show();
+            } else getEpisode(position, 1, 0, false);
+            return true;
+        });
+        gridView.setOnItemClickListener((adapterView, view, i, l) -> {
             //TODO: Rework?
             final boolean isDownloaded = isEpisodeDownloaded(i);
             new IonAlert(SelectedActivity.this, IonAlert.NORMAL_TYPE)
                     .setConfirmText("Stream")
                     .setConfirmClickListener(ionAlert -> getEpisode(i, 1, 0, true))
-                    .setCancelText(isDownloaded ? "Play downloaded" : "Cancel")
+                    .setCancelText(isDownloaded ? "Play" : "Cancel")
                     .setCancelClickListener(ionAlert -> {
                         if (isDownloaded)
                             playEpisodeFromSave(i);
@@ -195,29 +209,18 @@ public class SelectedActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(final MenuItem item) {
         int itemID = item.getItemId();
-        switch (itemID) {
-            case R.id.download_bound:
-                final InputDialogBuilder dialogBuilder = new InputDialogBuilder(new InputDialogListener() {
-                    @Override
-                    public void onDialogInput(final String text) {
-                        getEpisode(getLatestEpisode(), Integer.parseInt(text), 0, false);
-                    }
+        if (itemID == R.id.download_bound) {
+            final InputDialogBuilder dialogBuilder = new InputDialogBuilder(new InputDialogListener() {
+                @Override
+                public void onDialogInput(final String text) {
+                    getEpisode(getLatestEpisode(), Integer.parseInt(text), 0, false);
+                }
 
-                    @Override
-                    public void onDialogDenied() {
-                    }
-                });
-                dialogBuilder.showInput("Download bound", "Enter bound", this);
-                break;
-            case R.id.toogle_notifications_show:
-                //Add to notification manager
-                /*
-                 * TODO: Rework
-                 */
-                //  AnimeAppMain.getInstance().getAnimeNotifications().add(title.concat(StringUtil.splitter) + id, String.valueOf(episodes));
-                break;
-            default:
-                break;
+                @Override
+                public void onDialogDenied() {
+                }
+            });
+            dialogBuilder.showInput("Download bound", "Enter bound", this);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -354,16 +357,16 @@ public class SelectedActivity extends AppCompatActivity {
     class EpisodeAdapter extends BaseAdapter {
 
         private final Context context;
-        private int episodes;
+        private int size;
 
-        public EpisodeAdapter(final int episodes, final Context context) {
-            this.episodes = episodes;
+        public EpisodeAdapter(final int size, final Context context) {
+            this.size = size;
             this.context = context;
         }
 
         @Override
         public int getCount() {
-            return episodes;
+            return size;
         }
 
         @Override
@@ -376,38 +379,23 @@ public class SelectedActivity extends AppCompatActivity {
             return 0;
         }
 
-
-        public void setEpisodes(int episodes) {
-            this.episodes = episodes;
+        public void setSize(int size) {
+            this.size = size;
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            if (convertView == null)
-                convertView = LayoutInflater.from(context).inflate(R.layout.episode_item_layout, parent, false);
+        public View getView(final int position, View convertView, final ViewGroup parent) {
+            if (convertView == null) {
+                convertView = LayoutInflater.from(context).inflate(R.layout.item_episode, parent, false);
+            }
 
             final TextView textView = convertView.findViewById(R.id.episode_name);
-            final ImageView actionButton = convertView.findViewById(R.id.download_button);
-            textView.setText("Episode: " + position);
+            textView.setText(String.valueOf(position));
 
             if (isEpisodeDownloaded(position)) {
-                textView.setTextColor(getColor(R.color.colorPrimaryDark));
-                actionButton.setImageResource(R.drawable.delete);
-                actionButton.setOnClickListener(view ->
-                        new IonAlert(SelectedActivity.this, IonAlert.WARNING_TYPE)
-                                .setTitleText("Delete file?")
-                                .setContentText("Won't be able to recover this file!")
-                                .setConfirmText("Yes, delete it!")
-                                .setConfirmClickListener(ionAlert -> {
-                                    episodeAdapter.deleteItem(position);
-                                    ionAlert.dismissWithAnimation();
-                                }).setCancelText("Abort").setCancelClickListener(IonAlert::dismissWithAnimation)
-                                .show());
-            } else {
-                textView.setTextColor(getColor(R.color.text_color));
-                actionButton.setImageResource(R.drawable.download);
-                actionButton.setOnClickListener(view -> getEpisode(position, 1, 0, false));
-            }
+                textView.setTextColor(getColor(R.color.colorAccent));
+            } else textView.setTextColor(getColor(R.color.text_color));
+
             return convertView;
         }
 

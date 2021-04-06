@@ -43,7 +43,7 @@ public class AnimeAppMain {
 
     public AnimeAppMain() {
         this.version = Float.parseFloat(BuildConfig.VERSION_NAME.replace(".", ""));
-        this.developerMode = false;
+        this.developerMode = true;
         this.notificationChannelName = "AnimeChannel";
 
     }
