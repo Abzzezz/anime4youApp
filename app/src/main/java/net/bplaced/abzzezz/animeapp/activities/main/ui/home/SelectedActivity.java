@@ -8,6 +8,7 @@ package net.bplaced.abzzezz.animeapp.activities.main.ui.home;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.*;
 import android.widget.*;
@@ -52,6 +53,7 @@ public class SelectedActivity extends AppCompatActivity {
     private Show show;
 
     private Provider currentProvider;
+    private ColorStateList defaultTextColor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,13 +63,18 @@ public class SelectedActivity extends AppCompatActivity {
         this.show = (Show) IntentHelper.getObjectForKey("show"); //Receive show object from intent helper
         this.showDirectory = new File(getFilesDir(), show.getID()); //Set the show's directory
 
+
         //Fill in labels
         ((TextView) this.findViewById(R.id.selected_show_title_text_view)).setText(show.getShowTitle());
-        ((TextView) this.findViewById(R.id.selected_show_episode_count_text_view)).append(String.valueOf(show.getEpisodeCount()));
         ((TextView) this.findViewById(R.id.selected_show_id_text_view)).append(show.getID());
         ((TextView) this.findViewById(R.id.show_directory_total_size_text_view)).append(FileUtil.calculateFileSize(showDirectory));
 
+        final TextView episodeCountTextView = this.findViewById(R.id.selected_show_episode_count_text_view);
+
+        episodeCountTextView.append(String.valueOf(show.getEpisodeCount()));
+
         // ((TextView) findViewById(R.id.selected_anime_language)).append(show.getLanguage());
+        this.defaultTextColor = episodeCountTextView.getTextColors(); //This is needed to revert the text colors back to default, android you are a little bitch...
 
 
         final ImageView showCover = this.findViewById(R.id.show_cover_image_view); //Set cover
@@ -83,25 +90,35 @@ public class SelectedActivity extends AppCompatActivity {
             Picasso.with(getApplicationContext())
                     .load(show.getImageURL())
                     .resize(ImageUtil.IMAGE_COVER_DIMENSIONS[0], ImageUtil.IMAGE_COVER_DIMENSIONS[1])
-                    .into(showCover); //Load from url using picasso
+                    .into(showCover); //Load from url using picasso & resize to fit the image view bounds
 
 
         //Configure swipe refresh layout
         final SwipeRefreshLayout swipeRefreshLayout = this.findViewById(R.id.selected_show_swipe_refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(() -> {
-            if (URLUtil.isOffline(Objects.requireNonNull(getApplicationContext()))) return;
+            if (URLUtil.isOffline(Objects.requireNonNull(getApplicationContext()))) return; //Reject offline requests
 
-            final long showTimestampDifference = show.getTimestampDifference(currentProvider);
+            final Provider requestedProvider = currentProvider; //Create a local copy of the current provider, in case the provider is switched (so that data does not mix)
 
-            if (TimeUnit.MILLISECONDS.toMinutes(showTimestampDifference) >= 5) {
-                currentProvider.getShowEpisodeReferrals(show, jsonArray -> {
-                    show.addEpisodesForProvider(jsonArray, currentProvider);
+            final long showTimestampDifference = show.getTimestampDifference(requestedProvider); //Get the time difference between the saved episodes and the current system internal time
+
+            if (TimeUnit.MILLISECONDS.toMinutes(showTimestampDifference) >= 5) { //Lets the user only refresh every five minutes
+                requestedProvider.getShowEpisodeReferrals(show, jsonArray -> {
+                    show.addEpisodesForProvider(jsonArray, requestedProvider); //Adds the episodes to the provider
+
+                    if (currentProvider == requestedProvider) { //Don't update if the provider was switched
+                        //TODO: Remove "hack"
+                        episodeCountTextView.setText("Episodes:" + jsonArray.length()); //Update text view
+                        episodeAdapter.setSize(jsonArray.length()); //Update adapter with the new available episode count
+                        refreshAdapter(); //Refresh the adapter so all changes are shown
+                    }
+                    //Display a little message
                     Toast.makeText(this,
-                            String.format("Refreshed episodes for %s, new episode count for provider %d", show.getShowTitle(),
-                                    jsonArray.length()),
+                            String.format("Refreshed episodes for %s, new episode count for provider %s %d", show.getShowTitle(), requestedProvider.getName(), jsonArray.length()),
                             Toast.LENGTH_SHORT
                     ).show();
-                }); //Update episodes
+
+                });
             } else {
                 Toast.makeText(
                         this,
@@ -111,11 +128,6 @@ public class SelectedActivity extends AppCompatActivity {
                 ).show();
             }
 
-            final int providerEpisodeLength = show.getShowEpisodes(currentProvider).length();
-            //TODO: Remove "hack"
-            ((TextView) findViewById(R.id.selected_show_episode_count_text_view)).setText("Episodes:" + providerEpisodeLength); //Update count
-            episodeAdapter.setSize(providerEpisodeLength);
-
             swipeRefreshLayout.setRefreshing(false);
         });
 
@@ -124,12 +136,10 @@ public class SelectedActivity extends AppCompatActivity {
 
         final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1); //Create a new array adapter
         //Add all providers from the provider enum, excluding the NULL provider
-        try (final Stream<Providers> providerStream = Arrays.stream(Providers.values())) {
+        try (final Stream<Providers> providerStream = Stream.of(Providers.values())) {
             arrayAdapter.addAll(providerStream.filter(provider -> provider != Providers.NULL).map(Enum::name).toArray(String[]::new));
         }
         providerSpinner.setAdapter(arrayAdapter);
-
-        //TODO: Provider switching
 
         providerSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -139,8 +149,8 @@ public class SelectedActivity extends AppCompatActivity {
 
                 final int providerEpisodeLength = show.getShowEpisodes(currentProvider).length();
                 //TODO: Remove "hack"
-                ((TextView) findViewById(R.id.selected_show_episode_count_text_view)).setText("Episodes:" + providerEpisodeLength); //Update count
-                episodeAdapter.setSize(providerEpisodeLength);
+                episodeCountTextView.setText("Episodes:" + providerEpisodeLength); //Update count
+                episodeAdapter.setSize(providerEpisodeLength); //Update the size
                 refreshAdapter();
             }
 
@@ -276,7 +286,7 @@ public class SelectedActivity extends AppCompatActivity {
      */
     private void playEpisodeFromSave(final int index) {
         Intent intent = null;
-        final Optional<File> videoFile = getEpisodeFile(index);
+        final Optional<File> videoFile = this.getEpisodeFile(index);
 
         if (videoFile.isPresent()) {
             final int mode = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(this).getString("video_player_preference", "0"));
@@ -288,7 +298,10 @@ public class SelectedActivity extends AppCompatActivity {
                 intent = new Intent(getApplicationContext(), PlayerActivity.class);
                 intent.putExtra("path", videoFile.get().getAbsolutePath());
             }
-            startActivity(Objects.requireNonNull(intent));
+            if (intent == null) {
+                Toast.makeText(this, "Cannot use selected player", Toast.LENGTH_SHORT).show();
+            } else
+                startActivity(Objects.requireNonNull(intent));
         }
     }
 
@@ -332,6 +345,7 @@ public class SelectedActivity extends AppCompatActivity {
 
     /**
      * Check if a certain episode is downloaded
+     * TODO: Create and update a local index
      *
      * @param index index to search for
      * @return if the file has been found
@@ -394,12 +408,12 @@ public class SelectedActivity extends AppCompatActivity {
                 convertView = LayoutInflater.from(context).inflate(R.layout.item_episode, parent, false);
             }
 
-            final TextView textView = convertView.findViewById(R.id.episode_name);
+            final TextView textView = convertView.findViewById(R.id.episode_int_text_view);
             textView.setText(String.valueOf(position));
-
-            if (isEpisodeDownloaded(position)) {
+            //Highlight downloaded episodes, i.e. give those text views a different color
+            if (isEpisodeDownloaded(position))
                 textView.setTextColor(getColor(R.color.colorAccent));
-            } else textView.setTextColor(getColor(R.color.text_color));
+            else textView.setTextColor(defaultTextColor); //Revert text color back to default
 
             return convertView;
         }

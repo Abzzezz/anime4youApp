@@ -81,14 +81,21 @@ public class Show {
                 .orElse(System.currentTimeMillis());
     }
 
+    /**
+     * Refreshes the
+     *
+     * @param episodes json array with all the episode referrals for the show
+     * @param provider provider to add the json array to
+     */
     public void addEpisodesForProvider(final JSONArray episodes, final Provider provider) {
         this.getProviderJSON(provider).ifPresent(providerJSON -> {
             try {
-                providerJSON.put("episodes", episodes); //Update
-                providerJSON.put("time", System.currentTimeMillis());
-            } catch (JSONException e) {
+                providerJSON.put("episodes", episodes); //Update episodes
+                providerJSON.put("time", System.currentTimeMillis()); //Add the timestamp for later comparison
+            } catch (final JSONException e) {
                 e.printStackTrace();
             }
+            //Finally, update the provider json
             this.updateProviderJSON(provider, providerJSON);
         });
     }

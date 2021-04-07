@@ -6,7 +6,7 @@
 
 package net.bplaced.abzzezz.animeapp.util.tasks.animepahe;
 
-import net.bplaced.abzzezz.animeapp.util.connection.RandomUserAgent;
+import net.bplaced.abzzezz.animeapp.util.Constant;
 import net.bplaced.abzzezz.animeapp.util.connection.URLUtil;
 import net.bplaced.abzzezz.animeapp.util.provider.holders.AnimePaheHolder;
 import org.json.JSONArray;
@@ -25,7 +25,7 @@ public class AnimePaheFetchCallable implements Callable<JSONObject>, AnimePaheHo
 
     @Override
     public JSONObject call() throws Exception {
-        final HttpsURLConnection episodeAPIConnection = URLUtil.createHTTPSURLConnection(String.format(EPISODE_API, showJSON.getString("id")), new String[]{"User-Agent", RandomUserAgent.getRandomUserAgent()});
+        final HttpsURLConnection episodeAPIConnection = URLUtil.createHTTPSURLConnection(String.format(EPISODE_API, showJSON.getString("id")), new String[]{"User-Agent", Constant.USER_AGENT});
         final JSONArray collectedLines = new JSONObject(URLUtil.collectLines(episodeAPIConnection, "")).getJSONArray("data");
         final JSONArray sources = new JSONArray();
 

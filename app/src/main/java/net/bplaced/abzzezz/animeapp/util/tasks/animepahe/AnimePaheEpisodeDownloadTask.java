@@ -9,7 +9,6 @@ package net.bplaced.abzzezz.animeapp.util.tasks.animepahe;
 import com.arthenica.mobileffmpeg.FFmpeg;
 import net.bplaced.abzzezz.animeapp.activities.main.ui.home.SelectedActivity;
 import net.bplaced.abzzezz.animeapp.util.Constant;
-import net.bplaced.abzzezz.animeapp.util.connection.RandomUserAgent;
 import net.bplaced.abzzezz.animeapp.util.provider.holders.AnimePaheHolder;
 import net.bplaced.abzzezz.animeapp.util.string.JsUnpacker;
 import net.bplaced.abzzezz.animeapp.util.tasks.download.EpisodeDownloadTask;
@@ -41,12 +40,10 @@ public class AnimePaheEpisodeDownloadTask extends EpisodeDownloadTask implements
             return null;
         }
 
-        final Document document = Jsoup.connect(url).userAgent(RandomUserAgent.getRandomUserAgent()).referrer(ANIME_PAHE_REFERER).get();
+        final Document document = Jsoup.connect(url).userAgent(Constant.USER_AGENT).referrer(ANIME_PAHE_REFERER).get();
         final Elements javascriptElements = document.getElementsByTag("script");
 
-        //Get second to last javascript
-
-        final JsUnpacker jsUnpacker = new JsUnpacker(javascriptElements.get(javascriptElements.size() - 2).toString());
+        final JsUnpacker jsUnpacker = new JsUnpacker(javascriptElements.get(javascriptElements.size() - 2).toString());        //Get second to last javascript & unpack it
         if (!jsUnpacker.detect()) {
             this.progressHandler.onErrorThrown(getError("Finding P.A.C.K.E.R"));
             return null;

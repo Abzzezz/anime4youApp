@@ -6,7 +6,7 @@
 
 package net.bplaced.abzzezz.animeapp.util.tasks.animepahe;
 
-import net.bplaced.abzzezz.animeapp.util.connection.RandomUserAgent;
+import net.bplaced.abzzezz.animeapp.util.Constant;
 import net.bplaced.abzzezz.animeapp.util.connection.URLUtil;
 import net.bplaced.abzzezz.animeapp.util.provider.holders.AnimePaheHolder;
 import net.bplaced.abzzezz.animeapp.util.tasks.TaskExecutor;
@@ -33,10 +33,10 @@ public class AnimePaheSearchTask extends TaskExecutor implements Callable<List<J
     public List<JSONObject> call() throws Exception {
         final List<JSONObject> showsOut = new ArrayList<>();
 
-        final String collected = URLUtil.collectLines(URLUtil.createHTTPSURLConnection(String.format(SEARCH_API, searchQuery), new String[]{"User-Agent", RandomUserAgent.getRandomUserAgent()}), "");
+        final String collected = URLUtil.collectLines(URLUtil.createHTTPSURLConnection(String.format(SEARCH_API, searchQuery), new String[]{"User-Agent", Constant.USER_AGENT}), "");
 
         final JSONArray showsIn = new JSONObject(collected).getJSONArray("data");
-        //TODO: Adds all results. Distinction needed?
+
         for (int i = 0; i < showsIn.length(); i++) {
             final JSONObject show = new AnimePaheFetchCallable(showsIn.getJSONObject(i)).call();
             if (!showsOut.contains(show)) showsOut.add(show);

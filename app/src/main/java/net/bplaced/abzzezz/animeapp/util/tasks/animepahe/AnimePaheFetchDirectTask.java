@@ -6,7 +6,7 @@
 
 package net.bplaced.abzzezz.animeapp.util.tasks.animepahe;
 
-import net.bplaced.abzzezz.animeapp.util.connection.RandomUserAgent;
+import net.bplaced.abzzezz.animeapp.util.Constant;
 import net.bplaced.abzzezz.animeapp.util.connection.URLUtil;
 import net.bplaced.abzzezz.animeapp.util.json.JSONHelper;
 import net.bplaced.abzzezz.animeapp.util.provider.holders.AnimePaheHolder;
@@ -39,7 +39,7 @@ public class AnimePaheFetchDirectTask extends TaskExecutor implements Callable<O
         final String id = episodeJSONObject.getString("anime_id");
         final String session = episodeJSONObject.getString("session");
         //Establish a new connection to the episode api with the id & session. Add a user-agent as a confirmation of authenticity
-        final HttpsURLConnection episodeAPIConnection = URLUtil.createHTTPSURLConnection(String.format(STREAM_API, id, session), new String[]{"User-Agent", RandomUserAgent.getRandomUserAgent()});
+        final HttpsURLConnection episodeAPIConnection = URLUtil.createHTTPSURLConnection(String.format(STREAM_API, id, session), new String[]{"User-Agent", Constant.USER_AGENT});
         final JSONArray availableStreams = new JSONObject(URLUtil.collectLines(episodeAPIConnection, "")).getJSONArray("data"); //Collect all data from the output, read it into a new jsonobject and get the jsonarray called "data"
         //Get the highest resolution available
         return IntStream.range(0, availableStreams.length())

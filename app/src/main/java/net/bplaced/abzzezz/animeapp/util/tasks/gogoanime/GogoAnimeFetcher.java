@@ -7,7 +7,6 @@
 package net.bplaced.abzzezz.animeapp.util.tasks.gogoanime;
 
 import net.bplaced.abzzezz.animeapp.util.Constant;
-import net.bplaced.abzzezz.animeapp.util.connection.RandomUserAgent;
 import org.json.JSONArray;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -48,17 +47,15 @@ public class GogoAnimeFetcher {
         if (!CACHE_DIRECTORY.exists()) CACHE_DIRECTORY.mkdir();
         if (!DOWNLOAD_DIRECTORY.exists()) DOWNLOAD_DIRECTORY.mkdir();
 
-        this.showDocument = createGogoConnection(urlIn, RandomUserAgent.getRandomUserAgent()).get();
+        this.showDocument = createGogoConnection(urlIn, Constant.USER_AGENT).get();
         this.fetchedDirectURLs = this.fetchReferrals();
     }
 
     public static JSONArray fetchReferrals(final String idIn, final int epiStart, final int epiEnd) throws IOException {
-        final String userAgent = RandomUserAgent.getRandomUserAgent();
-
         final int id = Integer.parseInt(idIn); //Parse id
 
         final String episodesURL = String.format(Locale.ENGLISH, EPISODE_API_URL, epiStart, epiEnd, id); //Format episode request URL
-        final Document episodesDocument = createGogoCdn(episodesURL, userAgent).get(); //Create httpsurlconnection
+        final Document episodesDocument = createGogoCdn(episodesURL, Constant.USER_AGENT).get(); //Create httpsurlconnection
 
         return episodesDocument.body().getElementById("episode_related").children().stream()
                 .map(element -> BASE_URL + element.selectFirst("a").attr("href").trim())
@@ -156,7 +153,6 @@ public class GogoAnimeFetcher {
      * @throws IOException some connection goes wrong
      */
     private JSONArray fetchReferrals() throws IOException {
-        final String userAgent = RandomUserAgent.getRandomUserAgent();
 
         final Element body = showDocument.body();
 
@@ -166,7 +162,7 @@ public class GogoAnimeFetcher {
 
         final String episodesURL = String.format(Locale.ENGLISH, EPISODE_API_URL, epiStart, epiEnd, id);
 
-        final Document episodesDocument = createGogoCdn(episodesURL, userAgent).get();
+        final Document episodesDocument = createGogoCdn(episodesURL, Constant.USER_AGENT).get();
         return episodesDocument
                 .body()
                 .getElementById("episode_related")

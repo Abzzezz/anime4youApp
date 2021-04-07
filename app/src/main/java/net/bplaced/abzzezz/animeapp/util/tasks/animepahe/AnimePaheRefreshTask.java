@@ -6,7 +6,7 @@
 
 package net.bplaced.abzzezz.animeapp.util.tasks.animepahe;
 
-import net.bplaced.abzzezz.animeapp.util.connection.RandomUserAgent;
+import net.bplaced.abzzezz.animeapp.util.Constant;
 import net.bplaced.abzzezz.animeapp.util.connection.URLUtil;
 import net.bplaced.abzzezz.animeapp.util.provider.holders.AnimePaheHolder;
 import net.bplaced.abzzezz.animeapp.util.show.Show;
@@ -29,7 +29,7 @@ public class AnimePaheRefreshTask extends TaskExecutor implements Callable<JSONO
 
     @Override
     public JSONObject call() throws Exception {
-        final String collected = URLUtil.collectLines(URLUtil.createHTTPSURLConnection(String.format(SEARCH_API, showIn.getShowTitle()), new String[]{"User-Agent", RandomUserAgent.getRandomUserAgent()}), "");
+        final String collected = URLUtil.collectLines(URLUtil.createHTTPSURLConnection(String.format(SEARCH_API, showIn.getShowTitle()), new String[]{"User-Agent", Constant.USER_AGENT}), "");
         return new AnimePaheFetchCallable(new JSONObject(collected).getJSONArray("data").getJSONObject(0)).call();
     }
 }
