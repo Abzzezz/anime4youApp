@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2020. Roman P.
+ * Copyright (c) 2021. Roman P.
  * All code is owned by Roman P. APIs are mentioned.
- * Last modified: 07.11.20, 20:32
+ * Last modified: 07.04.21, 14:29
  */
 
 package net.bplaced.abzzezz.animeapp.activities.main.ui.home;
@@ -10,14 +10,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.*;
 import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatSpinner;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.FileProvider;
 import androidx.preference.PreferenceManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import com.google.android.material.appbar.MaterialToolbar;
 import com.squareup.picasso.Picasso;
 import ga.abzzezz.util.data.FileUtil;
 import ga.abzzezz.util.logging.Logger;
@@ -27,21 +27,22 @@ import net.bplaced.abzzezz.animeapp.R;
 import net.bplaced.abzzezz.animeapp.activities.main.DrawerMainMenu;
 import net.bplaced.abzzezz.animeapp.activities.main.ui.player.PlayerActivity;
 import net.bplaced.abzzezz.animeapp.activities.main.ui.player.StreamPlayer;
+import net.bplaced.abzzezz.animeapp.util.Constant;
 import net.bplaced.abzzezz.animeapp.util.IntentHelper;
 import net.bplaced.abzzezz.animeapp.util.connection.URLUtil;
+import net.bplaced.abzzezz.animeapp.util.crypto.Cloudflare;
 import net.bplaced.abzzezz.animeapp.util.file.OfflineImageLoader;
 import net.bplaced.abzzezz.animeapp.util.provider.Provider;
 import net.bplaced.abzzezz.animeapp.util.provider.Providers;
 import net.bplaced.abzzezz.animeapp.util.show.Show;
+import net.bplaced.abzzezz.animeapp.util.tasks.TaskExecutor;
 import net.bplaced.abzzezz.animeapp.util.ui.ImageUtil;
 import net.bplaced.abzzezz.animeapp.util.ui.InputDialogBuilder;
 import net.bplaced.abzzezz.animeapp.util.ui.InputDialogBuilder.InputDialogListener;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.OptionalInt;
+import java.net.HttpCookie;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
@@ -66,19 +67,17 @@ public class SelectedActivity extends AppCompatActivity {
 
         //Fill in labels
         ((TextView) this.findViewById(R.id.selected_show_title_text_view)).setText(show.getShowTitle());
-        ((TextView) this.findViewById(R.id.selected_show_id_text_view)).append(show.getID());
+        ((TextView) this.findViewById(R.id.selected_show_id_text_view)).setText(getString(R.string.show_id, show.getID()));
         ((TextView) this.findViewById(R.id.show_directory_total_size_text_view)).append(FileUtil.calculateFileSize(showDirectory));
+        ((TextView) findViewById(R.id.selected_show_score_text_view)).setText(getString(R.string.show_score, show.getShowScore()));
 
         final TextView episodeCountTextView = this.findViewById(R.id.selected_show_episode_count_text_view);
+        episodeCountTextView.setText(getString(R.string.show_episodes, show.getEpisodeCount()));
 
-        episodeCountTextView.append(String.valueOf(show.getEpisodeCount()));
-
-        // ((TextView) findViewById(R.id.selected_anime_language)).append(show.getLanguage());
         this.defaultTextColor = episodeCountTextView.getTextColors(); //This is needed to revert the text colors back to default, android you are a little bitch...
 
-
-        final ImageView showCover = this.findViewById(R.id.show_cover_image_view); //Set cover
-        final MaterialToolbar applicationToolbar = this.findViewById(R.id.selected_show_toolbar); //Set toolbar
+        final ImageView showCover = this.findViewById(R.id.selected_show_cover_image_view); //Set cover
+        final Toolbar applicationToolbar = this.findViewById(R.id.selected_show_toolbar); //Set toolbar
         setSupportActionBar(applicationToolbar); //Enable action bar
 
         Objects.requireNonNull(getSupportActionBar()).setTitle(show.getShowTitle()); //Set the toolbar'S title
@@ -92,7 +91,6 @@ public class SelectedActivity extends AppCompatActivity {
                     .resize(ImageUtil.IMAGE_COVER_DIMENSIONS[0], ImageUtil.IMAGE_COVER_DIMENSIONS[1])
                     .into(showCover); //Load from url using picasso & resize to fit the image view bounds
 
-
         //Configure swipe refresh layout
         final SwipeRefreshLayout swipeRefreshLayout = this.findViewById(R.id.selected_show_swipe_refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(() -> {
@@ -103,18 +101,39 @@ public class SelectedActivity extends AppCompatActivity {
             final long showTimestampDifference = show.getTimestampDifference(requestedProvider); //Get the time difference between the saved episodes and the current system internal time
 
             if (TimeUnit.MILLISECONDS.toMinutes(showTimestampDifference) >= 5) { //Lets the user only refresh every five minutes
+                if (requestedProvider == Providers.ANIFLIX.getProvider()) {
+
+
+                    Cloudflare cf = new Cloudflare("https://www2.aniflix.tv/api/show/shinsekai-yori");
+                    cf.setUser_agent(Constant.USER_AGENT);
+                    cf.getCookies(new TaskExecutor.Callback<List<HttpCookie>>() {
+                        @Override
+                        public void onComplete(List<HttpCookie> result) throws Exception {
+                            //convert the cookielist to a map
+                            Map<String, String> cookies = Cloudflare.List2Map(result);
+                            Log.d("COOKIES : ", cookies.toString());
+                        }
+
+                        @Override
+                        public void preExecute() {
+
+                        }
+                    });
+                    return;
+                }
+
                 requestedProvider.getShowEpisodeReferrals(show, jsonArray -> {
                     show.addEpisodesForProvider(jsonArray, requestedProvider); //Adds the episodes to the provider
 
                     if (currentProvider == requestedProvider) { //Don't update if the provider was switched
                         //TODO: Remove "hack"
-                        episodeCountTextView.setText("Episodes:" + jsonArray.length()); //Update text view
+                        episodeCountTextView.setText(getString(R.string.show_episodes, jsonArray.length())); //Update text view
                         episodeAdapter.setSize(jsonArray.length()); //Update adapter with the new available episode count
                         refreshAdapter(); //Refresh the adapter so all changes are shown
                     }
                     //Display a little message
                     Toast.makeText(this,
-                            String.format("Refreshed episodes for %s, new episode count for provider %s %d", show.getShowTitle(), requestedProvider.getName(), jsonArray.length()),
+                            String.format(Locale.ENGLISH, "Refreshed episodes for %s, new episode count for provider %s %d", show.getShowTitle(), requestedProvider.getName(), jsonArray.length()),
                             Toast.LENGTH_SHORT
                     ).show();
 
@@ -122,7 +141,7 @@ public class SelectedActivity extends AppCompatActivity {
             } else {
                 Toast.makeText(
                         this,
-                        String.format("You have already refreshed %d minutes ago. Please wait five minutes",
+                        String.format(Locale.ENGLISH, "You have already refreshed %d minutes ago. Please wait five minutes",
                                 TimeUnit.MILLISECONDS.toMinutes(showTimestampDifference)),
                         Toast.LENGTH_SHORT
                 ).show();
@@ -132,7 +151,7 @@ public class SelectedActivity extends AppCompatActivity {
         });
 
         //Configure the show's provider spinner
-        final AppCompatSpinner providerSpinner = findViewById(R.id.show_provider_spinner);
+        final Spinner providerSpinner = findViewById(R.id.show_provider_spinner);
 
         final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1); //Create a new array adapter
         //Add all providers from the provider enum, excluding the NULL provider
@@ -149,7 +168,7 @@ public class SelectedActivity extends AppCompatActivity {
 
                 final int providerEpisodeLength = show.getShowEpisodes(currentProvider).length();
                 //TODO: Remove "hack"
-                episodeCountTextView.setText("Episodes:" + providerEpisodeLength); //Update count
+                episodeCountTextView.setText(getString(R.string.show_episodes, providerEpisodeLength)); //Update count
                 episodeAdapter.setSize(providerEpisodeLength); //Update the size
                 refreshAdapter();
             }
@@ -404,18 +423,19 @@ public class SelectedActivity extends AppCompatActivity {
 
         @Override
         public View getView(final int position, View convertView, final ViewGroup parent) {
+            View view;
             if (convertView == null) {
-                convertView = LayoutInflater.from(context).inflate(R.layout.item_episode, parent, false);
-            }
+                view = LayoutInflater.from(context).inflate(R.layout.item_episode, parent, false);
+            } else view = convertView;
 
-            final TextView textView = convertView.findViewById(R.id.episode_int_text_view);
+            final TextView textView = view.findViewById(R.id.episode_int_text_view);
             textView.setText(String.valueOf(position));
             //Highlight downloaded episodes, i.e. give those text views a different color
             if (isEpisodeDownloaded(position))
                 textView.setTextColor(getColor(R.color.colorAccent));
             else textView.setTextColor(defaultTextColor); //Revert text color back to default
 
-            return convertView;
+            return view;
         }
 
         /**

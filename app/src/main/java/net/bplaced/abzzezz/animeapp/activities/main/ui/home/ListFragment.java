@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2020. Roman P.
+ * Copyright (c) 2021. Roman P.
  * All code is owned by Roman P. APIs are mentioned.
- * Last modified: 25.06.20, 15:16
+ * Last modified: 06.04.21, 22:00
  */
 
 package net.bplaced.abzzezz.animeapp.activities.main.ui.home;
@@ -37,7 +37,6 @@ public class ListFragment extends Fragment {
         final GridView gridView = root.findViewById(R.id.show_item_grid);
 
         final ShowAdapter showAdapter = new ShowAdapter(AnimeAppMain.getInstance().getShowSaver().getShowSize(), getActivity());
-
         gridView.setAdapter(showAdapter);
         /*
          * Set onclick listener, if clicked pass information through to selected anime.
@@ -54,7 +53,9 @@ public class ListFragment extends Fragment {
                     .setConfirmClickListener(ionAlert -> {
                         showAdapter.removeItem(position);
                         ionAlert.dismissWithAnimation();
-                    }).setCancelText("Abort").setCancelClickListener(IonAlert::dismissWithAnimation)
+                    })
+                    .setCancelText("Abort")
+                    .setCancelClickListener(IonAlert::dismissWithAnimation)
                     .show();
             return true;
         });
@@ -63,7 +64,8 @@ public class ListFragment extends Fragment {
             new IonAlert(getActivity(), IonAlert.WARNING_TYPE)
                     .setTitleText("Outdated version")
                     .setContentText("Your app-version is outdated, please update it now! If the auto update does not start automatically, download from the website!")
-                    .setCancelText("Close").setCancelClickListener(IonAlert::dismissWithAnimation)
+                    .setCancelText("Close")
+                    .setCancelClickListener(IonAlert::dismissWithAnimation)
                     .show();
         }
         return root;
@@ -110,11 +112,14 @@ public class ListFragment extends Fragment {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
+            View view;
+
             if (convertView == null) {
-                convertView = LayoutInflater.from(context).inflate(R.layout.item_show, parent, false);
-            }
-            final ImageView coverImage = convertView.findViewById(R.id.show_cover_image_view_item);
-            final TextView showTitle = convertView.findViewById(R.id.show_title_text_view_item);
+                view = LayoutInflater.from(context).inflate(R.layout.item_show, parent, false);
+            } else view = convertView;
+
+            final ImageView coverImage = view.findViewById(R.id.list_show_cover_image_view);
+            final TextView showTitle = view.findViewById(R.id.list_show_title_text_view);
             //Grab show
             AnimeAppMain.getInstance().getShowSaver().getShow(position).ifPresent(show -> {
                 showTitle.setText(show.getShowTitle()); //Set title text view
@@ -129,7 +134,7 @@ public class ListFragment extends Fragment {
                             .resize(ImageUtil.IMAGE_COVER_DIMENSIONS[0], ImageUtil.IMAGE_COVER_DIMENSIONS[1])
                             .into(coverImage);
             });
-            return convertView;
+            return view;
         }
 
         public void removeItem(final int index) {
@@ -150,7 +155,9 @@ public class ListFragment extends Fragment {
                                 }
                                 Toast.makeText(context, "Remaining files deleted.", Toast.LENGTH_SHORT).show();
                                 ionAlert.dismissWithAnimation();
-                            }).setCancelText("Abort").setCancelClickListener(IonAlert::dismissWithAnimation)
+                            })
+                            .setCancelText("Abort")
+                            .setCancelClickListener(IonAlert::dismissWithAnimation)
                             .show();
                 }
                 AnimeAppMain.getInstance().getShowSaver().remove(index);

@@ -1,52 +1,54 @@
 <!--
-  ~ Copyright (c) 2020. Roman P.
+  ~ Copyright (c) 2021. Roman P.
   ~ All code is owned by Roman P. APIs are mentioned.
-  ~ Last modified: 10.06.20, 13:49
+  ~ Last modified: 09.04.21, 17:58
   -->
 
 <resources>
     <string name="app_name">Anime4you</string>
-    <string name="action_settings">Settings</string>
-    <string name="title_activity_download">Download</string>
+
+    <!-- Strings for menus -->
+    <string name="menu_list">Anime List</string>
+    <string name="menu_settings">Settings</string>
+    <string name="menu_changelog">Changelog</string>
+    <string name="menu_search">Search</string>
 
     <!-- Strings used for fragments for navigation -->
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
-    <string name="title_activity_player">PlayerActivity</string>
-    <string name="title_activity_main">Main</string>
-    <string name="title_activity_settings">Settings</string>
+    <string name="title_activity_drawer_main_menu">DrawerMainMenu</string>
+
+    <!-- Strings for general use -->
+    <string name="show_title">Title: %s</string>
+    <string name="show_episodes">Episodes: %d</string>
+    <string name="show_score">Score: %.2f</string>
+    <string name="show_id">Id: %s</string>
+
+
     <!-- Preference Titles -->
     <string name="global_settings">Settings</string>
     <string name="global_video">Video</string>
-    <string name="global_notifications">Notifications</string>
+    <string name="global_storage">Storage</string>
 
+    <!-- Preferences -->
+
+    <!-- General -->
+    <string name="check_list_attachment_summary_on">Checks anime already exists</string>
+    <string name="check_list_attachment_summary_off">Does not check. Entries can be duplicated</string>
     <string name="download_delay">Download delay (seconds)</string>
     <string name="image_compression_strength">Image compression strength</string>
-
-    <string name="offline_mode">Offline mode</string>
-    <string name="offline_mode_attachment_summary_on">Show covers and information will be stored in storage, thus
-        resulting in higher storage usage. In addition image load-times will be slower.
-    </string>
-
-    <string name="offline_mode_attachment_summary_off">Images will only be cached. If cache is cleared and device is not
-        connected to the internet, no images will be loaded.
-    </string>
-    <string name="dark_mode_toggle">Use Dark Mode</string>
-    <string name="anime_notifications_manage">Manage Anime notifications</string>
-
     <string name="check_list_for_existing">Check list for existing Anime</string>
-    <string name="video_fill_mode">Video stretch mode</string>
-    <string name="attachment_summary_on">Checks if Anime already exists. Still accepts sub/dub</string>
-    <string name="attachment_summary_off">Does not check. Entries can be duplicated</string>
-    <string name="title_activity_drawer_main_menu">DrawerMainMenu</string>
 
-    <string name="menu_anime_list">Anime List</string>
-    <string name="menu_settings">Settings</string>
-    <string name="menu_changelog">Changelog</string>
 
-    <string name="anime_notification_service_description">Service checks every 4 hours if a new episode of your selected anime is available.</string>
-    <string name="anime_notifications">Anime Notifications</string>
-    <string name="show_search">Search</string>
-    <string name="cloud_list">Cloud list</string>
+    <!-- Video  -->
+    <string name="video_fill_mode" translatable="false">Video stretch mode</string>
+    <!-- Storage  -->
+    <string name="storage_clear_cache">Clear offline cache</string>
+    <string name="storage_clear_cache_summary">Deletes cached files, such as offline covers</string>
+    <string name="storage_copy_files">Copy downloaded episodes to card</string>
+    <string name="storage_copy_files_summary">Every downloaded episode, from every show, will be moved to a selected device</string>
 
+    <!-- Offline mode -->
+    <string name="offline_mode_attachment_summary_on">Show covers and information will be stored in storage, thus resulting in higher storage usage. In addition image load-times will be slower.</string>
+    <string name="offline_mode_attachment_summary_off">Images are only cached through lazy loading. If this cache is lost, they won\'t display</string>
+    <string name="offline_mode">Offline mode</string>
+    <string name="placeholder_todo">TODO</string>
 </resources>

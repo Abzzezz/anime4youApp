@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2021. Roman P.
+  ~ All code is owned by Roman P. APIs are mentioned.
+  ~ Last modified: 09.04.21, 19:28
+  -->
+
+<resources>
+    <string name="app_name">Anime4you</string>
+    <string name="menu_list">Animes</string>
+    <string name="menu_settings">Einstellungen</string>
+    <string name="menu_changelog">Änderungen</string>
+    <string name="menu_search">Suche</string>
+    <string name="title_activity_drawer_main_menu">MainMenu</string>
+    <string name="show_title">Titel: %s</string>
+    <string name="show_episodes">Episoden: %d</string>
+    <string name="show_score">Wertung: %f</string>
+    <string name="show_id">Id: %s</string>
+    <string name="global_settings">Einstellungen</string>
+    <string name="global_video">Video</string>
+    <string name="global_storage">Speicher</string>
+    <string name="check_list_attachment_summary_on">Prüft, ob ein neuzugefügter Anime bereits hinzugefügt wurde.</string>
+    <string name="check_list_attachment_summary_off">"Prüft keine Duplikate "</string>
+    <string name="download_delay">Verzögerung zwischen dem Herunterladen der Episoden (in Sekunden)</string>
+    <string name="image_compression_strength">Kompression der Cover</string>
+    <string name="check_list_for_existing">Duplikate filtern</string>
+    <string name="storage_clear_cache">Zwischengespeicherte Bilder löschen</string>
+    <string name="storage_clear_cache_summary">Löscht die von der App zwischengespeicherten Dateien, beispielsweise die Anime-Cover</string>
+    <string name="storage_copy_files">Episoden zu externem Außenmedium verschieben</string>
+    <string name="storage_copy_files_summary">Jede heruntergeladene Episode wird in das ausgewählte Außenmedium verschoben</string>
+    <string name="offline_mode_attachment_summary_on">Anime-Cover werden extra zwischengespeichert, was zu mehr Speichernutzung führen könnte.</string>
+    <string name="offline_mode_attachment_summary_off">Anime-Cover werden nicht zusätzlich zwischengespeichert, bei offline Nutzung empfiehlt es sich diese Option zu aktivieren.</string>
+    <string name="offline_mode">Offline-Modus</string>
+    <string name="placeholder_todo">In Bearbeitung</string>
+</resources>

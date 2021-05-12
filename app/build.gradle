@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2021. Roman P.
+ * All code is owned by Roman P. APIs are mentioned.
+ * Last modified: 06.04.21, 18:20
+ */
+
 apply plugin: 'com.android.application'
 apply plugin: 'androidx.navigation.safeargs'
 
@@ -9,7 +15,7 @@ android {
         minSdkVersion 29
         targetSdkVersion 30
         versionCode 18
-        versionName "12.1.0"
+        versionName "12.1.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     packagingOptions {
@@ -39,13 +45,14 @@ android {
     }
 }
 
+
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'com.google.android.material:material:1.3.0'
-    implementation 'androidx.navigation:navigation-fragment:2.3.4'
-    implementation 'androidx.navigation:navigation-ui:2.3.4'
+    implementation 'androidx.navigation:navigation-fragment:2.3.5'
+    implementation 'androidx.navigation:navigation-ui:2.3.5'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation 'androidx.preference:preference:1.1.1'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
@@ -55,13 +62,11 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.5.2' // Picasso
     implementation 'com.github.oktavianto:ionalert:1.0.4' //Alerts
     implementation 'androidx.preference:preference:1.1.1'
-    implementation 'com.google.android.exoplayer:exoplayer:2.11.6' //Exo -player
-    implementation 'org.json:json:20201115' //JSON
+    implementation 'com.google.android.exoplayer:exoplayer:2.13.3' //Exo -player
     implementation 'org.jsoup:jsoup:1.13.1' //JSOUP
     implementation 'net.ricecode:string-similarity:1.0.0' //String comparisons
     implementation 'com.blankj:utilcodex:1.30.1' //Android app install
     implementation 'com.arthenica:mobile-ffmpeg-full:4.4' //FFMPEG
     implementation 'net.sandrohc:reactive-jikan:1.0.0' //Mal api
-
-
+    implementation 'com.eclipsesource.j2v8:j2v8_android:3.0.5@aar'
 }

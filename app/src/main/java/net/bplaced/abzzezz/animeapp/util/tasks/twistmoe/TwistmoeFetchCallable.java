@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2020.
- * The code used in this project is entirely owned by Roman P.
- * Code snippets / templates / etc. are mentioned and credited.
+ * Copyright (c) 2021. Roman P.
+ * All code is owned by Roman P. APIs are mentioned.
+ * Last modified: 03.04.21, 18:15
  */
 
 package net.bplaced.abzzezz.animeapp.util.tasks.twistmoe;

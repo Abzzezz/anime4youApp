@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2021. Roman P.
  * All code is owned by Roman P. APIs are mentioned.
- * Last modified: 07.02.21, 18:14
+ * Last modified: 05.03.21, 20:46
  */
 
 package net.bplaced.abzzezz.animeapp.util.show;

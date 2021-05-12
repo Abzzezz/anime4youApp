@@ -1,7 +1,7 @@
 <!--
-  ~ Copyright (c) 2020. Roman P.
+  ~ Copyright (c) 2021. Roman P.
   ~ All code is owned by Roman P. APIs are mentioned.
-  ~ Last modified: 10.06.20, 11:47
+  ~ Last modified: 06.04.21, 21:00
   -->
 
 <resources>
@@ -27,38 +27,9 @@
         <item name="cardCornerRadius">2dp</item>
     </style>
 
-
-    <!-- Base Light theme.
-    <style name="DarkTheme" parent="Theme.AppCompat.NoActionBar">
-
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="android:colorAccent">@color/accentColor</item>
-        <item name="android:itemBackground">@color/colorPrimary</item>
-        <item name="android:actionBarItemBackground">@color/toolbarDark</item>
-        <item name="android:windowBackground">@color/colorPrimary</item>
-
-        <item name="colorAccent">@color/accentColor</item>
-
-        <item name="android:textColor">@color/textDark</item>
-        <item name="android:textColorPrimary">@color/textDark</item>
-
-        <item name="android:gridViewStyle">@color/colorPrimary</item>
-        <item name="toolbarStyle">@style/AppTheme.ActionBarDark</item>
-        <item name="floatingActionButtonStyle">@style/AppTheme.ActionButtonDark</item>
-
-        <item name="windowNoTitle">true</item>
-        <item name="windowActionBar">false</item>
+    <style name="TextViewStyle" parent="Widget.AppCompat.TextView">
+        <item name="android:maxLength">20</item>
+        <item name="android:textSize">16sp</item>
     </style>
-
-    <style name="AppTheme.ActionBarDark" parent="Widget.AppCompat.Toolbar">
-        <item name="android:background">@color/toolbarDark</item>
-        <item name="android:backgroundTint">@color/toolbarDark</item>
-    </style>
-
-    <style name="AppTheme.ActionButtonDark" parent="Widget.Design.FloatingActionButton">
-        <item name="android:backgroundTint">@color/accentColor</item>
-        <item name="borderWidth">0dp</item>
-    </style>
-        -->
 
 </resources>

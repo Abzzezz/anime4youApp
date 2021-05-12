@@ -1,7 +1,7 @@
 <!--
-  ~ Copyright (c) 2020. Roman P.
+  ~ Copyright (c) 2021. Roman P.
   ~ All code is owned by Roman P. APIs are mentioned.
-  ~ Last modified: 03.06.20, 14:40
+  ~ Last modified: 09.04.21, 17:57
   -->
 
 <PreferenceScreen
@@ -12,16 +12,10 @@
             app:title="@string/global_settings">
 
         <SwitchPreferenceCompat
-                app:key="dark_mode"
-                app:title="@string/dark_mode_toggle"
-                app:summaryOff="Toggle dark theme"
-                app:summaryOn="Dark mode on!"
-                app:defaultValue="true"/>
-        <SwitchPreferenceCompat
                 app:key="check_existing"
                 app:title="@string/check_list_for_existing"
-                app:summaryOn="@string/attachment_summary_on"
-                app:summaryOff="@string/attachment_summary_off"/>
+                app:summaryOn="@string/check_list_attachment_summary_on"
+                app:summaryOff="@string/check_list_attachment_summary_off"/>
         <EditTextPreference
                 app:key="download_delay"
                 app:title="@string/download_delay"
@@ -52,7 +46,7 @@
                 android:key="video_player_preference"/>
     </PreferenceCategory>
     <PreferenceCategory
-            android:title="Storage">
+            android:title="@string/global_storage">
 
         <SwitchPreference
                 android:defaultValue="false"
@@ -62,12 +56,13 @@
                 android:summaryOff="@string/offline_mode_attachment_summary_off"/>
 
         <Preference
-                android:title="Clear offline images"
-                android:key="clear_offline_images_button"
-                android:summary="Clear all offline images"/>
+                android:title="@string/storage_clear_cache"
+                android:key="storage_clear_cache"
+                android:summary="@string/storage_clear_cache_summary"/>
 
         <Preference
-                android:title="Copy files to sd card"
+                android:title="@string/storage_copy_files"
+                android:summary="@string/storage_copy_files_summary"
                 android:key="copy_sd_card"/>
 
 

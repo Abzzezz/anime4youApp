@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright (c) 2020. Roman P.
+  ~ Copyright (c) 2021. Roman P.
   ~ All code is owned by Roman P. APIs are mentioned.
-  ~ Last modified: 04.06.20, 11:33
+  ~ Last modified: 06.04.21, 21:30
   -->
 
 <androidx.constraintlayout.widget.ConstraintLayout
@@ -52,7 +52,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:src="@tools:sample/avatars"
-            android:id="@+id/show_cover_image_view"
+            android:id="@+id/selected_show_cover_image_view"
             app:layout_constraintTop_toBottomOf="@+id/selected_show_toolbar"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintVertical_bias="0.0"
@@ -71,15 +71,16 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintHorizontal_bias="0.955"
-            app:layout_constraintVertical_bias="0.976"
-            />
+            app:layout_constraintVertical_bias="0.960"
+            android:contentDescription="@string/placeholder_todo"/>
 
     <TextView
-            android:text="Title:"
+            style="@style/TextViewStyle"
+            android:text="@string/show_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:id="@+id/selected_show_title_text_view"
-            app:layout_constraintStart_toEndOf="@+id/show_cover_image_view"
+            app:layout_constraintStart_toEndOf="@+id/selected_show_cover_image_view"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/selected_show_toolbar"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -87,66 +88,54 @@
             app:layout_constraintVertical_bias="0.0"/>
 
     <TextView
-            android:text="Episodes:"
+            android:text="@string/show_episodes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/selected_show_episode_count_text_view"
-            app:layout_constraintStart_toEndOf="@+id/show_cover_image_view"
+            app:layout_constraintStart_toEndOf="@+id/selected_show_cover_image_view"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
 
             app:layout_constraintTop_toBottomOf="@+id/selected_show_id_text_view"
-            app:layout_constraintBottom_toBottomOf="@+id/show_cover_image_view"
+            app:layout_constraintBottom_toBottomOf="@+id/selected_show_cover_image_view"
             app:layout_constraintVertical_bias="0.0"/>
 
     <TextView
-            android:text="ID:"
+            android:text="@string/show_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/selected_show_id_text_view"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/show_cover_image_view"
+            app:layout_constraintStart_toEndOf="@+id/selected_show_cover_image_view"
             app:layout_constraintHorizontal_bias="0.0"
 
-            app:layout_constraintBottom_toBottomOf="@+id/show_cover_image_view"
+            app:layout_constraintBottom_toBottomOf="@+id/selected_show_cover_image_view"
             app:layout_constraintTop_toBottomOf="@+id/selected_show_title_text_view"
-            app:layout_constraintVertical_bias="0.3"/>
+            app:layout_constraintVertical_bias="0.568"/>
 
     <TextView
-            android:text="Language:"
+            android:text="@string/show_score"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/selected_show_language_text_view"
+            android:id="@+id/selected_show_score_text_view"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/show_cover_image_view"
+            app:layout_constraintStart_toEndOf="@+id/selected_show_cover_image_view"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintBottom_toBottomOf="@+id/show_cover_image_view"
+            app:layout_constraintBottom_toBottomOf="@+id/selected_show_cover_image_view"
             app:layout_constraintTop_toBottomOf="@+id/selected_show_episode_count_text_view"
-            app:layout_constraintVertical_bias="0.0"/>
+            app:layout_constraintVertical_bias="1.0"/>
 
     <TextView
             android:text="Total size: "
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/show_directory_total_size_text_view"
-            app:layout_constraintTop_toBottomOf="@+id/selected_show_swipe_refresh_layout"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/download_show_button"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintHorizontal_bias="0.05"
-            app:layout_constraintVertical_bias="0.5"/>
-
-    <TextView
-            android:text="Hoster: "
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/selected_show_hoster_text_view"
-            app:layout_constraintStart_toEndOf="@+id/show_cover_image_view"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintBottom_toBottomOf="@+id/show_cover_image_view"
-            app:layout_constraintTop_toBottomOf="@+id/selected_show_language_text_view"
-            app:layout_constraintVertical_bias="0.0"/>
+            app:layout_constraintHorizontal_bias="0.059"
+            app:layout_constraintVertical_bias="0.962"
+            app:layout_constraintTop_toTopOf="parent"/>
 
     <Spinner
             android:layout_width="0dp"
@@ -155,6 +144,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/selected_show_swipe_refresh_layout"
-            app:layout_constraintTop_toBottomOf="@+id/show_cover_image_view"
+            app:layout_constraintTop_toBottomOf="@+id/selected_show_cover_image_view"
             android:spinnerMode="dropdown"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

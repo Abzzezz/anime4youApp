@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2021. Roman P.
  * All code is owned by Roman P. APIs are mentioned.
- * Last modified: 02.02.21, 16:06
+ * Last modified: 07.04.21, 14:29
  */
 
 package net.bplaced.abzzezz.animeapp.util.tasks.animepahe;
@@ -23,9 +23,9 @@ import java.util.stream.IntStream;
 
 public class AnimePaheFetchDirectTask extends TaskExecutor implements Callable<Optional<String>>, AnimePaheHolder {
 
-    private final String episodeJSON;
+    private final JSONObject episodeJSON;
 
-    public AnimePaheFetchDirectTask(final String episodeJSON) {
+    public AnimePaheFetchDirectTask(final JSONObject episodeJSON) {
         this.episodeJSON = episodeJSON;
     }
 
@@ -35,9 +35,8 @@ public class AnimePaheFetchDirectTask extends TaskExecutor implements Callable<O
 
     @Override
     public Optional<String> call() throws Exception {
-        final JSONObject episodeJSONObject = new JSONObject(this.episodeJSON); //Supply the json from the episode
-        final String id = episodeJSONObject.getString("anime_id");
-        final String session = episodeJSONObject.getString("session");
+        final String id = episodeJSON.getString("anime_id");
+        final String session = episodeJSON.getString("session");
         //Establish a new connection to the episode api with the id & session. Add a user-agent as a confirmation of authenticity
         final HttpsURLConnection episodeAPIConnection = URLUtil.createHTTPSURLConnection(String.format(STREAM_API, id, session), new String[]{"User-Agent", Constant.USER_AGENT});
         final JSONArray availableStreams = new JSONObject(URLUtil.collectLines(episodeAPIConnection, "")).getJSONArray("data"); //Collect all data from the output, read it into a new jsonobject and get the jsonarray called "data"

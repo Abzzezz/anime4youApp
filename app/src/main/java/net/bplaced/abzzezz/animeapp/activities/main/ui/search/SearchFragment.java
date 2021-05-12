@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2020. Roman P.
+ * Copyright (c) 2021. Roman P.
  * All code is owned by Roman P. APIs are mentioned.
- * Last modified: 23.06.20, 18:16
+ * Last modified: 06.04.21, 18:56
  */
 
 package net.bplaced.abzzezz.animeapp.activities.main.ui.search;
@@ -49,7 +49,7 @@ public class SearchFragment extends Fragment {
 
                 new MyAnimeListSearchTask(query).executeAsync(new TaskExecutor.Callback<List<Show>>() {
                     @Override
-                    public void onComplete(List<Show> result) {
+                    public void onComplete(final List<Show> result) {
                         searchAdapter.getEntries().addAll(result);
                         searchAdapter.notifyDataSetChanged();
                     }
@@ -97,36 +97,42 @@ public class SearchFragment extends Fragment {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
+            View view;
             if (convertView == null) {
-                convertView = LayoutInflater.from(context).inflate(R.layout.item_search, parent, false);
+                view = LayoutInflater.from(context).inflate(R.layout.item_search, parent, false);
+            } else
+                view = convertView;
 
-                final Show showAtIndex = (Show) getItem(position);
+            final Show showAtIndex = (Show) getItem(position);
 
-                convertView.setOnClickListener(listener -> {
-                    try {
-                        AnimeAppMain.getInstance().getShowSaver().addShow(showAtIndex);
-                        Toast.makeText(context, "Added show!", Toast.LENGTH_SHORT).show();
-                    } catch (final JSONException e) {
-                        e.printStackTrace();
-                    }
-                });
+            view.setOnClickListener(listener -> {
+                try {
+                    AnimeAppMain.getInstance().getShowSaver().addShow(showAtIndex);
+                    Toast.makeText(context, "Added show!", Toast.LENGTH_SHORT).show();
+                } catch (final JSONException e) {
+                    e.printStackTrace();
+                }
+            });
 
-                final TextView showTitle = convertView.findViewById(R.id.show_title_text_view_search);
-                final TextView showEpisodes = convertView.findViewById(R.id.show_episodes_text_view_search);
-                final TextView showProvider = convertView.findViewById(R.id.show_provider_text_view_search);
-                final ImageView imageView = convertView.findViewById(R.id.show_cover_image_view_search);
-                //Load image from url into the image view
-                Picasso.with(context)
-                        .load(showAtIndex.getImageURL())
-                        .resize(ImageUtil.IMAGE_COVER_DIMENSIONS[0], ImageUtil.IMAGE_COVER_DIMENSIONS[1])
-                        .into(imageView);
+            final TextView showTitle = view.findViewById(R.id.search_show_title_text_view);
+            final TextView showEpisodes = view.findViewById(R.id.search_show_episodes_text_view);
+            final TextView showScore = view.findViewById(R.id.search_show_score_text_view);
+            final TextView showID = view.findViewById(R.id.search_show_id_text_view);
 
-                showTitle.append(showAtIndex.getShowTitle()); //append the show's title
-                showEpisodes.append(String.valueOf(showAtIndex.getEpisodeCount())); //Append the episode count
-                showProvider.append("MAL"); //Append the provider
+            final ImageView imageView = view.findViewById(R.id.search_show_cover_image_view);
+            //Load image from url into the image view
+            Picasso.with(context)
+                    .load(showAtIndex.getImageURL())
+                    .resize(ImageUtil.IMAGE_COVER_DIMENSIONS[0], ImageUtil.IMAGE_COVER_DIMENSIONS[1])
+                    .into(imageView);
 
-            }
-            return convertView;
+            //Format using android locale
+            showTitle.setText(context.getString(R.string.show_title, showAtIndex.getShowTitle())); //append the show's title
+            showEpisodes.setText(context.getString(R.string.show_episodes, showAtIndex.getEpisodeCount())); //Append the episode count
+            showScore.setText(context.getString(R.string.show_score, showAtIndex.getShowScore())); //Append the provider
+            showID.setText(context.getString(R.string.show_id, showAtIndex.getID()));
+
+            return view;
         }
 
         public List<Show> getEntries() {

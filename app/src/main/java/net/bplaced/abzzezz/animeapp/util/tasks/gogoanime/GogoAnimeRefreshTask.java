@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2020. Roman P.
+ * Copyright (c) 2021. Roman P.
  * All code is owned by Roman P. APIs are mentioned.
- * Last modified: 24.12.20, 21:09
+ * Last modified: 06.04.21, 23:37
  */
 
 package net.bplaced.abzzezz.animeapp.util.tasks.gogoanime;

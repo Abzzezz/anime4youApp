@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2020. Roman P.
+ * Copyright (c) 2021. Roman P.
  * All code is owned by Roman P. APIs are mentioned.
- * Last modified: 24.12.20, 21:23
+ * Last modified: 09.04.21, 17:42
  */
 
 package net.bplaced.abzzezz.animeapp.util.show;
@@ -76,6 +76,7 @@ public class Show {
      * @return Difference between the current time and the timestamp
      */
     public long getTimestampDifference(final Provider provider) {
+        if (AnimeAppMain.getInstance().isDeveloperMode()) return System.currentTimeMillis();
         return this.getProviderJSON(provider)
                 .map(jsonObject -> System.currentTimeMillis() - jsonObject.optLong("time"))
                 .orElse(System.currentTimeMillis());
@@ -120,7 +121,7 @@ public class Show {
         try {
             this.providers.put(provider.getName(), providerJSON);
             this.updateShow();
-        } catch (JSONException e) {
+        } catch (final JSONException e) {
             e.printStackTrace();
         }
     }
@@ -175,9 +176,5 @@ public class Show {
 
     public String getImageURL() {
         return imageURL;
-    }
-
-    public JSONObject getProviders() {
-        return providers;
     }
 }

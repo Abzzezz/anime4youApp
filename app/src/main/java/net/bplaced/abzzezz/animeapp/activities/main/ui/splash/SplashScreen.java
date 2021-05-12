@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2021. Roman P.
  * All code is owned by Roman P. APIs are mentioned.
- * Last modified: 04.02.21, 08:31
+ * Last modified: 06.04.21, 22:51
  */
 
 package net.bplaced.abzzezz.animeapp.activities.main.ui.splash;

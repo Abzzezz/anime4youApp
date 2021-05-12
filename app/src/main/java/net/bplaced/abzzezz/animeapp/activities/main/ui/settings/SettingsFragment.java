@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2020. Roman P.
+ * Copyright (c) 2021. Roman P.
  * All code is owned by Roman P. APIs are mentioned.
- * Last modified: 14.06.20, 20:08
+ * Last modified: 06.04.21, 18:09
  */
 
 package net.bplaced.abzzezz.animeapp.activities.main.ui.settings;
@@ -38,7 +38,7 @@ public class SettingsFragment extends Fragment {
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             setPreferencesFromResource(R.xml.root_preferences, rootKey);
 
-            findPreference("clear_offline_images_button").setOnPreferenceClickListener(preference -> {
+            findPreference("storage_clear_cache").setOnPreferenceClickListener(preference -> {
                 new IonAlert(getActivity(), IonAlert.WARNING_TYPE)
                         .setTitleText("Delete all offline images?")
                         .setContentText("If you are offline and there are no caches images wont be loaded!")

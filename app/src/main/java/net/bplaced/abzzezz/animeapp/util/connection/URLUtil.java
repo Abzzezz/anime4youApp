@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2020. Roman P.
+ * Copyright (c) 2021. Roman P.
  * All code is owned by Roman P. APIs are mentioned.
- * Last modified: 24.12.20, 16:11
+ * Last modified: 03.04.21, 18:26
  */
 
 package net.bplaced.abzzezz.animeapp.util.connection;
@@ -16,6 +16,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
+import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -160,7 +161,7 @@ public class URLUtil {
     }
 
     /**
-     * Joins all the lines read from a url together
+     * Joins all the lines read from an url together
      *
      * @param src    url to read from
      * @param joiner String to join all read lines together
@@ -179,7 +180,7 @@ public class URLUtil {
     }
 
     /**
-     * Joins all the lines read from a url together
+     * Joins all the lines read from an url together
      *
      * @param src    url to read from
      * @param joiner String to join all read lines together
@@ -191,7 +192,7 @@ public class URLUtil {
     }
 
     /**
-     * Joins all the lines read from a url together
+     * Joins all the lines read from an url together
      *
      * @param src url to read from
      * @return all joined lines
@@ -209,18 +210,18 @@ public class URLUtil {
     }
 
     /**
-     * Joins all the lines read from a url together
+     * Joins all the lines read from an url together
      *
      * @param src url to read from
      * @return all joined lines
      * @throws IOException if reader / url fails, etc.
      */
     public static String collectLines(final URL src) throws IOException {
-        return collectLines(src);
+        return collectLines(src.openConnection());
     }
 
     /**
-     * Joins all the lines read from a url together using a stream
+     * Joins all the lines read from an url together using a stream
      *
      * @param src    url to read from
      * @param joiner String to join all read lines together
@@ -235,7 +236,63 @@ public class URLUtil {
     }
 
     /**
-     * Joins all the lines read from a url together using a stream
+     * Collects all lines read from an url to an array
+     *
+     * @param src url to read from
+     * @return String array with all the lines
+     * @throws IOException if reader / url fails, etc.
+     */
+    public static String[] collectArray(final URLConnection src) throws IOException {
+        final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(src.getInputStream()));
+        try (final Stream<String> lines = bufferedReader.lines()) {
+            return lines.toArray(String[]::new);
+        }
+    }
+
+    /**
+     * Collects all lines read from an url to an array
+     *
+     * @param src url to read from
+     * @return String array with all the lines
+     * @throws IOException if reader / url fails, etc.
+     */
+    public static String[] collectArray(final URL src) throws IOException {
+        final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(src.openStream()));
+        try (final Stream<String> lines = bufferedReader.lines()) {
+            return lines.toArray(String[]::new);
+        }
+    }
+
+    /**
+     * Collects all lines read from an url to a list
+     *
+     * @param src url to read from
+     * @return String list with all the lines
+     * @throws IOException if reader / url fails, etc.
+     */
+    public static List<String> collectList(final URL src) throws IOException {
+        final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(src.openStream()));
+        try (final Stream<String> lines = bufferedReader.lines()) {
+            return lines.collect(Collectors.toList());
+        }
+    }
+
+    /**
+     * Collects all lines read from an url to a list
+     *
+     * @param src url to read from
+     * @return String list with all the lines
+     * @throws IOException if reader / url fails, etc.
+     */
+    public static List<String> collectList(final URLConnection src) throws IOException {
+        final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(src.getInputStream()));
+        try (final Stream<String> lines = bufferedReader.lines()) {
+            return lines.collect(Collectors.toList());
+        }
+    }
+
+    /**
+     * Joins all the lines read from an url together using a stream
      *
      * @param src    url to read from
      * @param joiner String to join all read lines together

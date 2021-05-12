@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2020. Roman P.
+ * Copyright (c) 2021. Roman P.
  * All code is owned by Roman P. APIs are mentioned.
- * Last modified: 29.12.20, 17:26
+ * Last modified: 29.03.21, 19:37
  */
 
 package net.bplaced.abzzezz.animeapp.util.provider.providers;
@@ -81,20 +81,16 @@ public class Twistmoe extends Provider {
 
     @Override
     public void handleURLRequest(Show show, Context context, Consumer<Optional<String>> resultURL, int... ints) {
-        try {
-            new TwistmoeDecodeSourcesTask(show.getShowEpisodes(this).getString(ints[1])).executeAsync(new TaskExecutor.Callback<String>() {
-                @Override
-                public void onComplete(String result) {
-                    resultURL.accept(Optional.of(result));
-                }
+        new TwistmoeDecodeSourcesTask(show.getShowEpisodes(this).optString(ints[1])).executeAsync(new TaskExecutor.Callback<String>() {
+            @Override
+            public void onComplete(String result) {
+                resultURL.accept(Optional.of(result));
+            }
 
-                @Override
-                public void preExecute() {
-                }
-            });
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+            @Override
+            public void preExecute() {
+            }
+        });
     }
 
     @Override

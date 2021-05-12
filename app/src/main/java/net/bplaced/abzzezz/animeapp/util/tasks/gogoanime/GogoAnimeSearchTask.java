@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2020. Roman P.
+ * Copyright (c) 2021. Roman P.
  * All code is owned by Roman P. APIs are mentioned.
- * Last modified: 24.12.20, 21:09
+ * Last modified: 06.04.21, 23:37
  */
 
 package net.bplaced.abzzezz.animeapp.util.tasks.gogoanime;
@@ -11,11 +11,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.Callable;
 
-public class GogoAnimeSearchTask extends TaskExecutor implements Callable<List<JSONObject>> {
+public class GogoAnimeSearchTask extends TaskExecutor implements Callable<Optional<JSONObject>> {
 
     private final String searchQuery;
 
@@ -23,36 +22,31 @@ public class GogoAnimeSearchTask extends TaskExecutor implements Callable<List<J
         this.searchQuery = searchQuery;
     }
 
-    public void executeAsync(Callback<List<JSONObject>> callback) {
+    public void executeAsync(Callback<Optional<JSONObject>> callback) {
         super.executeAsync(this, callback);
     }
 
 
     @Override
-    public List<JSONObject> call() throws IOException {
-
-        final List<JSONObject> showsOut = new ArrayList<>();
-
+    public Optional<JSONObject> call() throws IOException {
         final String[] urls = GogoAnimeFetcher.getURLsFromSearch(searchQuery);
+        if (urls.length == 0) return Optional.empty(); //No urls have been found
 
-        for (final String url : urls) {
-            try {
-                final GogoAnimeFetcher fetcher = new GogoAnimeFetcher(url);
-                final String id = fetcher.getID();
-                final String episodeStart = fetcher.getEpisodeStart();
-                final String episodeEnd = fetcher.getEpisodeEnd();
+        try {
+            final GogoAnimeFetcher fetcher = new GogoAnimeFetcher(urls[0]);
+            final String id = fetcher.getID();
+            final String episodeStart = fetcher.getEpisodeStart();
+            final String episodeEnd = fetcher.getEpisodeEnd();
 
-                showsOut.add(
-                        new JSONObject()
-                                .put("id", id)
-                                .put("ep_start", episodeStart)
-                                .put("ep_end", episodeEnd)
-                                .put("referrals", fetcher.getFetchedDirectURLs())
-                );
-            } catch (final IOException | JSONException e) {
-                e.printStackTrace();
-            }
+            return Optional.of(new JSONObject()
+                    .put("id", id)
+                    .put("ep_start", episodeStart)
+                    .put("ep_end", episodeEnd)
+                    .put("referrals", fetcher.getFetchedReferrals()
+                    ));
+        } catch (final IOException | JSONException e) {
+            e.printStackTrace();
         }
-        return showsOut;
+        return Optional.empty();
     }
 }

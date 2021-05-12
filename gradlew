@@ -1,5 +1,11 @@
 #!/usr/bin/env sh
 
+#
+# Copyright (c) 2021. Roman P.
+# All code is owned by Roman P. APIs are mentioned.
+# Last modified: 03.01.21, 20:22
+#
+
 ##############################################################################
 ##
 ##  Gradle start up script for UN*X

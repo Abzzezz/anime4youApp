@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2020.
- * The code used in this project is entirely owned by Roman P.
- * Code snippets / templates / etc. are mentioned and credited.
+ * Copyright (c) 2021. Roman P.
+ * All code is owned by Roman P. APIs are mentioned.
+ * Last modified: 03.04.21, 17:33
  */
 
 package net.bplaced.abzzezz.animeapp.util.tasks.twistmoe;
@@ -38,6 +38,8 @@ public class TwistmoeDecodeSourcesTask extends TaskExecutor implements Callable<
 
     @Override
     public String call() throws Exception {
+        if (string.isEmpty()) return null;
+
         final byte[] sourceDecoded = Base64.getDecoder().decode(string);
         final byte[] salt = Arrays.copyOfRange(sourceDecoded, 8, 16);
         final MessageDigest md5 = MessageDigest.getInstance("MD5");
@@ -50,9 +52,9 @@ public class TwistmoeDecodeSourcesTask extends TaskExecutor implements Callable<
             aesCBC.init(Cipher.DECRYPT_MODE, key, iv);
             final byte[] decryptedData = aesCBC.doFinal(encrypted);
             return STREAM_URL + new String(decryptedData, StandardCharsets.UTF_8);
-        } catch (InvalidAlgorithmParameterException | BadPaddingException | IllegalBlockSizeException e) {
+        } catch (final InvalidAlgorithmParameterException | BadPaddingException | IllegalBlockSizeException e) {
             e.printStackTrace();
-            return "-1";
+            return null;
         }
     }
 

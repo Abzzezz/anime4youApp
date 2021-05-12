@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2021. Roman P.
  * All code is owned by Roman P. APIs are mentioned.
- * Last modified: 02.02.21, 15:42
+ * Last modified: 07.04.21, 13:09
  */
 
 package net.bplaced.abzzezz.animeapp.util.tasks.animepahe;
@@ -13,11 +13,10 @@ import net.bplaced.abzzezz.animeapp.util.tasks.TaskExecutor;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.Callable;
 
-public class AnimePaheSearchTask extends TaskExecutor implements Callable<List<JSONObject>>, AnimePaheHolder {
+public class AnimePaheSearchTask extends TaskExecutor implements Callable<Optional<JSONObject>>, AnimePaheHolder {
 
     private final String searchQuery;
 
@@ -25,22 +24,17 @@ public class AnimePaheSearchTask extends TaskExecutor implements Callable<List<J
         this.searchQuery = searchQuery;
     }
 
-    public void executeAsync(Callback<List<JSONObject>> callback) {
+    public void executeAsync(Callback<Optional<JSONObject>> callback) {
         super.executeAsync(this, callback);
     }
 
     @Override
-    public List<JSONObject> call() throws Exception {
-        final List<JSONObject> showsOut = new ArrayList<>();
-
+    public Optional<JSONObject> call() throws Exception {
         final String collected = URLUtil.collectLines(URLUtil.createHTTPSURLConnection(String.format(SEARCH_API, searchQuery), new String[]{"User-Agent", Constant.USER_AGENT}), "");
 
         final JSONArray showsIn = new JSONObject(collected).getJSONArray("data");
+        if (showsIn.length() == 0) return Optional.empty(); //Empty case
 
-        for (int i = 0; i < showsIn.length(); i++) {
-            final JSONObject show = new AnimePaheFetchCallable(showsIn.getJSONObject(i)).call();
-            if (!showsOut.contains(show)) showsOut.add(show);
-        }
-        return showsOut;
+        return Optional.ofNullable(new AnimePaheFetchCallable(showsIn.getJSONObject(0)).call());
     }
 }
